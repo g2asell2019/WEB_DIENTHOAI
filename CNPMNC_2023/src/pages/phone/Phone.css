@@ -1,0 +1,39 @@
+.contentWidth {
+  margin-left: 30px;
+}
+.heading-p h1 {
+  color: #e94560;
+  padding: 20px 0px 0px 0px;
+  text-align: center;
+  font-size: xx-large;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.grid1-p {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 20px;
+}
+.product {
+  transition: 0.5s;
+}
+.product:hover {
+  box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
+}
+.pagination {
+  padding: 20px;
+}
+.pagination button {
+  font-size: larger;
+  cursor: pointer;
+  background: none;
+  transition: 0.5s;
+  border: 1px solid rgb(3 0 71 / 9%);
+  width: 80px;
+  height: 35px;
+  border-radius: 5px;
+}
+.pagination button:hover {
+  cursor: pointer;
+  background-color: black;
+  color: #fff;
+}
