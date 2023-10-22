@@ -14,15 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   User.init({
-  
-    phoneNumber:DataTypes.STRING,
+    taikhoan:DataTypes.STRING,
     password:DataTypes.STRING,
     fullName:DataTypes.STRING,
-    address:DataTypes.STRING, 
-    dateOfBirth:DataTypes.DATE, 
-    gender: DataTypes.STRING, 
+    address:DataTypes.STRING,
+    phoneNumber:DataTypes.STRING,
+    email:DataTypes.STRING, 
     image:DataTypes.TEXT,
-    job:DataTypes.STRING,
     roleId:DataTypes.STRING,
 
    

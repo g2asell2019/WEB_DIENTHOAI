@@ -17,18 +17,18 @@ let hashUserPassword =(password)=>{
     });
     }
 
-let handleUserLogin =(phoneNumber,password)=>{
+let handleUserLogin =(taikhoan,password)=>{
     return new Promise(async(resolve,reject)=>{
         try {
             let userData={};
-            let isExist=await checkUserphoneNumber(phoneNumber);
+            let isExist=await checkUsertaikhoan(taikhoan);
             if(isExist){
                 //user allready exist
                
                 let user =await db.User.findOne(
                     {
-                        attributes:['phoneNumber','roleId','password','fullName'],//  chỉ hiện phoneNumber, roleid, pasword
-                        where:{phoneNumber:phoneNumber},
+                        attributes:['taikhoan','roleId','password','fullName'],//  chỉ hiện taikhoan, roleid, pasword
+                        where:{taikhoan:taikhoan},
                         raw:true,// xóa passwword
                     }
                 );
@@ -56,7 +56,7 @@ let handleUserLogin =(phoneNumber,password)=>{
             else{
                 //return error
                 userData.errcode=1;
-                userData.errMessage="phoneNumber không tồn tại vui lòng  đăng kí hoặc kiểm tra lại";
+                userData.errMessage="taikhoan không tồn tại vui lòng  đăng kí hoặc kiểm tra lại";
             
             }
             resolve(userData)
@@ -68,12 +68,12 @@ let handleUserLogin =(phoneNumber,password)=>{
 }
 
 
-let checkUserphoneNumber=(phoneNumber)=>{
+let checkUsertaikhoan=(taikhoan)=>{
     return new Promise(async(resolve,reject)=>{
         try{
             let user =await db.User.findOne({
                
-                where: {phoneNumber:phoneNumber},
+                where: {taikhoan:taikhoan},
                
             });
             if(user){
@@ -127,26 +127,24 @@ let getAllUsers =(userId)=>{
 let CreateNewUser=(data)=>{
     return new Promise(async(resolve,reject)=>{
         try {
-            // check phoneNumber is exist??
-            let check= await checkUserphoneNumber(data.phoneNumber);
+            // check taikhoan is exist??
+            let check= await checkUsertaikhoan(data.taikhoan);
             if(check==true){
                 resolve({
                     errcode:1,
-                    errMessage:"Số điện thoại đã tồn tại vui lòng nhập số điện thoại khác"
+                    errMessage:"Tên người dùng đã tồn tại vui lòng nhập tên người dùng  khác"
                 })
             }else{
                 let hashPasswordFromBcrypt=await hashUserPassword(data.password);
                 await db.User.create({
-                    phoneNumber:data.phoneNumber,
+                    taikhoan:data.taikhoan,
                     password:hashPasswordFromBcrypt,
                     fullName: data.fullName,                    
-                    address:data.address,                  
-                    gender: data.gender, 
-                    roleId: data.roleId,
-                    dateOfBirth:data.dateOfBirth,
-                    job:data.job,
-                    image:data.avatar
-                    
+                    address:data.address,
+                    phoneNumber:data.phoneNumber, 
+                    email:data.email,                                
+                    roleId: data.roleId,                  
+                    image:data.avatar                  
                 });
                 if(data && data.image){
                     data.image=Buffer.from(data.image,'base64').toString('binary');
@@ -213,14 +211,14 @@ let updateUserData=(data)=>{
               if(user){
                 user.fullName=data.fullName;
                 user.address=data.address;
-                user.gender=data.gender;
-                user.dateOfBirth=data.dateOfBirth;
-                user.job=data.job;
+                user.phoneNumber=data.phoneNumber;
+                user.email=data.email;
                 user.roleId=data.roleId;                           
                 if(data.avatar){
                     user.image=data.avatar;
                     
                 }
+                
                 user.image=data.avatar;
                 await user.save();
                 // await db.User.save({

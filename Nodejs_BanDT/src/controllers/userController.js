@@ -1,10 +1,10 @@
 import userSevices from "../services/userServices";
 
 let handleLogin=async(req,res)=>{
-    let phoneNumber =req.body.phoneNumber;
+    let taikhoan =req.body.taikhoan;
     let password=req.body.password;
-    //check phoneNumber exist
-    if(!phoneNumber || !password){
+    //check taikhoan exist
+    if(!taikhoan || !password){
         return res.status(500).json({
             errcode: 1,
             message:'Vui lòng nhập đầy đủ thông tin'
@@ -15,7 +15,7 @@ let handleLogin=async(req,res)=>{
     
     // return userInfor
     //access_token:jWT JSON web token
-    let userData = await userSevices.handleUserLogin(phoneNumber,password);
+    let userData = await userSevices.handleUserLogin(taikhoan,password);
     console.log(userData)
         return res.status(200).json({
             errcode: userData.errcode,

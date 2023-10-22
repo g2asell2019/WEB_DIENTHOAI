@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import * as React from "react";
 import { Header } from "./common/header/Header";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import { Pages } from "./pages/Pages";
 import Data from "./component/flashDeals/Data";
 import Sdata from "./component/shop/Sdata";
@@ -18,6 +18,10 @@ import { Signup } from "./pages/login-signup/Signup";
 import { Profile } from "./pages/profile/Profile";
 import { ProfileUpdate } from "./pages/profile/ProfileUpdate";
 import { ChangePassword } from "./pages/profile/ChangePassword";
+import {IndexAdmin} from "../src/Admin/IndexAdmin";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   //step 1: fetch data from DB
@@ -65,16 +69,50 @@ function App() {
   };
   return (
     <>
+  <div>
+  <Router>
+    <Switch>
+    <Route path="/admin" exact>
+            <IndexAdmin />
+            <ToastContainer
+                  position="bottom-right"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="colored"
+                  />
+
+          </Route>
+         
+          
+          
+    </Switch>
+    
+  </Router>
+  </div>
+  
+      
+    <div> 
+
       <Router>
-        <Header cartItem={cartItem} />
+     
         <Switch>
+       
           <Route path="/" exact>
+          <Header cartItem={cartItem} />
             <Pages
               productItems={productItems}
               addToCart={addToCart}
               itemDetail={itemDetail}
               shopItems={shopItems}
+
             />
+              
           </Route>
           <Route path="/login-signup/Login" exact>
             <Login />
@@ -113,10 +151,14 @@ function App() {
           </Route>
           <Route path="/phone">
             <Phone phoneItems={phoneItems} addToCart={addToCart} />
+         
           </Route>
+        
         </Switch>
         <Footer />
       </Router>
+      </div>
+      
     </>
   );
 }

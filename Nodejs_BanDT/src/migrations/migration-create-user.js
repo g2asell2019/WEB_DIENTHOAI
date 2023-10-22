@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
      
-      phoneNumber: {
+      taikhoan: {
         type: Sequelize.STRING
       },
       password: {
@@ -21,20 +21,17 @@ module.exports = {
       fullName: {
         type: Sequelize.STRING
       },
-      address: {
+      phoneNumber: {
         type: Sequelize.STRING
       },
-      dateOfBirth: {
-        type: Sequelize.DATE
+      email: {
+        type: Sequelize.STRING
       },
-      gender: {
+      address: {
         type: Sequelize.STRING
       },
       image: {
         type: Sequelize.BLOB('long')
-      },
-      job: {
-        type: Sequelize.STRING
       },
       roleId: {
         type: Sequelize.STRING
