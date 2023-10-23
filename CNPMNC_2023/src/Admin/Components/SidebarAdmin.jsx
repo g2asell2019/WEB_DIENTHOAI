@@ -1,7 +1,7 @@
 import React from 'react';
 import { Nav, NavDropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { Link } from "react-router-dom";
 
 const SidebarAdmin = () => {
   return (
@@ -22,7 +22,7 @@ const SidebarAdmin = () => {
     <span style={{ display: 'flex', alignItems: 'center' }}>
       <i className="fas fa-list-ul" style={{ marginRight: '5px' }}></i>
       <span className="ml-0">    <NavDropdown title="Danh sách" className='text-secondary'>
-      <NavDropdown.Item href="list chuyen di" className='text-secondary '><i className="fas fa-book-reader text-secondary mr-3"></i>Danh sách chuyến đi </NavDropdown.Item>
+      <NavDropdown.Item href="list chuyen di" className='text-secondary '><i className="fas fa-book-reader text-secondary mr-3"></i> <Link to="/admin"><span>Danh sách chuyến đi</span></Link> </NavDropdown.Item>
       <NavDropdown.Item href="list nguoi dung" className='text-secondary '><i className="fas fa-book-medical text-secondary mr-3"></i>Danh sách người dùng</NavDropdown.Item>
     </NavDropdown></span>
     </span>

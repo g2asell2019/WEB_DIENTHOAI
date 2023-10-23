@@ -21,7 +21,7 @@ class ModalUser extends Component {
           email:'',
           roleId: 'R1',
           avatar:'',
-          previewImgURL:"",
+          previewImgURL:" ",
         
 
 
@@ -41,7 +41,7 @@ class ModalUser extends Component {
           email:'',
           roleId: 'R1',
           avatar:'',
-          previewImgURL:"",
+          previewImgURL:" ",
         })
       });
 
@@ -129,7 +129,7 @@ class ModalUser extends Component {
     
     render() {
     
-      console.log("usernaemdau:",this.state);
+     
         return (
            <Modal isOpen={this.props.isOpen} 
            toggle={()=>{this.toggle()}} 

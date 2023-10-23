@@ -1,7 +1,16 @@
-import React from "react";
-import "./LoginSignup.css";
+import React, { useState } from 'react';
+import "./LoginSignup.scss";
 import { Link } from "react-router-dom";
 export const Login = () => {
+
+
+
+
+
+  const [isShowPassword, setIsShowPassword] = useState(false);
+  const handleShowHidePassword = () => {
+    setIsShowPassword(!isShowPassword);
+  };
   return (
     <>
       <div className="loginsignup">
@@ -13,7 +22,10 @@ export const Login = () => {
             <label>Tài khoản </label>
           </div>
           <div className="input-data">
-            <input type="password" required />
+            <input  type={isShowPassword ? 'text' : 'password'} required />
+            <span onClick={handleShowHidePassword}>
+    <i className={isShowPassword ? 'fas fa-eye' : 'fas fa-eye-slash'}></i>
+  </span> 
             <div className="underline"></div>
             <label>Mật khẩu </label>
           </div>

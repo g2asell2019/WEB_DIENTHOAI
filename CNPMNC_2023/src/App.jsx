@@ -112,7 +112,7 @@ function App() {
               shopItems={shopItems}
 
             />
-              
+                <Footer />
           </Route>
           <Route path="/login-signup/Login" exact>
             <Login />
@@ -155,7 +155,19 @@ function App() {
           </Route>
         
         </Switch>
-        <Footer />
+        <ToastContainer
+                  position="bottom-right"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="colored"
+                  />
+      
       </Router>
       </div>
       

@@ -57,12 +57,14 @@
   border: none;
   cursor: pointer;
 }
+
 .input-data {
   height: 65px;
   width: 100%;
   position: relative;
   margin-top: 30px;
 }
+
 .input-data input {
   height: 100%;
   width: 100%;
@@ -72,7 +74,16 @@
   outline: none;
   color: #5c5c5c;
   border: 1px solid #c9c9c9;
+  position: relative; /* Đặt vị trí là tương đối */
 }
+
+.input-data span {
+  position: absolute;
+  margin-left: -40px;
+  margin-top: 20px;
+  /* Sử dụng top và left để điều chỉnh vị trí của span trong input */
+}
+
 .input-data input:focus ~ label,
 .input-data input:valid ~ label {
   transform: translateY(-40px);

@@ -85,7 +85,8 @@ class UserManage extends Component {
             toast.error("Xóa thất bại")
            }else{
             await this.getAllUserFromReact();
-            toast.success("Xóa Thành công")
+            toast.success("Xóa Thành công");
+         
             
             
            
@@ -112,15 +113,18 @@ class UserManage extends Component {
     doEditUser=async(user)=>{
         try {
             let res= await editUserService(user);
-            if(res && res.errcode==0){
+            if(res && res.errcode!==0){
+                await this.getAllUserFromReact();
+                toast.success("Sửa Thành công")
                 this.setState({
                     isOpenModalEditUser:false
                 })
-                await this.getAllUserFromReact();
-                toast.error("Sửa Thất bại")
+                
+                
+               
             }
             else{
-               
+                toast.error("Sửa Thất bại")
             }
             
         } catch (e) {
@@ -139,7 +143,7 @@ class UserManage extends Component {
  */
 
     render() {
-        console.log('check render',this.state)
+       
         let arrUsers=this.state.arrUsers;
        
         return (
@@ -183,9 +187,9 @@ class UserManage extends Component {
                 
                         {
                             arrUsers&&arrUsers.map((item,index)=>{
-                                console.log('tanh check map',item,index)
+                              
                                 return(
-                                    <tr> 
+                                    <tr key={index}> 
                                         <td>{item.taikhoan}</td>
                                         <td>{item.fullName}</td>                                      
                                         <td>{item.address}</td>

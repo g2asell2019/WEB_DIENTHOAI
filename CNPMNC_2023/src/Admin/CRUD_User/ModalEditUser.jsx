@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 
 import { Button,Modal,ModalHeader,ModalBody,ModalFooter } from 'reactstrap';
-import {toast} from "react-toastify";
+
 import "./ModalUser.scss";
 import _ from 'lodash';
 import { Buffer } from 'buffer';
@@ -110,7 +110,7 @@ class ModalEditUser extends Component {
         if(isValid==true){
        
           this.props.editUser(this.state);
-          toast.success("Sửa thành công !")
+   
        
        
        
@@ -145,7 +145,7 @@ class ModalEditUser extends Component {
     
     render() {
     
-  console.log("hinhne",this.state);
+
         return (
 
       
