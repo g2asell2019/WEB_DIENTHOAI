@@ -27,7 +27,7 @@ let handleUserLogin =(taikhoan,password)=>{
                
                 let user =await db.User.findOne(
                     {
-                        attributes:['taikhoan','roleId','password','fullName'],//  chỉ hiện taikhoan, roleid, pasword
+                        attributes:['taikhoan','roleId','password','fullName',],//  chỉ hiện taikhoan, roleid, pasword
                         where:{taikhoan:taikhoan},
                         raw:true,// xóa passwword
                     }

@@ -21,6 +21,8 @@ import { ChangePassword } from "./pages/profile/ChangePassword";
 import {IndexAdmin} from "../src/Admin/IndexAdmin";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import{NavbarAdmin} from "../src/Admin/Components/NavbarAdmin";
+
 
 
 function App() {
@@ -30,6 +32,7 @@ function App() {
   const { phoneItems } = PData;
   const [cartItem, setCardItem] = useState([]);
   const [productItem, setProductItem] = useState([]);
+
 
   const addToCart = (product) => {
     const productExit = cartItem.find((item) => item.id == product.id);
@@ -67,13 +70,19 @@ function App() {
       );
     }
   };
+
+
   return (
     <>
   <div>
+    
   <Router>
     <Switch>
-    <Route path="/admin" exact>
-            <IndexAdmin />
+  
+    <Route path="/admin" exact >
+      <IndexAdmin/>
+            
+        
             <ToastContainer
                   position="bottom-right"
                   autoClose={5000}

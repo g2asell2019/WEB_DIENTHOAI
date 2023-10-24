@@ -4,13 +4,18 @@ import SidebarAdmin from './Components/SidebarAdmin';
 import Tablene from "./CRUD_User/Tablene";
 import UserManage from './CRUD_User/UserManage';
 
+
 export const IndexAdmin=()=>{
  
             return(
           
            
               <div >
-              <NavbarAdmin/>
+         
+                <NavbarAdmin/>
+        
+               
+             
               
              
              

@@ -1,7 +1,7 @@
 import axios from "./axios"
 
-const handleLoginApi=(userEmail,userPassword)=>{
-return axios.post('/api/login',{email: userEmail,password:userPassword});
+const handleLoginApi=(userName,userPassword)=>{
+return axios.post('/api/login',{taikhoan: userName,password:userPassword});
 }
 
 const getAllUser =(inputId)=>{

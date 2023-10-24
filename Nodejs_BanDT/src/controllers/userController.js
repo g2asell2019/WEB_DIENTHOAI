@@ -7,7 +7,7 @@ let handleLogin=async(req,res)=>{
     if(!taikhoan || !password){
         return res.status(500).json({
             errcode: 1,
-            message:'Vui lòng nhập đầy đủ thông tin'
+            message:'vui lòng điền đầy đủ thông tin'
         });
     }
    
