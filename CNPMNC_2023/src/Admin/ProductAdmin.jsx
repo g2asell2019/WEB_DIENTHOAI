@@ -1,9 +1,8 @@
-
-import UserManage from "./CRUD_User/UserManage";
+import ProductManager from "./CRUD_Products/ProductManager";
 import "./Admin.css";
 import { DashBoard } from "./Components/DashBoard";
 import { Header } from "./Components/Header";
-export const IndexAdmin = () => {
+export const ProductAdmin = () => {
   return (
     <>
     
@@ -11,7 +10,7 @@ export const IndexAdmin = () => {
         <DashBoard />
         <div className="main--content">
           <Header />
-          <UserManage/>
+          <ProductManager/>
           
         </div>
         
@@ -21,4 +20,4 @@ export const IndexAdmin = () => {
   );
 };
 
-export default IndexAdmin;
+export default ProductAdmin;

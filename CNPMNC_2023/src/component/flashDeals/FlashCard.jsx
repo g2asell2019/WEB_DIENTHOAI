@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getAllProducts} from "../../userService";
+import { Buffer } from "buffer";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
 
@@ -13,6 +15,7 @@ const NextArrow = (props) => {
   );
 };
 const PrevArrow = (props) => {
+ 
   const { onClick } = props;
   return (
     <div className="control-btn" onClick={onClick}>
@@ -50,20 +53,45 @@ export const FlashCard = ({ productItems, addToCart }) => {
     // Loại bỏ khoảng trắng giữa số và đơn vị tiền tệ (₫)
     return formattedNumber.replace(/\s/g, "");
   }
+
+
+  const [arrProducts, setArrProducts] = useState([]);
+
+  useEffect(() => {
+    getAllUserFromReact();
+  }, []);
+
+
+  
+  const getAllUserFromReact = async () => {
+    let response = await getAllProducts("ALL");
+    if (response && response.errcode === 0) {
+      setArrProducts(response.products);
+    }
+  };
   return (
     <>
       <Slider {...settings}>
-        {productItems.map((productItems) => {
+        {arrProducts.map((arrProducts) => {
+             let imageBase64='';
+             if(arrProducts.image){
+     
+              
+                imageBase64=Buffer.from(arrProducts.image,'base64').toString('binary');
+             
+     
+           }
+             
           return (
-            <article key={productItems.id}>
+            <article key={arrProducts.id}>
               <div className="box">
                 <div className="product mtop">
                   <div className="img">
                     <span className="discount">
-                      {productItems.discount}% Off
+                      {arrProducts.discount}% Off
                     </span>
-                    <Link to={`/productdetail/${productItems.id}`}>
-                      <img src={productItems.cover} alt="" />
+                    <Link to={`/productdetail/${arrProducts.id}`}>
+                    <img src={imageBase64} alt="" />
                     </Link>
 
                     {/* <div className="product-like">
@@ -73,7 +101,7 @@ export const FlashCard = ({ productItems, addToCart }) => {
                   </div> */}
                   </div>
                   <div className="product-details">
-                    <h3>{productItems.name}</h3>
+                    <h3>{arrProducts.name}</h3>
                     <div className="rate">
                       <i className="fa fa-star"></i>
                       <i className="fa fa-star"></i>
@@ -83,19 +111,19 @@ export const FlashCard = ({ productItems, addToCart }) => {
                     </div>
                     <div className="d_flex">
                       <div className="price">
-                        <h4>{formatCurrency(productItems.price)}</h4>
+                        <h4>{formatCurrency(arrProducts.price)}</h4>
                       </div>
                       <div className="price-discount">
                         <strike>123$</strike>
                       </div>
                     </div>
                     <div className="d_flex">
-                      <Link to={`/productdetail/${productItems.id}`}>
+                      <Link to={`/productdetail/${arrProducts.id}`}>
                         <button>
                           <span>Chi tiết</span>
                         </button>
                       </Link>
-                      <button onClick={() => addToCart(productItems)}>
+                      <button onClick={() => addToCart(arrProducts)}>
                         {/* <i className="fa fa-plus"></i> */}
                         <span>Mua ngay</span>
                       </button>

@@ -1,68 +1,89 @@
 import axios from "./axios"
 
-const handleLoginApi=(userName,userPassword)=>{
-return axios.post('/api/login',{taikhoan: userName,password:userPassword});
+const handleLoginApi = (userName, userPassword) => {
+    return axios.post('/api/login', { taikhoan: userName, password: userPassword });
 }
 
-const getAllUser =(inputId)=>{
+const getAllUser = (inputId) => {
     //teamplate String
     return axios.get(`/api/get-all-users?id=${inputId}`)
 }
-const createNewUseService=(data)=>{
-    return axios.post('/api/create-new-user',data)
+const createNewUseService = (data) => {
+    return axios.post('/api/create-new-user', data)
 }
-const deleteUserService=(userId)=>{
+const deleteUserService = (userId) => {
     //return axios.delete('/api/delete-user',{id:userId})
-    return axios.delete('/api/delete-user',{
-        data:{
-            id:userId
+    return axios.delete('/api/delete-user', {
+        data: {
+            id: userId
         }
     })
 }
-const editUserService=(inputData)=>{
-    return axios.put('/api/edit-user',inputData)
-       
-}
-const getAllCodeService=(inputType)=>{
-    return axios.get(`/api/allcode?type=${inputType}`)
-}
+const editUserService = (inputData) => {
+    return axios.put('/api/edit-user', inputData)
 
-const getTopDoctorHomeService=(limit)=>{
-    return axios.get(`/api/top-doctor-home?limit=${limit}`)
-}
-
-const getAllDoctor=()=>{
-    return axios.get('/api/get-all-doctors')
-}
-
-const saveDetailDoctorService=(data)=>{
-    return axios.post('/api/save-infor-doctors',data)
-}
-const getDetailInforDoctor=(inputId)=>{
-    return axios.get(`/api/get-detail-doctor-by-id?id=${inputId}`)
-}
-
-const CreateNewSpecialty=(data)=>{
-    return axios.post('/api/create-new-specialty',data)
-}
-
-const getAllSpecialty=()=>{
-    return axios.get('/api/get-all-specialty')
 }
 
 
-export
-{
+// goi api cua products
+
+const getAllProducts = (inputId) => {
+    //teamplate String
+    return axios.get(`api/get-all-products?id=${inputId}`)
+}
+const CreateProducts = (data) => {
+    return axios.post('/api/create-new-products', data)
+}
+const deleteProducts = (productId) => {
+
+    return axios.delete('/api/delete-products', {
+        data: {
+            id: productId
+        }
+    })
+}
+const updateProductData = (inputData) => {
+    return axios.put('/api/edit-products', inputData)
+
+}
+
+// cua categories
+
+const CreateCategories = (data) => {
+    return axios.post('/api/create-new-categories', data)
+}
+const deleteCategories = (productId) => {
+
+        return axios.delete('/api/delete-categories', {
+            data: {
+                id: productId
+            }
+        })
+    }
+    // lay tat ca loai san pham
+const getAllCategories = (inputType) => {
+    return axios.get(`/api/get-all-categories?id=${inputType}`)
+}
+
+
+
+
+
+
+
+export {
     handleLoginApi,
     getAllUser,
     createNewUseService,
     deleteUserService,
     editUserService,
-    getAllCodeService,
-    getTopDoctorHomeService,
-    getAllDoctor,
-    saveDetailDoctorService,
-    getDetailInforDoctor,
-    CreateNewSpecialty,
-    getAllSpecialty
+    getAllProducts,
+    CreateProducts,
+    deleteProducts,
+    updateProductData,
+    CreateCategories,
+    deleteCategories,
+    getAllCategories
+
+
 }

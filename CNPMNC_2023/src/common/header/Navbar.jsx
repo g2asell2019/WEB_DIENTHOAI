@@ -7,13 +7,7 @@ export const Navbar = () => {
     <>
       <header className="header">
         <div className="container d_flex">
-          <div className="categories d_flex">
-            <span className="fa-solid fa-border-all"></span>
-            <h4>
-              Phân loại <i className="fa fa-chevron-down"></i>
-            </h4>
-          </div>
-          <div className="navlink">
+          <div className="d_flex">
             <ul
               className={
                 MobileMenu ? "nav-links-MobileMenu" : "link f_flex capitalize"
@@ -26,6 +20,15 @@ export const Navbar = () => {
               <li>
                 <Link to="/contact">Liên lạc</Link>
               </li>
+            </ul>
+          </div>
+          <div className="navlink">
+            <ul
+              className={
+                MobileMenu ? "nav-links-MobileMenu" : "link f_flex capitalize"
+              }
+              onClick={() => setMobileMenu(false)}
+            >
               <li>
                 <Link to="/login-signup/Login">Đăng nhập</Link>
               </li>

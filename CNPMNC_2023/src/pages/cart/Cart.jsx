@@ -1,6 +1,7 @@
 import React from "react";
 import "./Cart.css";
 import { Link } from "react-router-dom";
+import { Buffer } from "buffer";
 
 export const Cart = ({ cartItem, addToCart, decreaseQty }) => {
   const totalPrice = cartItem.reduce(
@@ -36,10 +37,18 @@ export const Cart = ({ cartItem, addToCart, decreaseQty }) => {
             )}
             {cartItem.map((item) => {
               const productQty = item.price * item.qty;
+              let imageBase64='';
+              if(item.image){
+      
+               
+                 imageBase64=Buffer.from(item.image,'base64').toString('binary');
+              
+      
+            }
               return (
                 <div className="cart-list product d_flex">
                   <div className="img">
-                    <img src={item.cover} alt="" />
+                    <img src={imageBase64} alt="" />
                   </div>
                   <div className="cart-details">
                     <h3>{item.name}</h3>

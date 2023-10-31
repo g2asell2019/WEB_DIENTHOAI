@@ -1,163 +1,338 @@
-
+import categories from "../models/categories";
 import db from "../models/index";
-let getAllproducts =(userId)=>{
-    return new Promise(async(resolve,reject)=>{
+let getAllProducts = (productId) => {
+    return new Promise(async(resolve, reject) => {
         try {
-            let users='';
-            if(userId=='ALL'){
-                users=db.User.findAll({
-                    // ẩn mật khẩu
-                    attributes:{
-                        exclude:['password']
-                    }
+            let products = '';
+            if (productId == 'ALL') {
+                products = db.Products.findAll({
+                    order: [
+                        ["createdAt", "DESC"]
+                    ],
+                    include: [{
+                        model: db.Categories, // Tham chiếu đến bảng Categories
+                        as: 'idCateData',
+                        attributes: ['name'] // Tên alias của quan hệ (nếu đã được đặt)
+                    }, ],
+                    raw: true,
+                    nest: true,
 
                 })
 
+
             }
-            if(userId && userId !== 'ALL')
-            {
-                users = await db.User.findOne({
-                    where:{id:userId},//  userId laf cais tham so truyen vao
-                     // ẩn mật khẩu
-                     attributes:{
-                        exclude:['password']
-                    }
+
+            if (productId && productId !== 'ALL') {
+                products = await db.Products.findOne({
+                    where: { id: productId }, //  productId laf cais tham so truyen vao
+
+                    include: [{
+                        model: db.Categories, // Tham chiếu đến bảng Categories
+                        as: 'idCateData',
+                        attributes: ['name'] // Tên alias của quan hệ (nếu đã được đặt)
+                    }, ],
+                    raw: true,
+                    nest: true,
                 });
-               
+
             }
-            resolve(users)
+            resolve(products)
         } catch (e) {
             reject(e);
         }
     })
 
 }
+let checkproductname = (name) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            let products = await db.Products.findOne({
 
-let CreateNewUser=(data)=>{
-    return new Promise(async(resolve,reject)=>{
+                where: { name: name },
+
+            });
+            if (products) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+
+        } catch (e) {
+            reject(e);
+
+        }
+    })
+}
+
+let CreateProducts = (data) => {
+    return new Promise(async(resolve, reject) => {
         try {
             // check taikhoan is exist??
-            let check= await checkUsertaikhoan(data.taikhoan);
-            if(check==true){
+            let check = await checkproductname(data.name);
+            if (check == true) {
                 resolve({
-                    errcode:1,
-                    errMessage:"Tên người dùng đã tồn tại vui lòng nhập tên người dùng  khác"
+                    errcode: 1,
+                    errMessage: "Tên người dùng đã tồn tại vui lòng nhập tên người dùng  khác"
                 })
-            }else{
-                let hashPasswordFromBcrypt=await hashUserPassword(data.password);
-                await db.User.create({
-                    taikhoan:data.taikhoan,
-                    password:hashPasswordFromBcrypt,
-                    fullName: data.fullName,                    
-                    address:data.address,
-                    phoneNumber:data.phoneNumber, 
-                    email:data.email,                                
-                    roleId: data.roleId,                  
-                    image:data.avatar                  
+            } else {
+                await db.Products.create({
+                    name: data.name,
+                    price: data.price,
+                    quantity: data.quantity,
+                    image: data.avatar,
+                    idCate: data.idCate
                 });
-                if(data && data.image){
-                    data.image=Buffer.from(data.image,'base64').toString('binary');
+                if (data && data.image) {
+                    data.image = Buffer.from(data.image, 'base64').toString('binary');
 
                 }
-                if(!data){
-                    data={};
+                if (!data) {
+                    data = {};
                 }
                 resolve({
-                    errcode:0,
-                    data:data
+                    errcode: 0,
+                    data: data
                 })
-    
+
                 resolve({
-                    errcode:0,
-                    message:'OK'
+                    errcode: 0,
+                    message: 'OK'
                 })
             }
-            
-           
-            
-        } catch (e) 
-        {
+
+
+
+        } catch (e) {
             reject(e);
-            
+
         }
     })
 }
-let deleteUser =(userId)=>{
-    return new Promise(async(resolve,reject)=>{
-        let user =await db.User.findOne({
-            where:{id:userId}
+let deleteProducts = (productId) => {
+    return new Promise(async(resolve, reject) => {
+        let products = await db.Products.findOne({
+            where: { id: productId }
         })
-        if(!user){
+        if (!products) {
             resolve({
-                errcode:2,
-                errMessage:"the user isn't exist !"
+                errcode: 2,
+                errMessage: "product isn't exist !"
             })
         }
-        await db.User.destroy({
-            where:{id:userId}
+        await db.Products.destroy({
+            where: { id: productId }
         });
         resolve({
-            errcode:0,
-            errMessage:"the user is deleted !"
+            errcode: 0,
+            errMessage: "product is deleted !"
 
         });
     })
 }
-let updateUserData=(data)=>{
-    return new Promise(async(resolve,reject)=>{
+let updateProductData = (data) => {
+    return new Promise(async(resolve, reject) => {
         try {
 
-            if(!data.id||!data.gender){
+            if (!data.id || !data.name) {
                 resolve({
-                    errcode:2,
-                    errMessage:"Missing required parameter"
+                    errcode: 2,
+                    errMessage: "Missing required parameter"
                 })
             }
-            let user = await db.User.findOne({
-                where:{id:data.id},
-                raw:false
-              })
-              if(user){
-                user.fullName=data.fullName;
-                user.address=data.address;
-                user.phoneNumber=data.phoneNumber;
-                user.email=data.email;
-                user.roleId=data.roleId;                           
-                if(data.avatar){
-                    user.image=data.avatar;
-                    
-                }
-                
-                user.image=data.avatar;
-                await user.save();
-                // await db.User.save({
-                //     fistName:data.firstName,
-                //     lastName:data.lastName,
-                //     address:data.address,
+            let products = await db.Products.findOne({
+                where: { id: data.id },
+                raw: false
+            })
+            if (products) {
+                products.name = data.name;
+                products.price = data.price;
+                products.quantity = data.quantity;
+                products.idCate = data.idCate;
+                if (data.avatar) {
+                    products.image = data.avatar;
 
-                // }); //  muốn không bị lỗi TypeError: user.save is not a function thì vào config.json đổi raw: true --> false  là đc
+                }
+
+                products.image = data.avatar;
+                await products.save();
                 resolve({
-                    errcode:0,
-                    errMessage:"update the user succeeds !"
+                    errcode: 0,
+                    errMessage: "update product succeeds !"
                 });
-              }
-              else{
+            } else {
                 resolve({
-                    errcode:1,
-                    errMessage:"User's not found !"
-                });         
-              }
+                    errcode: 1,
+                    errMessage: "product not found !"
+                });
+            }
         } catch (e) {
             reject(e)
-            
+
         }
     })
 }
 
 
-module.exports={
-    getAllUsers:getAllUsers,
-    CreateNewUser:CreateNewUser,
-    deleteUser:deleteUser,
-    updateUserData:updateUserData,
+
+
+
+let checkcategoriesname = (name) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            let category = await db.Categories.findOne({
+
+                where: { name: name },
+
+            });
+            if (category) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+
+        } catch (e) {
+            reject(e);
+
+        }
+    })
+}
+
+
+
+
+
+let CreateCategories = (data) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            // check taikhoan is exist??
+            let check = await checkcategoriesname(data.name);
+            if (check == true) {
+                resolve({
+                    errcode: 1,
+                    errMessage: "Tên loại sản phẩm này đã tồn tại"
+                })
+            } else {
+                await db.Categories.create({
+                    name: data.name,
+                    keyMap: data.keyMap
+                });
+                resolve({
+                    errcode: 0,
+                    data: data
+                })
+
+                resolve({
+                    errcode: 0,
+                    message: 'OK'
+                })
+            }
+
+
+
+        } catch (e) {
+            reject(e);
+
+        }
+    })
+}
+let deleteCategories = (CategoriesId) => {
+    return new Promise(async(resolve, reject) => {
+        let category = await db.Categories.findOne({
+            where: { id: CategoriesId }
+        })
+        if (!category) {
+            resolve({
+                errcode: 2,
+                errMessage: "loại sản phẩm  không tồn tại"
+            })
+        }
+        await db.Categories.destroy({
+            where: { id: CategoriesId }
+        });
+        resolve({
+            errcode: 0,
+            errMessage: "loại sản phẩm đã bị xóa !"
+
+        });
+    })
+}
+
+
+
+// let getAllCategories = (typeInput) => {
+//     return new Promise(async(resolve, reject) => {
+//         try {
+//             if (!typeInput) {
+//                 resolve({
+//                     errcode: 1,
+//                     errMessage: "Vui lòng điền đủ Thông tin"
+//                 })
+
+//             } else {
+//                 let res = {};
+//                 let categories = '';
+//                 if (typeInput == 'ALL') {
+//                     categories = db.Categories.findAll({
+//                         order: [
+//                             ["createdAt", "DESC"]
+//                         ],
+//                     })
+
+//                 }
+//                 res.errcode = 0;
+//                 res.data = categories;
+//                 resolve(res)
+//             }
+
+//         } catch (e) {
+//             reject(e)
+//         }
+//     })
+
+// }
+
+
+let getAllCategories = (categoriesId) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            let categories = '';
+            if (categoriesId == 'ALL') {
+                categories = db.Categories.findAll({
+                    order: [
+                        ["createdAt", "DESC"]
+                    ],
+                })
+
+            }
+            if (categoriesId && categoriesId !== 'ALL') {
+                categories = await db.Categories.findOne({
+                    where: { id: categoriesId }, //  productId laf cais tham so truyen vao
+                });
+
+            }
+            resolve(categories)
+        } catch (e) {
+            reject(e);
+        }
+    })
+
+}
+
+
+
+
+
+
+
+
+
+module.exports = {
+    getAllProducts: getAllProducts,
+    CreateProducts: CreateProducts,
+    deleteProducts: deleteProducts,
+    updateProductData: updateProductData,
+    CreateCategories: CreateCategories,
+    deleteCategories: deleteCategories,
+    getAllCategories: getAllCategories
+
 }

@@ -1,50 +1,51 @@
 import React, { Component } from "react";
-
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-
-import "./ModalEditUser.scss";
+import { emitter } from "../../utils/emitter";
+import { toast } from "react-toastify";
+import "./ModalProducts.scss";
 import _ from "lodash";
-import { Buffer } from "buffer";
 import CommonUtils from "../../utils/CommonUtils";
+import {getAllCategories} from "../../userService";
 
-class ModalEditUser extends Component {
+class ModalProducts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      taikhoan: "",
-      password: "",
-      fullName: "",
-      address: "",
-      phoneNumber: "",
-      email: "",
-      roleId: "R1",
+      arrCate:[],
+      name: "",
+      price: "",
+      quantity: "",
+      idCate: "",
       avatar: "",
-      previewImgURL: "",
+      previewImgURL: " ",
     };
+    this.listenToEmitter();
+  }
+  listenToEmitter = () => {
+    emitter.on("EVENT_CLEAR_MODAL_DATA", () => {
+      //reset state
+      this.setState({
+      name: "",
+      price: "",
+      quantity: "",
+      idCate: "",
+      avatar: "",
+      previewImgURL: " ",
+      });
+    });
+  };
+ async componentDidMount() {
+  await this.getAllCategoriesReact();
   }
 
-  componentDidMount() {
-    let user = this.props.currentUser;
-    // cachs 2 //let {CurrentUser}=this.props;
-    if (user && !_.isEmpty(user)) {
-      let imageBase64 = "";
-      if (user.image) {
-        // const imageBuffer = Buffer.from(JSON.stringify(user.image));
-        imageBase64 = new Buffer.from(user.image, "base64").toString("binary");
-      }
+  getAllCategoriesReact = async () => {
+    let response = await getAllCategories("ALL");
+    if (response && response.errcode == 0) {
       this.setState({
-        id: user.id,
-        taikhoan: user.taikhoan,
-        fullName: user.fullName,
-        address: user.address,
-        phoneNumber: user.phoneNumber,
-        email: user.email,
-        avatar: user.avatar,
-        roleId: user.roleId,
-        previewImgURL: imageBase64,
+        arrCate: response.categories,
       });
     }
-  }
+  };
 
   toggle = () => {
     this.props.toggleFromParent();
@@ -66,16 +67,14 @@ class ModalEditUser extends Component {
 
     // console.log(event.target.value,id)
   };
-
-  checkValideInputEdit = () => {
+  checkValideInput = () => {
     let isValid = true;
     let arrInput = [
-      "taikhoan",
-      "fullName",
-      "address",
-      "phoneNumber",
-      "email",
-      "roleId",
+      "name",
+      "price",
+      "quantity",
+      "idCate",
+      "avatar"
     ];
 
     for (let i = 0; i < arrInput.length; i++) {
@@ -90,11 +89,15 @@ class ModalEditUser extends Component {
     return isValid;
   };
 
-  handleSaveUser = () => {
-    let isValid = this.checkValideInputEdit();
+  handleAddNewUser = () => {
+    let isValid = this.checkValideInput();
 
     if (isValid == true) {
-      this.props.editUser(this.state);
+      //call api create modal
+      //  console.log('check props child:',this.props);
+      this.props.createNewUser(this.state);
+      // console.log('data modal:',this.state)
+      toast.success("Tạo Thành công");
     }
   };
 
@@ -113,6 +116,7 @@ class ModalEditUser extends Component {
   };
 
   render() {
+    let category=this.state.arrCate;
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -129,7 +133,7 @@ class ModalEditUser extends Component {
             this.toggle();
           }}
         >
-          Sửa tài tài khoản khách hàng
+          Thêm sản phẩm mới
         </ModalHeader>
         <ModalBody>
           <div className="user-redux-body">
@@ -137,92 +141,60 @@ class ModalEditUser extends Component {
               <div className="row-12">
                 <div className="form-row">
                   <div className="form-group col-md-6">
-                    <label>UserName</label>
+                    <label>Tên sản phẩm</label>
                     <input
                       className="form-control"
-                      placeholder="UserName"
+                      placeholder="iphone"
                       onChange={(event) => {
-                        this.handleOnChangeInput(event, "taikhoan");
+                        this.handleOnChangeInput(event, "name");
                       }}
-                      value={this.state.taikhoan}
-                      disabled
+                      value={this.state.name}
                     />
                   </div>
                   <div className="form-group col-md-6">
-                    <label>Mật khẩu</label>
+                    <label>Giá</label>
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
-                      placeholder="********"
+                      placeholder="10,000,000"
                       onChange={(event) => {
-                        this.handleOnChangeInput(event, "password");
+                        this.handleOnChangeInput(event, "price");
                       }}
-                      value={this.state.password}
-                      disabled
+                      value={this.state.price}
                     />
                   </div>
                 </div>
                 <div className="form-row">
                   <div className="form-group col-md-12">
-                    <label>Họ và Tên</label>
+                    <label>Số Lượng</label>
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
-                      placeholder="Anh"
+                      placeholder="50"
                       onChange={(event) => {
-                        this.handleOnChangeInput(event, "fullName");
+                        this.handleOnChangeInput(event, "quantity");
                       }}
-                      value={this.state.fullName}
+                      value={this.state.quantity}
                     />
                   </div>
                 </div>
                 <div className="form-row">
-                  <div className="form-group col-md-6">
-                    <label>Địa chỉ</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="1234 Main St"
-                      onChange={(event) => {
-                        this.handleOnChangeInput(event, "address");
-                      }}
-                      value={this.state.address}
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label>Số Điện thoại</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="0123456789"
-                      onChange={(event) => {
-                        this.handleOnChangeInput(event, "phoneNumber");
-                      }}
-                      value={this.state.phoneNumber}
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label>Email</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="0123456789"
-                      onChange={(event) => {
-                        this.handleOnChangeInput(event, "email");
-                      }}
-                      value={this.state.email}
-                    />
-                  </div>
-
+                  
                   <div className="form-group col-md-3">
-                    <label>Quyền</label>
+                    <label>Loại</label> 
                     <select className="form-control"
                      onChange={(event) => {
-                      this.handleOnChangeInput(event, "roleId");
+                      this.handleOnChangeInput(event, "idCate");
                     }}
-                    value={this.state.roleId}>
-                      <option value='R1'>Admin</option>
-                      <option value='R2'>Khách hàng</option>
+                    value={this.state.idCate}>
+                     {
+                      category&&category.length>0
+                      &&category.map((item,index)=>{
+                        return(
+                          <option  value={item.id}>{item.name}</option>
+                        )
+                      })
+                     }
                      
                     </select>
                   </div>
@@ -260,10 +232,10 @@ class ModalEditUser extends Component {
             color="primary"
             className="px-3"
             onClick={() => {
-              this.handleSaveUser();
+              this.handleAddNewUser();
             }}
           >
-            Lưu thay đổi
+            Thêm
           </Button>
           <Button
             variant="secondary"
@@ -281,4 +253,4 @@ class ModalEditUser extends Component {
   }
 }
 
-export default ModalEditUser;
+export default ModalProducts;

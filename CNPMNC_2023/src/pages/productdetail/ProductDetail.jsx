@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getAllProducts} from "../../userService";
+import { Buffer } from "buffer";
 import "./ProductDetail.css";
 import { Link, useParams } from "react-router-dom";
 export const ProductDetail = ({ addToCart, productItems, decreaseQty }) => {
@@ -18,22 +20,44 @@ export const ProductDetail = ({ addToCart, productItems, decreaseQty }) => {
     return formattedNumber.replace(/\s/g, "");
   }
 
+
   const { id } = useParams();
+  
+  const [detailProducts, setdetailProducts] = useState({});
 
-  const product = productItems.find((item) => item.id == id);
+  useEffect(() => {
+    getAllUserFromReact();
+  }, []);
 
-  const { discount, cover, description, name, price } = product;
+
+  
+  const getAllUserFromReact = async () => {
+    let response = await getAllProducts(id);
+    if (response && response.errcode === 0) {
+      setdetailProducts(response.products);
+    }
+  };
+  let imageBase64='';
+  if(detailProducts.image){
+
+   
+     imageBase64=Buffer.from(detailProducts.image,'base64').toString('binary');
+  
+
+}
+  
+
   // {product.cover}
   return (
     <>
       <div className="wrapper-pd">
         <div className="product mtop d_flex">
           <div className="img-pd">
-            <span className="discount">{discount}% Off</span>
-            <img src={cover} alt={name} />
+            <span className="discount">{}% Off</span>
+            <img src={imageBase64} alt="" />
           </div>
           <div className="product-info">
-            <h2>{name}</h2>
+            <h2>{detailProducts.name}</h2>
             <div className="rate">
               <i className="fa fa-star"></i>
               <i className="fa fa-star"></i>
@@ -42,12 +66,12 @@ export const ProductDetail = ({ addToCart, productItems, decreaseQty }) => {
               <i className="fa fa-star"></i>
             </div>
             <div className="desc">
-              <p>{description}</p>
+              <p>{detailProducts.name}</p>
             </div>
             <div className="price-pd">
-              <h4>{formatCurrency(price)}</h4>
+              <h4>{formatCurrency(detailProducts.price)}</h4>
             </div>
-            <button onClick={() => addToCart(product)}>
+            <button onClick={() => addToCart(detailProducts)}>
               <i class="fa-solid fa-cart-plus"></i>
               <span> Mua ngay</span>
             </button>
