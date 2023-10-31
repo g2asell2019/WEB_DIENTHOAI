@@ -26,7 +26,7 @@ let handleUserLogin = (taikhoan, password) => {
                 //user allready exist
 
                 let user = await db.User.findOne({
-                    attributes: ['taikhoan', 'roleId', 'password', 'fullName', ], //  chỉ hiện taikhoan, roleid, pasword
+                    attributes: ['taikhoan', 'roleId', 'password', 'fullName', 'phoneNumber', 'email', 'address', 'image'], //  chỉ hiện taikhoan, roleid,
                     where: { taikhoan: taikhoan },
                     raw: true, // xóa passwword
                 });

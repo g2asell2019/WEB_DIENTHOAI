@@ -1,8 +1,30 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useHistory, Redirect } from "react-router-dom";
 
 export const Navbar = () => {
   const [MobileMenu, setMobileMenu] = useState(false);
+  const history = useHistory();
+  const [user, setUser] = useState({ taikhoan: "" });
+
+  useEffect(() => {
+    // Sử dụng một hàm async để lấy dữ liệu từ Local Storage
+    const getUserDataFromLocalStorage = async () => {
+      const userData = localStorage.getItem("user");
+      console.log("userData", userData); // Kiểm tra giá trị userData
+
+      if (userData) {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+      }
+    };
+
+    getUserDataFromLocalStorage(); // Gọi hàm để lấy dữ liệu từ Local Storage
+  }, []);
+
+  {
+    user && <Navbar />;
+  }
+
   return (
     <>
       <header className="header">
@@ -30,7 +52,12 @@ export const Navbar = () => {
               onClick={() => setMobileMenu(false)}
             >
               <li>
-                <Link to="/login-signup/Login">Đăng nhập</Link>
+                  
+                {
+                  user&&user.taikhoan==null?<Link to="/login-signup/Login">Đăng nhập</Link>:<Link to="/">Xin Chào,<strong>{user.taikhoan}</strong></Link>
+
+                }
+                
               </li>
             </ul>
 

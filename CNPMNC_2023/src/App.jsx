@@ -104,9 +104,10 @@ function App() {
 
       <div>
         <Router>
+        <Header cartItem={cartItem} />
           <Switch>
             <Route path="/" exact>
-              <Header cartItem={cartItem} />
+           
 
               <Pages
                 productItems={productItems}

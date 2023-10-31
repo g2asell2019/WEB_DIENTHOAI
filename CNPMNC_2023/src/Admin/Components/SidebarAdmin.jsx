@@ -32,7 +32,7 @@ const SidebarAdmin = () => {
             <span style={{ display: "flex", alignItems: "center" }}>
               <i className="fas fa-list-ul" style={{ marginRight: "5px" }}></i>
               <span className="ml-0">
-                {" "}
+            
                 <NavDropdown title="Danh sách" className="text-secondary">
                   <NavDropdown.Item
                     href="list chuyen di"

@@ -3,7 +3,7 @@ import { getAllProducts} from "../../userService";
 import { Buffer } from "buffer";
 import "./ProductDetail.css";
 import { Link, useParams } from "react-router-dom";
-export const ProductDetail = ({ addToCart, productItems, decreaseQty }) => {
+export const ProductDetail = ({ addToCart }) => {
   //Chuyển đổi tiền tệ
   function formatCurrency(number) {
     // Sử dụng Intl.NumberFormat để định dạng số

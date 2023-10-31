@@ -2,7 +2,7 @@ import React from "react";
 import { PhoneCard } from "./PhoneCard";
 import "./Phone.css";
 
-export const Phone = ({ phoneItems, addToCart }) => {
+export const Phone = ({ addToCart }) => {
   return (
     <>
       <section className="flash">
@@ -10,7 +10,7 @@ export const Phone = ({ phoneItems, addToCart }) => {
           <div className="heading-p">
             <h1>Điện thoại di động</h1>
           </div>
-          <PhoneCard phoneItems={phoneItems} addToCart={addToCart} />
+          <PhoneCard  addToCart={addToCart} />
         </div>
       </section>
     </>
