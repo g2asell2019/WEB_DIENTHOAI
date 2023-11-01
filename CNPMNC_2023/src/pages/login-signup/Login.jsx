@@ -35,7 +35,7 @@ const handleLogin = async () => {
         localStorage.setItem('user', JSON.stringify(data.user));
        
         if(data.user.roleId=="R1"){
-          history.replace("/admin"); // Sử dụng replace thay vì push
+          history.replace("/admin/user"); // Sử dụng replace thay vì push
           window.location.reload(); // Tải lại trang
         }else{
           history.replace("/"); // Sử dụng replace thay vì push

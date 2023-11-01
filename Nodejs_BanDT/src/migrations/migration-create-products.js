@@ -30,6 +30,9 @@ module.exports = {
             idBrand: {
                 type: Sequelize.INTEGER
             },
+            idDiscount: {
+                type: Sequelize.INTEGER
+            },
             idSale: {
                 type: Sequelize.INTEGER
             },

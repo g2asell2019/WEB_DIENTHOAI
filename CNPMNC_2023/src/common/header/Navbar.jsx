@@ -54,7 +54,11 @@ export const Navbar = () => {
               <li>
                   
                 {
-                  user&&user.taikhoan==null?<Link to="/login-signup/Login">Đăng nhập</Link>:<Link to="/">Xin Chào,<strong>{user.taikhoan}</strong></Link>
+                  user.taikhoan === "" ? (
+                    <Link to="/login-signup/Login">Đăng nhập</Link>
+                  ) : (
+                    <Link to="/">Xin Chào, <strong>{user.taikhoan}</strong></Link>
+                  )
 
                 }
                 

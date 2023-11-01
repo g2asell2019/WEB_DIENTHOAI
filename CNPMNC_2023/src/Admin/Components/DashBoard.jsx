@@ -9,6 +9,10 @@ export const DashBoard = () => {
   const handleManageProduct=()=>{
     history.replace("/admin/product"); // Sử dụng replace thay vì push
   }
+
+  const handleManageCategories=()=>{
+    history.replace("/admin/categories"); // Sử dụng replace thay vì push
+  }
   return (
     <>
       <div className="sidebar">
@@ -34,6 +38,15 @@ export const DashBoard = () => {
             
               <i className="fas fa-mobile-alt"></i>
                 <span>Quản lý  Sản phẩm </span>
+            
+            </li>
+
+            <li
+            onClick={()=>handleManageCategories()}
+            >
+            
+              <i className="fas fa-mobile-alt"></i>
+                <span>Quản lý Loại sản phẩm</span>
             
             </li>
             <li className="logout">

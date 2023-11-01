@@ -22,7 +22,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IndexAdmin } from "../src/Admin/IndexAdmin";
 import ProductAdmin from "./Admin/ProductAdmin";
-
+import CategoriesAdmin from "./Admin/CategoriesAdmin";
 function App() {
   //step 1: fetch data from DB
   const { productItems } = Data;
@@ -85,7 +85,12 @@ function App() {
                  <ProductAdmin/>
               
             </Route>
-
+            <Route path="/admin/categories" exact>
+             
+            
+             <CategoriesAdmin/>
+          
+        </Route>
             <ToastContainer
               position="bottom-right"
               autoClose={5000}

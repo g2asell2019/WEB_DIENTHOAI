@@ -97,7 +97,7 @@ class UserManage extends Component {
   doEditUser = async (user) => {
     try {
       let res = await editUserService(user);
-      if (res && res.errcode !== 0) {
+      if (res && res.errcode== 0) {
         await this.getAllUserFromReact();
         toast.success("Sửa Thành công");
         this.setState({

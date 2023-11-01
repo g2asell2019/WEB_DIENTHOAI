@@ -65,6 +65,11 @@ const getAllCategories = (inputType) => {
     return axios.get(`/api/get-all-categories?id=${inputType}`)
 }
 
+const updateCategoriesData = (inputData) => {
+    return axios.put('/api/edit-categories', inputData)
+
+}
+
 
 
 
@@ -83,7 +88,8 @@ export {
     updateProductData,
     CreateCategories,
     deleteCategories,
-    getAllCategories
+    getAllCategories,
+    updateCategoriesData
 
 
 }

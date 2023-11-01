@@ -1,13 +1,13 @@
 {
-  "development": {
-    "username": "root",
-    "password": "",
-    "database": "db_dienthoai",
-    "host": "localhost",
-    "dialect": "mysql",
-    "logging": false,
-    "query":{"raw":true},
-    "timezone":"+07:00"
-  }
+    "development": {
+        "username": "fx3f09hng2ji_nhom6",
+        "password": "nhom6@123456789",
+        "database": "fx3f09hng2ji_db_dienthoai",
+        "host": "137.59.106.55",
+        "dialect": "mysql",
+        "logging": false,
+        "query": { "raw": true },
+        "timezone": "+07:00"
+    }
 
 }

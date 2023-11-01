@@ -196,7 +196,7 @@ let updateUserData = (data) => {
     return new Promise(async(resolve, reject) => {
         try {
 
-            if (!data.id || !data.gender) {
+            if (!data.id) {
                 resolve({
                     errcode: 2,
                     errMessage: "Missing required parameter"

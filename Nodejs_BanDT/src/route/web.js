@@ -38,6 +38,7 @@ let initWebRouters = (app) => {
     //api cua categories
     router.post('/api/create-new-categories', productController.handleCreateCategories);
     router.delete('/api/delete-categories', productController.handleDeleteCategories);
+    router.put('/api/edit-categories', productController.handleEditCategories);
     router.get('/api/get-all-categories', productController.handlegetAllCategories);
 
 

@@ -259,37 +259,43 @@ let deleteCategories = (CategoriesId) => {
 
 
 
-// let getAllCategories = (typeInput) => {
-//     return new Promise(async(resolve, reject) => {
-//         try {
-//             if (!typeInput) {
-//                 resolve({
-//                     errcode: 1,
-//                     errMessage: "Vui lòng điền đủ Thông tin"
-//                 })
 
-//             } else {
-//                 let res = {};
-//                 let categories = '';
-//                 if (typeInput == 'ALL') {
-//                     categories = db.Categories.findAll({
-//                         order: [
-//                             ["createdAt", "DESC"]
-//                         ],
-//                     })
+let updateCategoriesData = (data) => {
+    return new Promise(async(resolve, reject) => {
+        try {
 
-//                 }
-//                 res.errcode = 0;
-//                 res.data = categories;
-//                 resolve(res)
-//             }
+            if (!data.id) {
+                resolve({
+                    errcode: 2,
+                    errMessage: "Missing required parameter"
+                })
+            }
+            let categories = await db.Categories.findOne({
+                where: { id: data.id },
+                raw: false
+            })
+            if (categories) {
+                categories.name = data.name;
 
-//         } catch (e) {
-//             reject(e)
-//         }
-//     })
 
-// }
+
+                await categories.save();
+                resolve({
+                    errcode: 0,
+                    errMessage: "update categories succeeds !"
+                });
+            } else {
+                resolve({
+                    errcode: 1,
+                    errMessage: "categories not found !"
+                });
+            }
+        } catch (e) {
+            reject(e)
+
+        }
+    })
+}
 
 
 let getAllCategories = (categoriesId) => {
@@ -333,6 +339,7 @@ module.exports = {
     updateProductData: updateProductData,
     CreateCategories: CreateCategories,
     deleteCategories: deleteCategories,
-    getAllCategories: getAllCategories
+    getAllCategories: getAllCategories,
+    updateCategoriesData: updateCategoriesData
 
 }

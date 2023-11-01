@@ -53,21 +53,7 @@ let handleEditProducts = async(req, res) => {
 
 // cua categories 
 
-// let handlegetAllCategories = async(req, res) => {
-//     try {
 
-//         let data = await productServices.getAllCategories(req.query.id);
-//         return res.status(200).json(data);
-
-//     } catch (e) {
-//         console.log('get categories error', e)
-//         return res.status(200).json({
-//             errcode: -1,
-//             errMessage: "Error from sever"
-//         })
-
-//     }
-// }
 
 let handlegetAllCategories = async(req, res) => {
     let id = req.query.id; //all, id
@@ -112,6 +98,13 @@ let handleDeleteCategories = async(req, res) => {
     return res.status(200).json(message);
 }
 
+let handleEditCategories = async(req, res) => {
+    let data = req.body;
+    let message = await productServices.updateCategoriesData(data);
+    return res.status(200).json(message)
+
+}
+
 
 
 
@@ -134,6 +127,7 @@ module.exports = {
     handleEditProducts: handleEditProducts,
     handlegetAllCategories: handlegetAllCategories,
     handleCreateCategories: handleCreateCategories,
-    handleDeleteCategories: handleDeleteCategories
+    handleDeleteCategories: handleDeleteCategories,
+    handleEditCategories: handleEditCategories
 
 }
