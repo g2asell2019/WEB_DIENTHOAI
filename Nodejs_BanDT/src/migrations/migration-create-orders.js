@@ -4,7 +4,7 @@ const { sequelize } = require("../models");
 
 module.exports = {
     up: async(queryInterface, Sequelize) => {
-        await queryInterface.createTable('Products', {
+        await queryInterface.createTable('Orders', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -12,27 +12,33 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
 
-            name: {
+
+
+
+
+
+            receiver: {
                 type: Sequelize.STRING
             },
-            price: {
+            order_date: {
+                type: Sequelize.DATE
+            },
+            order_status: {
+                type: Sequelize.STRING
+            },
+            receiving_point: {
+                type: Sequelize.STRING
+            },
+            total_value: {
                 type: Sequelize.DECIMAL
             },
-            quantity: {
+            note: {
+                type: Sequelize.STRING
+            },
+            order_idUser: {
                 type: Sequelize.INTEGER
             },
-            image: {
-                type: Sequelize.BLOB('long')
-            },
-            idCate: {
-                type: Sequelize.INTEGER
-            },
-            idBrand: {
-                type: Sequelize.INTEGER
-            },
-            idSale: {
-                type: Sequelize.INTEGER
-            },
+
 
 
             createdAt: {
@@ -46,6 +52,6 @@ module.exports = {
         });
     },
     down: async(queryInterface, Sequelize) => {
-        await queryInterface.dropTable('Products');
+        await queryInterface.dropTable('Orders');
     }
 };
