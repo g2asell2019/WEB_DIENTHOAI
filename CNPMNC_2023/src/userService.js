@@ -27,10 +27,12 @@ const editUserService = (inputData) => {
 
 // goi api cua products
 
-const getAllProducts = (inputId) => {
-    //teamplate String
-    return axios.get(`api/get-all-products?id=${inputId}`)
+const getAllProducts = (inputId, idne) => {
+    // Template String
+    return axios.get(`api/get-all-products?id=${inputId}&idCate=${idne}`);
 }
+
+
 const CreateProducts = (data) => {
     return axios.post('/api/create-new-products', data)
 }

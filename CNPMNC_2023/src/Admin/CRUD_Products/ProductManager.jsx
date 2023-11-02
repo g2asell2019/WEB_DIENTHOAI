@@ -6,8 +6,7 @@ import {
   updateProductData,
   CreateCategories,
   deleteCategories,
-  getAllCategories
-
+  getAllCategories,
 } from "../../userService";
 import { emitter } from "../../utils/emitter";
 import { toast } from "react-toastify";
@@ -15,32 +14,52 @@ import ModalEditProducts from "./ModalEditProducts";
 import ModalProducts from "./ModalProducts";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import "./ModalProducts.scss"
+import "./ModalProducts.scss";
 import ModalCategories from "./ModalCategories";
-import { Buffer } from 'buffer';
-
-
+import { Buffer } from "buffer";
 
 class ProductManager extends Component {
   constructor(props) {
     super(props);
     this.state = {
       arrProducts: [],
-      arrCate:[],
+      arrCate: [],
+      idne: "",
       isOpenModalProduct: false,
       isOpenModalEditProduct: false,
       isOpenModalCategories: false,
       productEdit: {},
       currentPage: 1,
       productsPerPage: 5,
-      previewImgURL:'',
+      previewImgURL: "",
     };
+
     this.handlePageChange = this.handlePageChange.bind(this); // Thêm dòng này
   }
+  handleOnChangeInput = (event, id) => {
+    //good code
+    let copyState = { ...this.state };
+    copyState[id] = event.target.value;
+    this.setState(
+      {
+        ...copyState,
+      },
+      () => {
+        //console.log('check good state: ',this.state.idne);
+        // muốn lấy giá trị từ hàm render thì phải bỏ vào đây
+        this.getAllUserFromReact(this.state.idne);
+      }
+    );
+    //console.log('copystate: ',copyState);
+
+    // console.log(event.target.value,id)
+  };
 
   async componentDidMount() {
-    await this.getAllUserFromReact();
+    console.log("id cuar toi: ", this.state.idne);
+
     await this.getAllCategoriesReact();
+    await this.getAllUserFromReact(this.state.idne);
   }
   getAllCategoriesReact = async () => {
     let response = await getAllCategories("ALL");
@@ -50,8 +69,12 @@ class ProductManager extends Component {
       });
     }
   };
-  getAllUserFromReact = async () => {
-    let response = await getAllProducts("ALL");
+
+  getAllUserFromReact = async (idne) => {
+    console.log("id cuar toi: ", idne);
+
+    let response = await getAllProducts("ALL", idne);
+
     if (response && response.errcode == 0) {
       this.setState({
         arrProducts: response.products,
@@ -69,13 +92,12 @@ class ProductManager extends Component {
       isOpenModalCategories: true,
     });
   };
-  toggleCategoriesModal= () => {
+  toggleCategoriesModal = () => {
     this.setState({
       isOpenModalCategories: !this.state.isOpenModalCategories,
     });
   };
 
-  
   toggleUserModal = () => {
     this.setState({
       isOpenModalProduct: !this.state.isOpenModalProduct,
@@ -95,10 +117,8 @@ class ProductManager extends Component {
         await this.getAllUserFromReact();
         this.setState({
           isOpenModalProduct: false,
-          
         });
         emitter.emit("EVENT_CLEAR_MODAL_DATA");
-       
       }
       //  console.log("response create user: " , response)
     } catch (e) {
@@ -107,20 +127,17 @@ class ProductManager extends Component {
     // console.log('check data from child',data)
   };
 
-
-
   createNewCategories = async (data) => {
     try {
       let response = await CreateCategories(data);
       if (response && response.errcode !== 0) {
         alert(response.errMessage);
       } else {
-        await this. getAllCategoriesReact();
+        await this.getAllCategoriesReact();
         this.setState({
-          isOpenModalCategories:false,
+          isOpenModalCategories: false,
         });
         emitter.emit("EVENT_CLEAR_MODAL_DATA");
-       
       }
       //  console.log("response create user: " , response)
     } catch (e) {
@@ -169,13 +186,11 @@ class ProductManager extends Component {
     }
   };
 
-
   handlePageChange(event, page) {
     this.setState({
       currentPage: page,
     });
   }
-  
 
   /**Life cycle
    * Run component:
@@ -185,10 +200,14 @@ class ProductManager extends Component {
    */
 
   render() {
-    const { arrProducts,arrCate, currentPage, productsPerPage } = this.state;
+    let { idne } = this.state;
+    const { arrProducts, arrCate, currentPage, productsPerPage } = this.state;
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = arrProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+    const currentProducts = arrProducts.slice(
+      indexOfFirstProduct,
+      indexOfLastProduct
+    );
     return (
       <div className="hello">
         <ModalProducts
@@ -196,7 +215,7 @@ class ProductManager extends Component {
           toggleFromParent={this.toggleUserModal}
           createNewUser={this.createNewUser}
         />
-         <ModalCategories
+        <ModalCategories
           isOpen={this.state.isOpenModalCategories}
           toggleFromParent={this.toggleCategoriesModal}
           createNewCategories={this.createNewCategories}
@@ -215,7 +234,6 @@ class ProductManager extends Component {
           <div className="col">
             <div className="col-md-12">
               <div className="f-index">
-                
                 <div className="tabular--wrapper">
                   <button
                     className=" btn btn-primary px-3 mr-3"
@@ -227,10 +245,40 @@ class ProductManager extends Component {
                     className=" btn btn-primary px-3"
                     onClick={() => this.handleAddCategories()}
                   >
-                  <i class="fas fa-box mr-2"></i>Thêm Loại sản phẩm
+                    <i class="fas fa-box mr-2"></i>Thêm Loại sản phẩm
                   </button>
-                  
+
                   <h2 className="h2--title">Danh sách sản phẩm</h2>
+                  <div className="locsanpham">
+                    <select
+                      className="form-control col-3 mr-3"
+                      onChange={(event) => {
+                        this.handleOnChangeInput(event, "idne");
+                      }}
+                      value={idne}
+                    >
+                      <option value="">Tất cả hãng sản xuất</option>
+                      {arrCate &&
+                        arrCate.length > 0 &&
+                        arrCate.map((item, index) => {
+                          return <option value={item.id}>{item.name}</option>;
+                        })}
+                    </select>
+                    <select
+                      className="form-control col-3"
+                      onChange={(event) => {
+                        this.handleOnChangeInput(event, "idne");
+                      }}
+                      value={idne}
+                    >
+                      <option value="">Tất cả giá</option>
+                      {arrCate &&
+                        arrCate.length > 0 &&
+                        arrCate.map((item, index) => {
+                          return <option value={item.id}>{item.name}</option>;
+                        })}
+                    </select>
+                  </div>
 
                   <div className="table-container">
                     <table>
@@ -247,34 +295,29 @@ class ProductManager extends Component {
                       <tbody>
                         {currentProducts &&
                           currentProducts.map((item, index) => {
-                            let imageBase64='';
-                            if(item.image){
-                    
-                             
-                               imageBase64=Buffer.from(item.image,'base64').toString('binary');
-                            
-                    
-                          }
-                            
-                            
+                            let imageBase64 = "";
+                            if (item.image) {
+                              imageBase64 = Buffer.from(
+                                item.image,
+                                "base64"
+                              ).toString("binary");
+                            }
 
                             return (
                               <tr key={index}>
                                 <td>{item.name}</td>
                                 <td>{item.price}</td>
                                 <td>{item.quantity}</td>
-                              
-                                <td>{item.idCateData.name}</td>
-                               <td > 
-                               <div className="imagene" style={{backgroundImage:`url(${imageBase64})`}}>
 
-                               </div>
-                                
-                                 </td>
-      
-     
-                      
-                        
+                                <td>{item.idCateData.name}</td>
+                                <td>
+                                  <div
+                                    className="imagene"
+                                    style={{
+                                      backgroundImage: `url(${imageBase64})`,
+                                    }}
+                                  ></div>
+                                </td>
 
                                 <td>
                                   <button
@@ -299,22 +342,20 @@ class ProductManager extends Component {
                                 </td>
                               </tr>
                             );
-                                  
                           })}
                       </tbody>
                     </table>
                   </div>
                   <div className="phantrang">
-                  <Stack spacing={2}>
-                    <Pagination shape="rounded"
-                      count={Math.ceil(arrProducts.length / productsPerPage)}
-                      page={currentPage}
-                      onChange={this.handlePageChange}
-                    />
-                  </Stack>
-
+                    <Stack spacing={2}>
+                      <Pagination
+                        shape="rounded"
+                        count={Math.ceil(arrProducts.length / productsPerPage)}
+                        page={currentPage}
+                        onChange={this.handlePageChange}
+                      />
+                    </Stack>
                   </div>
-                  
                 </div>
               </div>
             </div>

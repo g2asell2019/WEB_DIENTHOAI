@@ -187,6 +187,7 @@ class ModalProducts extends Component {
                       this.handleOnChangeInput(event, "idCate");
                     }}
                     value={this.state.idCate}>
+                         <option  value=''>Chọn loại sản phẩm</option>
                      {
                       category&&category.length>0
                       &&category.map((item,index)=>{

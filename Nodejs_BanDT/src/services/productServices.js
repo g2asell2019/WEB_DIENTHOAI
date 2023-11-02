@@ -1,48 +1,60 @@
 import categories from "../models/categories";
 import db from "../models/index";
-let getAllProducts = (productId) => {
+
+let getAllProducts = (productId, idne) => {
     return new Promise(async(resolve, reject) => {
+
         try {
             let products = '';
-            if (productId == 'ALL') {
+            if (productId == 'ALL' && idne == '') {
                 products = db.Products.findAll({
                     order: [
                         ["createdAt", "DESC"]
                     ],
                     include: [{
-                        model: db.Categories, // Tham chiếu đến bảng Categories
+                        model: db.Categories,
                         as: 'idCateData',
-                        attributes: ['name'] // Tên alias của quan hệ (nếu đã được đặt)
-                    }, ],
-                    raw: true,
-                    nest: true,
-
-                })
-
-
-            }
-
-            if (productId && productId !== 'ALL') {
-                products = await db.Products.findOne({
-                    where: { id: productId }, //  productId laf cais tham so truyen vao
-
-                    include: [{
-                        model: db.Categories, // Tham chiếu đến bảng Categories
-                        as: 'idCateData',
-                        attributes: ['name'] // Tên alias của quan hệ (nếu đã được đặt)
+                        attributes: ['name'],
                     }, ],
                     raw: true,
                     nest: true,
                 });
-
+            } else if (productId && productId !== 'ALL') {
+                products = await db.Products.findOne({
+                    where: { id: productId },
+                    include: [{
+                        model: db.Categories,
+                        as: 'idCateData',
+                        attributes: ['name'],
+                    }, ],
+                    raw: true,
+                    nest: true,
+                });
+            } else if (productId == 'ALL' && idne !== '') {
+                products = await db.Products.findAll({
+                    where: { idCate: idne },
+                    order: [
+                        ["createdAt", "DESC"]
+                    ],
+                    include: [{
+                        model: db.Categories,
+                        as: 'idCateData',
+                        attributes: ['name'],
+                    }, ],
+                    raw: true,
+                    nest: true,
+                });
             }
-            resolve(products)
+            console.log('productId:', productId);
+            console.log('idne:', idne);
+
+            resolve(products);
         } catch (e) {
             reject(e);
         }
-    })
+    });
+};
 
-}
 let checkproductname = (name) => {
     return new Promise(async(resolve, reject) => {
         try {
