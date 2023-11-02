@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 
 export const PhoneCard = ({ addToCart }) => {
   const [arrProducts, setArrProducts] = useState([]);
+  const [idne, setidne] = useState('');
+  const [orderBy, setordeby] = useState('');
+  const [selectedPriceRange, setgia] = useState('');
   useEffect(() => {
     getAllUserFromReact();
   }, []);
@@ -12,7 +15,7 @@ export const PhoneCard = ({ addToCart }) => {
 
   
   const getAllUserFromReact = async () => {
-    let response = await getAllProducts("ALL");
+    let response = await getAllProducts("ALL",idne,orderBy,selectedPriceRange);
     if (response && response.errcode === 0) {
       setArrProducts(response.products);
     }

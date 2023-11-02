@@ -24,6 +24,9 @@ export const ProductDetail = ({ addToCart }) => {
   const { id } = useParams();
   
   const [detailProducts, setdetailProducts] = useState({});
+  const [idne, setidne] = useState('');
+  const [orderBy, setordeby] = useState('');
+  const [selectedPriceRange, setgia] = useState('');
 
   useEffect(() => {
     getAllUserFromReact();
@@ -32,7 +35,7 @@ export const ProductDetail = ({ addToCart }) => {
 
   
   const getAllUserFromReact = async () => {
-    let response = await getAllProducts(id);
+    let response = await getAllProducts(id,idne,orderBy,selectedPriceRange);
     if (response && response.errcode === 0) {
       setdetailProducts(response.products);
     }
