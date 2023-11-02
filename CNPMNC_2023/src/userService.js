@@ -1,3 +1,4 @@
+import { orderBy } from "lodash";
 import axios from "./axios"
 
 const handleLoginApi = (userName, userPassword) => {
@@ -27,9 +28,9 @@ const editUserService = (inputData) => {
 
 // goi api cua products
 
-const getAllProducts = (inputId, idne) => {
+const getAllProducts = (inputId, idne, selectedPriceRange, orderBy) => {
     // Template String
-    return axios.get(`api/get-all-products?id=${inputId}&idCate=${idne}`);
+    return axios.get(`api/get-all-products?id=${inputId}&idCate=${idne}&price=${selectedPriceRange}&orderBy=${orderBy}`);
 }
 
 

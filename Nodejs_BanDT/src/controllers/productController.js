@@ -4,6 +4,8 @@ import productServices from "../services/productServices"
 let handleGetAllProducts = async(req, res) => {
     let id = req.query.id; //all, id
     let idCate = req.query.idCate;
+    let price = req.query.price;
+    let orderBy = req.query.orderBy
     if (!id) {
         return res.status(200).json({
             errcode: 1,
@@ -12,7 +14,7 @@ let handleGetAllProducts = async(req, res) => {
         })
 
     }
-    let products = await productServices.getAllProducts(id, idCate);
+    let products = await productServices.getAllProducts(id, idCate, price, orderBy);
     console.log(products);
     return res.status(200).json({
         errcode: 0,

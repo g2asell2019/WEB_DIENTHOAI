@@ -1,12 +1,14 @@
 import categories from "../models/categories";
 import db from "../models/index";
+const { Sequelize, Op } = require('sequelize');
 
-let getAllProducts = (productId, idne) => {
+
+let getAllProducts = (productId, idne, priceRange, orderBy) => {
     return new Promise(async(resolve, reject) => {
-
         try {
             let products = '';
-            if (productId == 'ALL' && idne == '') {
+
+            if (productId == 'ALL' && idne == '' && priceRange == '') {
                 products = db.Products.findAll({
                     order: [
                         ["createdAt", "DESC"]
@@ -19,7 +21,7 @@ let getAllProducts = (productId, idne) => {
                     raw: true,
                     nest: true,
                 });
-            } else if (productId && productId !== 'ALL') {
+            } else if (productId && productId !== 'ALL' && idne == '' && priceRange == '') {
                 products = await db.Products.findOne({
                     where: { id: productId },
                     include: [{
@@ -31,6 +33,7 @@ let getAllProducts = (productId, idne) => {
                     nest: true,
                 });
             } else if (productId == 'ALL' && idne !== '') {
+
                 products = await db.Products.findAll({
                     where: { idCate: idne },
                     order: [
@@ -44,9 +47,61 @@ let getAllProducts = (productId, idne) => {
                     raw: true,
                     nest: true,
                 });
+            } else if (productId == 'ALL' && idne == '' && priceRange !== '') {
+                // Thêm điều kiện để lọc sản phẩm theo mức giá
+                const [minPrice, maxPrice] = (priceRange && priceRange.split('-').map(price => parseFloat(price))) || [0, 0];
+
+
+                products = await db.Products.findAll({
+                    where: {
+                        price: {
+                            [Op.between]: [minPrice, maxPrice],
+                        },
+                    },
+                    order: [
+                        ["createdAt", "DESC"]
+                    ],
+                    include: [{
+                        model: db.Categories,
+                        as: 'idCateData',
+                        attributes: ['name'],
+                    }, ],
+                    raw: true,
+                    nest: true,
+                });
+
             }
-            console.log('productId:', productId);
-            console.log('idne:', idne);
+
+            if (productId == 'ALL' && idne == '' && priceRange == '' && orderBy !== '') {
+
+                // Thêm điều kiện sắp xếp sản phẩm
+                const orderCondition = [];
+                if (orderBy === 'price-asc') {
+                    orderCondition.push(["price", "ASC"]);
+                } else if (orderBy === 'price-desc') {
+                    orderCondition.push(["price", "DESC"]);
+                } else {
+                    // Sắp xếp mặc định theo createdAt DESC nếu không có điều kiện sắp xếp
+                    orderCondition.push(["createdAt", "DESC"]);
+                }
+
+
+                products = await db.Products.findAll({
+
+                    order: [orderCondition], // Thêm điều kiện sắp xếp vào đây
+                    include: [{
+                        model: db.Categories,
+                        as: 'idCateData',
+                        attributes: ['name'],
+                    }, ],
+                    raw: true,
+                    nest: true,
+                });
+
+            }
+
+
+
 
             resolve(products);
         } catch (e) {
@@ -54,6 +109,7 @@ let getAllProducts = (productId, idne) => {
         }
     });
 };
+
 
 let checkproductname = (name) => {
     return new Promise(async(resolve, reject) => {

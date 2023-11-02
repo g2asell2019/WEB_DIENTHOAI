@@ -32,6 +32,12 @@ class ProductManager extends Component {
       currentPage: 1,
       productsPerPage: 5,
       previewImgURL: "",
+      
+       orderBy:'',
+      
+
+
+      selectedPriceRange: "", // Lưu trữ mức giá đã chọn
     };
 
     this.handlePageChange = this.handlePageChange.bind(this); // Thêm dòng này
@@ -47,7 +53,7 @@ class ProductManager extends Component {
       () => {
         //console.log('check good state: ',this.state.idne);
         // muốn lấy giá trị từ hàm render thì phải bỏ vào đây
-        this.getAllUserFromReact(this.state.idne);
+        this.getAllUserFromReact(this.state.idne,this.state.selectedPriceRange,this.state.orderBy);
       }
     );
     //console.log('copystate: ',copyState);
@@ -59,7 +65,7 @@ class ProductManager extends Component {
     console.log("id cuar toi: ", this.state.idne);
 
     await this.getAllCategoriesReact();
-    await this.getAllUserFromReact(this.state.idne);
+    await this.getAllUserFromReact(this.state.idne,this.state.selectedPriceRange,this.state.orderBy);
   }
   getAllCategoriesReact = async () => {
     let response = await getAllCategories("ALL");
@@ -70,10 +76,10 @@ class ProductManager extends Component {
     }
   };
 
-  getAllUserFromReact = async (idne) => {
+  getAllUserFromReact = async (idne,selectedPriceRange,orderBy) => {
     console.log("id cuar toi: ", idne);
 
-    let response = await getAllProducts("ALL", idne);
+    let response = await getAllProducts("ALL", idne,selectedPriceRange,orderBy);
 
     if (response && response.errcode == 0) {
       this.setState({
@@ -200,6 +206,7 @@ class ProductManager extends Component {
    */
 
   render() {
+    const { selectedPriceRange,orderBy } = this.state;
     let { idne } = this.state;
     const { arrProducts, arrCate, currentPage, productsPerPage } = this.state;
     const indexOfLastProduct = currentPage * productsPerPage;
@@ -265,18 +272,34 @@ class ProductManager extends Component {
                         })}
                     </select>
                     <select
-                      className="form-control col-3"
+                      className="form-control col-3 mr-3"
                       onChange={(event) => {
-                        this.handleOnChangeInput(event, "idne");
+                        this.handleOnChangeInput(event, "selectedPriceRange");
                       }}
-                      value={idne}
+                      value={selectedPriceRange}
                     >
                       <option value="">Tất cả giá</option>
-                      {arrCate &&
-                        arrCate.length > 0 &&
-                        arrCate.map((item, index) => {
-                          return <option value={item.id}>{item.name}</option>;
-                        })}
+                      <option value="0-5000000">0 - 5 triệu</option>
+                      <option value="5000000-10000000">5 triệu - 10 triệu</option>
+                      <option value="10000000-20000000">10 triệu - 20 triệu</option>
+                      <option value="20000000-30000000">20 triệu - 30 triệu</option>
+                      <option value="30000000-50000000">30 triệu - 50 triệu</option>
+                      <option value="50000000-100000000">50 triệu - 100 triệu</option>
+                      <option value="100000000-200000000">100 triệu - 200 triệu</option>
+                      <option value="200000000-999999999999999999">200 triệu - không giới hạn</option>
+                    </select>
+
+                    <select
+                      className="form-control col-3 mr-3"
+                      onChange={(event) => {
+                        this.handleOnChangeInput(event, "orderBy");
+                      }}
+                      value={orderBy}
+                    >
+                      <option value="">sắp xếp theo giá</option>
+                      <option value="price-asc">Sắp xếp theo giá tăng dần</option>
+                      <option value="price-desc">Sắp xếp theo giá giảm dần</option>
+                     
                     </select>
                   </div>
 
