@@ -73,6 +73,22 @@ const updateCategoriesData = (inputData) => {
 
 }
 
+// api cua  orders 
+const getAllOders = (inputType) => {
+    return axios.get(`/api/get-all-orders?id=${inputType}`)
+}
+const CreateOrders = (data) => {
+    return axios.post('/api/create-new-orders', data)
+}
+
+const deleteOrders = (productId) => {
+
+    return axios.delete('/api/delete-orders', {
+        data: {
+            id: productId
+        }
+    })
+}
 
 
 
@@ -92,7 +108,10 @@ export {
     CreateCategories,
     deleteCategories,
     getAllCategories,
-    updateCategoriesData
+    updateCategoriesData,
+    getAllOders,
+    deleteOrders,
+    CreateOrders,
 
 
 }

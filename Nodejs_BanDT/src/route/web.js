@@ -4,6 +4,7 @@ import userController from "../controllers/userController";
 import doctorController from "../controllers/doctorController";
 import specialtyController from "../controllers/specialtyController";
 import productController from "../controllers/productController";
+import orderController from "../controllers/ordersController";
 
 let router = express.Router();
 
@@ -42,8 +43,10 @@ let initWebRouters = (app) => {
     router.get('/api/get-all-categories', productController.handlegetAllCategories);
 
 
-
-
+    //api cua orders
+    router.get('/api/get-all-orders', orderController.handleGetAllOrders);
+    router.post('/api/create-new-orders', orderController.handleCreateOrders);
+    router.delete('/api/delete-orders', orderController.handleDeleteOrders);
 
 
 

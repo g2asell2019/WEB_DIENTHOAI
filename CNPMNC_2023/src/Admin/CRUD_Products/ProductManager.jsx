@@ -120,7 +120,7 @@ class ProductManager extends Component {
       if (response && response.errcode !== 0) {
         alert(response.errMessage);
       } else {
-        await this.getAllUserFromReact();
+        await this.getAllUserFromReact(this.state.idne,this.state.selectedPriceRange,this.state.orderBy);
         this.setState({
           isOpenModalProduct: false,
         });
@@ -139,7 +139,7 @@ class ProductManager extends Component {
       if (response && response.errcode !== 0) {
         alert(response.errMessage);
       } else {
-        await this.getAllCategoriesReact();
+        await this.getAllUserFromReact(this.state.idne,this.state.selectedPriceRange,this.state.orderBy);
         this.setState({
           isOpenModalCategories: false,
         });
@@ -159,7 +159,7 @@ class ProductManager extends Component {
         alert(res.errMessage);
         toast.error("Xóa thất bại");
       } else {
-        await this.getAllUserFromReact();
+        await this.getAllUserFromReact(this.state.idne,this.state.selectedPriceRange,this.state.orderBy);
         toast.success("Xóa Thành công");
       }
       console.log(res);
@@ -179,7 +179,7 @@ class ProductManager extends Component {
     try {
       let res = await updateProductData(user);
       if (res && res.errcode === 0) {
-        await this.getAllUserFromReact();
+        await this.getAllUserFromReact(this.state.idne,this.state.selectedPriceRange,this.state.orderBy);
         toast.success("Sửa Thành công");
         this.setState({
           isOpenModalEditProduct: false,

@@ -13,6 +13,13 @@ export const DashBoard = () => {
   const handleManageCategories=()=>{
     history.replace("/admin/categories"); // Sử dụng replace thay vì push
   }
+
+  const handleManageOrders=()=>{
+    history.replace("/admin/orders"); // Sử dụng replace thay vì push
+  }
+
+
+
   return (
     <>
       <div className="sidebar">
@@ -47,6 +54,15 @@ export const DashBoard = () => {
             
               <i className="fas fa-mobile-alt"></i>
                 <span>Quản lý Loại sản phẩm</span>
+            
+            </li>
+
+            <li
+            onClick={()=>handleManageOrders()}
+            >
+            
+              <i className="fas fa-mobile-alt"></i>
+                <span>Quản lý Đơn hàng</span>
             
             </li>
             <li className="logout">

@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import "./App.css";
 import * as React from "react";
 import { Header } from "./common/header/Header";
@@ -12,7 +13,7 @@ import { ProductDetail } from "./pages/productdetail/ProductDetail";
 import { Products } from "./pages/products/Products";
 import PData from "./pages/phone/Pdata";
 import { Phone } from "./pages/phone/Phone";
-import { Order } from "./pages/cart/Checkout";
+import { Order } from "./pages/cart/Order";
 import { Login } from "./pages/login-signup/Login";
 import { Signup } from "./pages/login-signup/Signup";
 import { Profile } from "./pages/profile/Profile";
@@ -23,6 +24,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { IndexAdmin } from "../src/Admin/IndexAdmin";
 import ProductAdmin from "./Admin/ProductAdmin";
 import CategoriesAdmin from "./Admin/CategoriesAdmin";
+import {  useEffect } from "react";
+import OrderAdmin from "./Admin/OrderAdmin";
 function App() {
   //step 1: fetch data from DB
   const { productItems } = Data;
@@ -30,6 +33,15 @@ function App() {
   const { phoneItems } = PData;
   const [cartItem, setCardItem] = useState([]);
   const [productItem, setProductItem] = useState([]);
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cartItem));
+  }, [cartItem]);
+
+  
+  
+
+
 
   const addToCart = (product) => {
     const productExit = cartItem.find((item) => item.id == product.id);
@@ -68,6 +80,11 @@ function App() {
     }
   };
 
+  const deleteProduct = (product) => {
+    setCardItem(cartItem.filter((item) => item.id !== product.id));
+  };
+  
+
   return (
     <>
       <div>
@@ -91,6 +108,13 @@ function App() {
              <CategoriesAdmin/>
           
         </Route>
+        <Route path="/admin/orders" exact>
+             
+            
+             <OrderAdmin/>
+          
+        </Route>
+        
             <ToastContainer
               position="bottom-right"
               autoClose={5000}
@@ -132,6 +156,8 @@ function App() {
                 cartItem={cartItem}
                 addToCart={addToCart}
                 decreaseQty={decreaseQty}
+                deleteProduct={deleteProduct}
+                setCardItem={setCardItem}
               />
             </Route>
             <Route path="/profile/Profile" exact>
@@ -148,6 +174,7 @@ function App() {
                 cartItem={cartItem}
                 addToCart={addToCart}
                 decreaseQty={decreaseQty}
+                deleteProduct={deleteProduct}
               />
             </Route>
             <Route path="/productdetail/:id">

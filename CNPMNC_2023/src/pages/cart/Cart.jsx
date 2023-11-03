@@ -1,13 +1,21 @@
 import React from "react";
 import "./Cart.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Buffer } from "buffer";
+import { useEffect } from "react";
 
-export const Cart = ({ cartItem, addToCart, decreaseQty }) => {
-  const totalPrice = cartItem.reduce(
-    (price, item) => price + item.qty * item.price,
-    0
-  );
+export const Cart = ({ cartItem, addToCart, decreaseQty, deleteProduct, setCardItem }) => {
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      setCardItem(JSON.parse(storedCart));
+    }
+  }, []);
+
+  const history = useHistory();
+
+  const totalPrice = cartItem.reduce((price, item) => price + item.qty * item.price, 0);
+
   function formatCurrency(number) {
     // Sử dụng Intl.NumberFormat để định dạng số
     const formatter = new Intl.NumberFormat("vi-VN", {
@@ -22,6 +30,11 @@ export const Cart = ({ cartItem, addToCart, decreaseQty }) => {
     // Loại bỏ khoảng trắng giữa số và đơn vị tiền tệ (₫)
     return formattedNumber.replace(/\s/g, "");
   }
+
+  const handleCheckout = () => {
+    history.push({ pathname: "./Checkout", state: { totalPrice: totalPrice } });
+  };
+
   return (
     <>
       <section className="cart-items">
@@ -30,21 +43,15 @@ export const Cart = ({ cartItem, addToCart, decreaseQty }) => {
         </div>
         <div className="container d_flex">
           <div className="cart-details">
-            {cartItem.length == 0 && (
-              <h1 className="no-items product">
-                Không có sản phẩm nào trong giỏ hàng
-              </h1>
+            {cartItem.length === 0 && (
+              <h1 className="no-items product">Không có sản phẩm nào trong giỏ hàng</h1>
             )}
             {cartItem.map((item) => {
               const productQty = item.price * item.qty;
-              let imageBase64='';
-              if(item.image){
-      
-               
-                 imageBase64=Buffer.from(item.image,'base64').toString('binary');
-              
-      
-            }
+              let imageBase64 = "";
+              if (item.image) {
+                imageBase64 = Buffer.from(item.image, "base64").toString("binary");
+              }
               return (
                 <div className="cart-list product d_flex">
                   <div className="img">
@@ -59,22 +66,16 @@ export const Cart = ({ cartItem, addToCart, decreaseQty }) => {
                   </div>
                   <div className="cart-items-function">
                     <div className="removeCart">
-                      <button>
+                      <button onClick={() => deleteProduct(item)}>
                         <i className="fa-solid fa-xmark"></i>
                       </button>
                     </div>
 
                     <div className="cartControl d_flex">
-                      <button
-                        className="desCart"
-                        onClick={() => decreaseQty(item)}
-                      >
-                        <i className="fa-solid  fa-minus"></i>
+                      <button className="desCart" onClick={() => decreaseQty(item)}>
+                        <i className="fa-solid fa-minus"></i>
                       </button>
-                      <button
-                        className="incCart"
-                        onClick={() => addToCart(item)}
-                      >
+                      <button className="incCart" onClick={() => addToCart(item)}>
                         <i className="fa-solid fa-plus"></i>
                       </button>
                     </div>
@@ -89,9 +90,7 @@ export const Cart = ({ cartItem, addToCart, decreaseQty }) => {
               <h4>Tổng thanh toán: </h4>
               <h3>{formatCurrency(totalPrice)}</h3>
             </div>
-            <Link to={"./Checkout"}>
-              <button>Tiến hành đặt hàng</button>
-            </Link>
+            <button onClick={handleCheckout}>Tiến hành đặt hàng</button>
           </div>
         </div>
       </section>

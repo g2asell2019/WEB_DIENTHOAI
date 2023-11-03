@@ -21,6 +21,7 @@ module.exports = {
                 type: Sequelize.STRING
             },
             order_date: {
+                allowNull: false,
                 type: Sequelize.DATE
             },
             order_status: {
@@ -33,6 +34,12 @@ module.exports = {
                 type: Sequelize.DECIMAL
             },
             note: {
+                type: Sequelize.STRING
+            },
+            payment: {
+                type: Sequelize.STRING
+            },
+            phoneNumber: {
                 type: Sequelize.STRING
             },
             order_idUser: {
