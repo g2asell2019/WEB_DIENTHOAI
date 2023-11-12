@@ -91,6 +91,28 @@ const deleteOrders = (productId) => {
 }
 
 
+// api cua  orders 
+const getAllSale = (inputType) => {
+    return axios.get(`/api/get-all-sale?id=${inputType}`)
+}
+const CreateSale = (data) => {
+    return axios.post('/api/create-new-sale', data)
+}
+
+const deleteSale = (productId) => {
+
+    return axios.delete('/api/delete-sale', {
+        data: {
+            id: productId
+        }
+    })
+}
+
+const updateSaleData = (inputData) => {
+    return axios.put('/api/edit-sale', inputData)
+
+}
+
 
 
 
@@ -112,6 +134,10 @@ export {
     getAllOders,
     deleteOrders,
     CreateOrders,
+    getAllSale,
+    CreateSale,
+    deleteSale,
+    updateSaleData
 
 
 }

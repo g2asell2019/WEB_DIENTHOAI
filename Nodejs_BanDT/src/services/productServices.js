@@ -8,100 +8,50 @@ let getAllProducts = (productId, idne, priceRange, orderBy) => {
         try {
             let products = '';
 
-            if (productId == 'ALL' && idne == '' && priceRange == '') {
-                products = db.Products.findAll({
-                    order: [
-                        ["createdAt", "DESC"]
-                    ],
-                    include: [{
-                        model: db.Categories,
-                        as: 'idCateData',
-                        attributes: ['name'],
-                    }, ],
-                    raw: true,
-                    nest: true,
-                });
-            } else if (productId && productId !== 'ALL' && idne == '' && priceRange == '') {
-                products = await db.Products.findOne({
-                    where: { id: productId },
-                    include: [{
-                        model: db.Categories,
-                        as: 'idCateData',
-                        attributes: ['name'],
-                    }, ],
-                    raw: true,
-                    nest: true,
-                });
-            } else if (productId == 'ALL' && idne !== '') {
+            // Khởi tạo các điều kiện truy vấn
+            let queryConditions = {};
 
-                products = await db.Products.findAll({
-                    where: { idCate: idne },
-                    order: [
-                        ["createdAt", "DESC"]
-                    ],
-                    include: [{
-                        model: db.Categories,
-                        as: 'idCateData',
-                        attributes: ['name'],
-                    }, ],
-                    raw: true,
-                    nest: true,
-                });
-            } else if (productId == 'ALL' && idne == '' && priceRange !== '') {
-                // Thêm điều kiện để lọc sản phẩm theo mức giá
-                const [minPrice, maxPrice] = (priceRange && priceRange.split('-').map(price => parseFloat(price))) || [0, 0];
-
-
-                products = await db.Products.findAll({
-                    where: {
-                        price: {
-                            [Op.between]: [minPrice, maxPrice],
-                        },
-                    },
-                    order: [
-                        ["createdAt", "DESC"]
-                    ],
-                    include: [{
-                        model: db.Categories,
-                        as: 'idCateData',
-                        attributes: ['name'],
-                    }, ],
-                    raw: true,
-                    nest: true,
-                });
-
+            // Lọc theo ID sản phẩm
+            if (productId && productId !== 'ALL') {
+                queryConditions.id = productId;
             }
 
-            if (productId == 'ALL' && idne == '' && priceRange == '' && orderBy !== '') {
-
-                // Thêm điều kiện sắp xếp sản phẩm
-                const orderCondition = [];
-                if (orderBy === 'price-asc') {
-                    orderCondition.push(["price", "ASC"]);
-                } else if (orderBy === 'price-desc') {
-                    orderCondition.push(["price", "DESC"]);
-                } else {
-                    // Sắp xếp mặc định theo createdAt DESC nếu không có điều kiện sắp xếp
-                    orderCondition.push(["createdAt", "DESC"]);
-                }
-
-
-                products = await db.Products.findAll({
-
-                    order: [orderCondition], // Thêm điều kiện sắp xếp vào đây
-                    include: [{
-                        model: db.Categories,
-                        as: 'idCateData',
-                        attributes: ['name'],
-                    }, ],
-                    raw: true,
-                    nest: true,
-                });
-
+            // Lọc theo ID hãng
+            if (idne && idne !== '') {
+                queryConditions.idCate = idne;
             }
 
+            // Lọc theo mức giá
+            if (priceRange && priceRange !== '') {
+                const [minPrice, maxPrice] = priceRange.split('-').map(price => parseFloat(price));
+                queryConditions.price = {
+                    [Op.between]: [minPrice, maxPrice],
+                };
+            }
 
+            // Thêm điều kiện sắp xếp
+            let orderCondition = [];
+            if (orderBy === 'price-asc') {
+                orderCondition.push(["price", "ASC"]);
+            } else if (orderBy === 'price-desc') {
+                orderCondition.push(["price", "DESC"]);
+            } else {
+                // Sắp xếp mặc định theo createdAt DESC nếu không có điều kiện sắp xếp
+                orderCondition.push(["createdAt", "DESC"]);
+            }
 
+            // Truy vấn database
+            products = await db.Products.findAll({
+                where: queryConditions,
+                order: orderCondition,
+                include: [{
+                    model: db.Categories,
+                    as: 'idCateData',
+                    attributes: ['name'],
+                }],
+                raw: true,
+                nest: true,
+            });
 
             resolve(products);
         } catch (e) {
@@ -282,7 +232,7 @@ let CreateCategories = (data) => {
             } else {
                 await db.Categories.create({
                     name: data.name,
-                    keyMap: data.keyMap
+
                 });
                 resolve({
                     errcode: 0,

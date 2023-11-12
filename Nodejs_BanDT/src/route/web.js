@@ -5,6 +5,9 @@ import doctorController from "../controllers/doctorController";
 import specialtyController from "../controllers/specialtyController";
 import productController from "../controllers/productController";
 import orderController from "../controllers/ordersController";
+import brandController from "../controllers/brandController";
+
+import SaleController from "../controllers/saleController";
 
 let router = express.Router();
 
@@ -35,6 +38,19 @@ let initWebRouters = (app) => {
     router.post('/api/create-new-products', productController.handleCreateProducts);
     router.put('/api/edit-products', productController.handleEditProducts);
     router.delete('/api/delete-products', productController.handleDeleteProducts);
+
+
+    //api cua brand
+    router.post('/api/create-new-brand', brandController.handleCreateBrand);
+    router.delete('/api/delete-brand', brandController.handleDeleteBrand);
+    router.put('/api/edit-brand', brandController.handleEditBrand);
+    router.get('/api/get-all-brand', brandController.handlegetAllBrand);
+
+    // api cuar sale
+    router.post('/api/create-new-sale', SaleController.handleCreateSale);
+    router.delete('/api/delete-sale', SaleController.handleDeleteSale);
+    router.put('/api/edit-sale', SaleController.handleEditSale);
+    router.get('/api/get-all-sale', SaleController.handlegetAllSale);
 
     //api cua categories
     router.post('/api/create-new-categories', productController.handleCreateCategories);

@@ -4,7 +4,13 @@ import { Link, useHistory } from "react-router-dom";
 import { Buffer } from "buffer";
 import { useEffect } from "react";
 
-export const Cart = ({ cartItem, addToCart, decreaseQty, deleteProduct, setCardItem }) => {
+export const Cart = ({
+  cartItem,
+  addToCart,
+  decreaseQty,
+  deleteProduct,
+  setCardItem,
+}) => {
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
     if (storedCart) {
@@ -14,7 +20,10 @@ export const Cart = ({ cartItem, addToCart, decreaseQty, deleteProduct, setCardI
 
   const history = useHistory();
 
-  const totalPrice = cartItem.reduce((price, item) => price + item.qty * item.price, 0);
+  const totalPrice = cartItem.reduce(
+    (price, item) => price + item.qty * item.price,
+    0
+  );
 
   function formatCurrency(number) {
     // Sử dụng Intl.NumberFormat để định dạng số
@@ -38,19 +47,26 @@ export const Cart = ({ cartItem, addToCart, decreaseQty, deleteProduct, setCardI
   return (
     <>
       <section className="cart-items">
-        <div className="container title">
+      <div className="container title ">
+          <Link to={"../phone"}>
+            <button>Tiếp tục mua hàng</button>
+          </Link>
           <h1>Giỏ hàng</h1>
         </div>
         <div className="container d_flex">
           <div className="cart-details">
             {cartItem.length === 0 && (
-              <h1 className="no-items product">Không có sản phẩm nào trong giỏ hàng</h1>
+              <h1 className="no-items product">
+                Không có sản phẩm nào trong giỏ hàng
+              </h1>
             )}
             {cartItem.map((item) => {
               const productQty = item.price * item.qty;
               let imageBase64 = "";
               if (item.image) {
-                imageBase64 = Buffer.from(item.image, "base64").toString("binary");
+                imageBase64 = Buffer.from(item.image, "base64").toString(
+                  "binary"
+                );
               }
               return (
                 <div className="cart-list product d_flex">
@@ -59,10 +75,8 @@ export const Cart = ({ cartItem, addToCart, decreaseQty, deleteProduct, setCardI
                   </div>
                   <div className="cart-details">
                     <h3>{item.name}</h3>
-                    <h4>
-                      {formatCurrency(item.price)} * {item.qty}
-                      <span>{formatCurrency(productQty)}</span>
-                    </h4>
+                    <h5>Giá: {formatCurrency(item.price)}</h5>
+                    <h4>Tổng:{formatCurrency(productQty)}</h4>
                   </div>
                   <div className="cart-items-function">
                     <div className="removeCart">
@@ -72,10 +86,18 @@ export const Cart = ({ cartItem, addToCart, decreaseQty, deleteProduct, setCardI
                     </div>
 
                     <div className="cartControl d_flex">
-                      <button className="desCart" onClick={() => decreaseQty(item)}>
+                      <button
+                        className="desCart"
+                        onClick={() => decreaseQty(item)}
+                      >
                         <i className="fa-solid fa-minus"></i>
                       </button>
-                      <button className="incCart" onClick={() => addToCart(item)}>
+                      <span>{item.qty}</span>
+
+                      <button
+                        className="incCart"
+                        onClick={() => addToCart(item)}
+                      >
                         <i className="fa-solid fa-plus"></i>
                       </button>
                     </div>

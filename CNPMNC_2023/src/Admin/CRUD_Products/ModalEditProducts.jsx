@@ -6,21 +6,24 @@ import "./ModalEditProducts.scss";
 import _ from "lodash";
 import { Buffer } from "buffer";
 import CommonUtils from "../../utils/CommonUtils";
+import {getAllCategories} from "../../userService";
 
 class ModalEditProducts extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      arrCate:[],
       name: "",
       price: "",
       quantity: "",
-      category: "",
+      idCate: "",
       avatar: "",
       previewImgURL: " ",
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    await this.getAllCategoriesReact();
     let user = this.props.currentUser;
     // cachs 2 //let {CurrentUser}=this.props;
     if (user && !_.isEmpty(user)) {
@@ -34,7 +37,7 @@ class ModalEditProducts extends Component {
         name: user.name,
         price: user.price,
         quantity: user.quantity,
-        category: user.category,
+        idCate: user.idCate,
         avatar: user.avatar,
         previewImgURL: imageBase64,
       });
@@ -43,6 +46,15 @@ class ModalEditProducts extends Component {
 
   toggle = () => {
     this.props.toggleFromParent();
+  };
+
+  getAllCategoriesReact = async () => {
+    let response = await getAllCategories("ALL");
+    if (response && response.errcode == 0) {
+      this.setState({
+        arrCate: response.categories,
+      });
+    }
   };
 
   handleOnChangeInput = (event, id) => {
@@ -64,7 +76,7 @@ class ModalEditProducts extends Component {
 
   checkValideInputEdit = () => {
     let isValid = true;
-    let arrInput = ["name", "price", "quantity", "category", "avatar"];
+    let arrInput = ["name", "price", "quantity", "idCate"];
 
     for (let i = 0; i < arrInput.length; i++) {
       console.log("check inside loop", this.state[arrInput[i]], arrInput[i]);
@@ -100,7 +112,22 @@ class ModalEditProducts extends Component {
     }
   };
 
+  handleOnChangeInputPrice = (event, field) => {
+    // Loại bỏ các dấu phẩy từ giá trị người dùng nhập
+    const inputValue = event.target.value.replace(/,/g, '');
+
+    // Kiểm tra xem giá trị có phải là số không
+    if (!isNaN(inputValue)) {
+      // Cập nhật state
+      this.setState({
+        [field]: inputValue
+      });
+    }
+  };
+
   render() {
+    const formattedPrice = new Intl.NumberFormat('en-US').format(this.state.price);
+    let category=this.state.arrCate;
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -138,14 +165,14 @@ class ModalEditProducts extends Component {
                   <div className="form-group col-md-6">
                     <label>Giá</label>
                     <input
-                      type="text"
-                      className="form-control"
-                      placeholder="10,000,000"
-                      onChange={(event) => {
-                        this.handleOnChangeInput(event, "price");
-                      }}
-                      value={this.state.price}
-                    />
+                          type="text"
+                          className="form-control"
+                          placeholder="10,000,000"
+                          onChange={(event) => {
+                            this.handleOnChangeInputPrice(event, "price");
+                          }}
+                          value={formattedPrice} // Hiển thị giá trị đã được định dạng
+                        />
                   </div>
                 </div>
                 <div className="form-row">
@@ -163,17 +190,23 @@ class ModalEditProducts extends Component {
                   </div>
                 </div>
                 <div className="form-row">
-                  <div className="form-group col-md-3">
-                    <label>Loại</label>
-                    <select
-                      className="form-control"
-                      onChange={(event) => {
-                        this.handleOnChangeInput(event, "category");
-                      }}
-                      value={this.state.category}
-                    >
-                      <option value="SS">Sam Sung</option>
-                      <option value="IP">Iphone</option>
+                <div className="form-group col-md-3">
+                    <label>Loại</label> 
+                    <select className="form-control"
+                     onChange={(event) => {
+                      this.handleOnChangeInput(event, "idCate");
+                    }}
+                    value={this.state.idCate}>
+                         <option  value=''>Chọn loại sản phẩm</option>
+                     {
+                      category&&category.length>0
+                      &&category.map((item,index)=>{
+                        return(
+                          <option  value={item.id}>{item.name}</option>
+                        )
+                      })
+                     }
+                     
                     </select>
                   </div>
 

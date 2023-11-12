@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             Products.belongsTo(models.Categories, { foreignKey: 'idCate', targetKey: 'id', as: 'idCateData' })
-            Products.belongsTo(models.Brand, { foreignKey: 'idBrand', targetKey: 'id', as: 'idBrandData' })
+            Products.belongsTo(models.Brands, { foreignKey: 'idBrand', targetKey: 'id', as: 'idBrandData' })
             Products.belongsTo(models.Discount, { foreignKey: 'idDiscount', targetKey: 'id', as: 'idDiscountData' })
-            Products.belongsTo(models.Discount, { foreignKey: 'idSale', targetKey: 'id', as: 'idSaleData' })
+            Products.belongsTo(models.Sales, { foreignKey: 'idSale', targetKey: 'id', as: 'idSaleData' })
 
 
         }

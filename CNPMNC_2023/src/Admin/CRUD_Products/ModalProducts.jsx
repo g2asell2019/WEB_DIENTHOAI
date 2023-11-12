@@ -67,6 +67,30 @@ class ModalProducts extends Component {
 
     // console.log(event.target.value,id)
   };
+
+
+  handleOnChangeInputPrice = (event, field) => {
+    // Loại bỏ các dấu phẩy từ giá trị người dùng nhập
+    const inputValue = event.target.value.replace(/,/g, '');
+
+    // Kiểm tra xem giá trị có phải là số không
+    if (!isNaN(inputValue)) {
+      // Cập nhật state
+      this.setState({
+        [field]: inputValue
+      });
+    }
+  };
+
+
+
+
+
+
+
+
+
+
   checkValideInput = () => {
     let isValid = true;
     let arrInput = [
@@ -116,6 +140,8 @@ class ModalProducts extends Component {
   };
 
   render() {
+
+    const formattedPrice = new Intl.NumberFormat('en-US').format(this.state.price);
     let category=this.state.arrCate;
     return (
       <Modal
@@ -154,14 +180,14 @@ class ModalProducts extends Component {
                   <div className="form-group col-md-6">
                     <label>Giá</label>
                     <input
-                      type="number"
-                      className="form-control"
-                      placeholder="10,000,000"
-                      onChange={(event) => {
-                        this.handleOnChangeInput(event, "price");
-                      }}
-                      value={this.state.price}
-                    />
+                          type="text"
+                          className="form-control"
+                          placeholder="10,000,000"
+                          onChange={(event) => {
+                            this.handleOnChangeInputPrice(event, "price");
+                          }}
+                          value={formattedPrice} // Hiển thị giá trị đã được định dạng
+                        />
                   </div>
                 </div>
                 <div className="form-row">
