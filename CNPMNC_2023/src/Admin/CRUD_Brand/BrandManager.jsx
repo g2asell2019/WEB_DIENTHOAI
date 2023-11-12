@@ -1,26 +1,26 @@
 import React, { Component } from "react";
 import {
-  updateCategoriesData,
-  CreateCategories,
-  deleteCategories,
-  getAllCategories
+  CreateBrand,
+  deleteBrand,
+  getAllBrand,
+  updateBrandData
 
 } from "../../userService";
 import { emitter } from "../../utils/emitter";
 import { toast } from "react-toastify";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import ModalCategories from "./ModalCategories";
-import ModalEditCategories from "./ModalEditCategories";
+import ModalBrand from "./ModalBrand";
+import ModalEditBrand from "./ModalEditBrand";
 
 
 
 
-class CategoriesManager extends Component {
+class BrandManager extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      arrCategories: [],
+      arrBrand: [],
       isOpenModalEditProduct: false,
       isOpenModalCategories: false,
       productEdit: {},
@@ -33,13 +33,13 @@ class CategoriesManager extends Component {
 
   async componentDidMount() {
   
-    await this.getAllCategoriesReact();
+    await this.getAllBrandReact();
   }
-  getAllCategoriesReact = async () => {
-    let response = await getAllCategories("ALL");
+  getAllBrandReact = async () => {
+    let response = await getAllBrand("ALL");
     if (response && response.errcode == 0) {
       this.setState({
-        arrCategories: response.categories,
+        arrBrand: response.Brand,
       });
     }
   };
@@ -64,11 +64,11 @@ class CategoriesManager extends Component {
   
   createNewCategories = async (data) => {
     try {
-      let response = await CreateCategories(data);
+      let response = await CreateBrand(data);
       if (response && response.errcode !== 0) {
         alert(response.errMessage);
       } else {
-        await this. getAllCategoriesReact();
+        await this. getAllBrandReact();
         this.setState({
           isOpenModalCategories:false,
         });
@@ -84,12 +84,12 @@ class CategoriesManager extends Component {
 
   handleDeleteUser = async (user) => {
     try {
-      let res = await deleteCategories(user.id);
+      let res = await deleteBrand(user.id);
       if (res && res.errcode !== 0) {
         alert(res.errMessage);
         toast.error("Xóa thất bại");
       } else {
-        await this. getAllCategoriesReact();
+        await this. getAllBrandReact();
         toast.success("Xóa Thành công");
       }
       console.log(res);
@@ -107,9 +107,9 @@ class CategoriesManager extends Component {
 
   doEditUser = async (user) => {
     try {
-      let res = await updateCategoriesData(user);
+      let res = await updateBrandData(user);
       if (res && res.errcode === 0) {
-        await this. getAllCategoriesReact();
+        await this. getAllBrandReact();
         toast.success("Sửa Thành công");
         this.setState({
           isOpenModalEditProduct: false,
@@ -138,20 +138,20 @@ class CategoriesManager extends Component {
    */
 
   render() {
-    const { arrCategories, currentPage, productsPerPage } = this.state;
+    const { arrBrand, currentPage, productsPerPage } = this.state;
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = arrCategories.slice(indexOfFirstProduct, indexOfLastProduct);
+    const currentProducts = arrBrand.slice(indexOfFirstProduct, indexOfLastProduct);
     return (
       <div className="hello">
       
-         <ModalCategories
+         <ModalBrand
           isOpen={this.state.isOpenModalCategories}
           toggleFromParent={this.toggleCategoriesModal}
           createNewCategories={this.createNewCategories}
         />
         {this.state.isOpenModalEditProduct && (
-          <ModalEditCategories
+          <ModalEditBrand
             isOpen={this.state.isOpenModalEditProduct}
             toggleFromParent={this.toggleUserEditModal}
             currentUser={this.state.productEdit}
@@ -170,17 +170,17 @@ class CategoriesManager extends Component {
                     className=" btn btn-primary px-3"
                     onClick={() => this.handleAddCategories()}
                   >
-                  <i class="fas fa-box mr-2"></i>Thêm Loại sản phẩm
+                  <i class="fas fa-box mr-2"></i>Thêm Hãng sản phẩm
                   </button>
                   
-                  <h2 className="h2--title">Danh sách loại sản phẩm</h2>
+                  <h2 className="h2--title">Danh sách Hãng sản phẩm</h2>
 
                   <div className="table-container">
                     <table>
                       <thead>
                         <tr>
                           <th>STT</th>
-                          <th>Tên loại sản phẩm</th>
+                          <th>Tên Hãng sản phẩm</th>
                           <th>Hành động</th>
                         </tr>
                       </thead>
@@ -224,7 +224,7 @@ class CategoriesManager extends Component {
                   <div className="phantrang">
                   <Stack spacing={2}>
                     <Pagination shape="rounded"
-                      count={Math.ceil(arrCategories.length / productsPerPage)}
+                      count={Math.ceil(arrBrand.length / productsPerPage)}
                       page={currentPage}
                       onChange={this.handlePageChange}
                     />
@@ -242,4 +242,4 @@ class CategoriesManager extends Component {
   }
 }
 
-export default CategoriesManager;
+export default BrandManager;

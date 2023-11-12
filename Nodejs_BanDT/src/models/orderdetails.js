@@ -23,6 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         sequelize,
         modelName: 'OrderDetails',
+         // muốn không thêm s sau tên bảng database phải thêm thuộc tính này
+       freezeTableName: true
     });
     return OrderDetails;
 };

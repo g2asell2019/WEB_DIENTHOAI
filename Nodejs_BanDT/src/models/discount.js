@@ -22,6 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         sequelize,
         modelName: 'Discount',
+         // muốn không thêm s sau tên bảng database phải thêm thuộc tính này
+       freezeTableName: true
     });
     return Discount;
 };

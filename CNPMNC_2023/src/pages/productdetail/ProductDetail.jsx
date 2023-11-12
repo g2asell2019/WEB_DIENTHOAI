@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getAllProducts} from "../../userService";
+import { getDeltaiProduct} from "../../userService";
 import { Buffer } from "buffer";
 import "./ProductDetail.css";
 import { Link, useParams } from "react-router-dom";
@@ -24,9 +24,7 @@ export const ProductDetail = ({ addToCart }) => {
   const { id } = useParams();
   
   const [detailProducts, setdetailProducts] = useState({});
-  const [idne, setidne] = useState('');
-  const [orderBy, setordeby] = useState('');
-  const [selectedPriceRange, setgia] = useState('');
+ 
 
   useEffect(() => {
     getAllUserFromReact();
@@ -35,7 +33,7 @@ export const ProductDetail = ({ addToCart }) => {
 
   
   const getAllUserFromReact = async () => {
-    let response = await getAllProducts(id,idne,orderBy,selectedPriceRange);
+    let response = await getDeltaiProduct(id);
     if (response && response.errcode === 0) {
       setdetailProducts(response.products);
     }

@@ -7,6 +7,7 @@ import {
   CreateCategories,
   deleteCategories,
   getAllCategories,
+  getAllBrand
 } from "../../userService";
 import { emitter } from "../../utils/emitter";
 import { toast } from "react-toastify";
@@ -24,7 +25,9 @@ class ProductManager extends Component {
     this.state = {
       arrProducts: [],
       arrCate: [],
+      arrBrand:[],
       idne: "",
+      idbrand:"",
       isOpenModalProduct: false,
       isOpenModalEditProduct: false,
       isOpenModalCategories: false,
@@ -53,7 +56,7 @@ class ProductManager extends Component {
       () => {
         //console.log('check good state: ',this.state.idne);
         // muốn lấy giá trị từ hàm render thì phải bỏ vào đây
-        this.getAllUserFromReact(this.state.idne,this.state.selectedPriceRange,this.state.orderBy);
+        this.getAllUserFromReact(this.state.idne,this.state.idbrand,this.state.selectedPriceRange,this.state.orderBy);
       }
     );
     //console.log('copystate: ',copyState);
@@ -62,10 +65,10 @@ class ProductManager extends Component {
   };
 
   async componentDidMount() {
-    console.log("id cuar toi: ", this.state.idne);
 
     await this.getAllCategoriesReact();
-    await this.getAllUserFromReact(this.state.idne,this.state.selectedPriceRange,this.state.orderBy);
+    await this.getAllBrandReact();
+    await this.getAllUserFromReact(this.state.idne,this.state.idbrand,this.state.selectedPriceRange,this.state.orderBy);
   }
   getAllCategoriesReact = async () => {
     let response = await getAllCategories("ALL");
@@ -75,11 +78,20 @@ class ProductManager extends Component {
       });
     }
   };
+  getAllBrandReact = async () => {
+    let response = await getAllBrand("ALL");
+    if (response && response.errcode == 0) {
+      this.setState({
+        arrBrand: response.Brand,
+      });
+    }
+  };
 
-  getAllUserFromReact = async (idne,selectedPriceRange,orderBy) => {
+
+  getAllUserFromReact = async (idne,idbrand,selectedPriceRange,orderBy) => {
     console.log("id cuar toi: ", idne);
 
-    let response = await getAllProducts("ALL", idne,selectedPriceRange,orderBy);
+    let response = await getAllProducts("ALL", idne,idbrand,selectedPriceRange,orderBy);
 
     if (response && response.errcode == 0) {
       this.setState({
@@ -120,7 +132,7 @@ class ProductManager extends Component {
       if (response && response.errcode !== 0) {
         alert(response.errMessage);
       } else {
-        await this.getAllUserFromReact(this.state.idne,this.state.selectedPriceRange,this.state.orderBy);
+        await this.getAllUserFromReact(this.state.idne,this.state.idbrand,this.state.selectedPriceRange,this.state.orderBy);
         this.setState({
           isOpenModalProduct: false,
         });
@@ -138,11 +150,16 @@ class ProductManager extends Component {
       let response = await CreateCategories(data);
       if (response && response.errcode !== 0) {
         alert(response.errMessage);
+        toast.error("tạo thất bại");
       } else {
-        await this.getAllUserFromReact(this.state.idne,this.state.selectedPriceRange,this.state.orderBy);
+        
+        await this.getAllUserFromReact(this.state.idne,this.state.idbrand,this.state.selectedPriceRange,this.state.orderBy);
+
         this.setState({
           isOpenModalCategories: false,
+          
         });
+        toast.success('tạo thành công');
         emitter.emit("EVENT_CLEAR_MODAL_DATA");
       }
       //  console.log("response create user: " , response)
@@ -159,7 +176,7 @@ class ProductManager extends Component {
         alert(res.errMessage);
         toast.error("Xóa thất bại");
       } else {
-        await this.getAllUserFromReact(this.state.idne,this.state.selectedPriceRange,this.state.orderBy);
+        await this.getAllUserFromReact(this.state.idne,this.state.idbrand,this.state.selectedPriceRange,this.state.orderBy);
         toast.success("Xóa Thành công");
       }
       console.log(res);
@@ -179,7 +196,7 @@ class ProductManager extends Component {
     try {
       let res = await updateProductData(user);
       if (res && res.errcode === 0) {
-        await this.getAllUserFromReact(this.state.idne,this.state.selectedPriceRange,this.state.orderBy);
+        await this.getAllUserFromReact(this.state.idne,this.state.idbrand,this.state.selectedPriceRange,this.state.orderBy);
         toast.success("Sửa Thành công");
         this.setState({
           isOpenModalEditProduct: false,
@@ -222,8 +239,8 @@ class ProductManager extends Component {
 
   render() {
     const { selectedPriceRange,orderBy } = this.state;
-    let { idne } = this.state;
-    const { arrProducts, arrCate, currentPage, productsPerPage } = this.state;
+    let { idne,idbrand } = this.state;
+    const { arrProducts, arrCate,arrBrand, currentPage, productsPerPage } = this.state;
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     const currentProducts = arrProducts.slice(
@@ -273,21 +290,36 @@ class ProductManager extends Component {
                   <h2 className="h2--title">Danh sách sản phẩm</h2>
                   <div className="locsanpham">
                     <select
-                      className="form-control col-3 mr-3"
+                      className="form-control col-3 mr-2"
                       onChange={(event) => {
                         this.handleOnChangeInput(event, "idne");
                       }}
                       value={idne}
                     >
-                      <option value="">Tất cả hãng sản xuất</option>
+                      <option value="">Tất cả loại sản phẩm</option>
                       {arrCate &&
                         arrCate.length > 0 &&
                         arrCate.map((item, index) => {
                           return <option value={item.id}>{item.name}</option>;
                         })}
                     </select>
+
                     <select
-                      className="form-control col-3 mr-3"
+                      className="form-control col-3 mr-2"
+                      onChange={(event) => {
+                        this.handleOnChangeInput(event, "idbrand");
+                      }}
+                      value={idbrand}
+                    >
+                      <option value="">Tất cả Hãng sản phẩm</option>
+                      {arrBrand &&
+                        arrBrand.length > 0 &&
+                        arrBrand.map((item, index) => {
+                          return <option value={item.id}>{item.name}</option>;
+                        })}
+                    </select>
+                    <select
+                      className="form-control col-3 mr-2"
                       onChange={(event) => {
                         this.handleOnChangeInput(event, "selectedPriceRange");
                       }}
@@ -305,7 +337,7 @@ class ProductManager extends Component {
                     </select>
 
                     <select
-                      className="form-control col-3 mr-3"
+                      className="form-control col-2 mr-2"
                       onChange={(event) => {
                         this.handleOnChangeInput(event, "orderBy");
                       }}
@@ -322,9 +354,11 @@ class ProductManager extends Component {
                     <table>
                       <thead>
                         <tr>
+                        <th>STT</th>
                           <th>Tên sản phẩm</th>
                           <th>giá</th>
                           <th>số lượng</th>
+                          <th>Hãng</th>
                           <th>loại</th>
                           <th>hình ảnh</th>
                           <th>Hành động</th>
@@ -343,10 +377,11 @@ class ProductManager extends Component {
 
                             return (
                               <tr key={index}>
+                                <td>{index+1}</td>
                                 <td>{item.name}</td>
                                 <td>{this.formatCurrency(item.price)}</td>
                                 <td>{item.quantity}</td>
-
+                                <td>{item.idBrandData.name}</td>
                                 <td>{item.idCateData.name}</td>
                                 <td>
                                   <div

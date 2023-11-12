@@ -28,9 +28,14 @@ const editUserService = (inputData) => {
 
 // goi api cua products
 
-const getAllProducts = (inputId, idne, selectedPriceRange, orderBy) => {
+const getAllProducts = (inputId, idne,idbrand, selectedPriceRange, orderBy) => {
     // Template String
-    return axios.get(`api/get-all-products?id=${inputId}&idCate=${idne}&price=${selectedPriceRange}&orderBy=${orderBy}`);
+    return axios.get(`api/get-all-products?id=${inputId}&idCate=${idne}&idBrand=${idbrand}&price=${selectedPriceRange}&orderBy=${orderBy}`);
+}
+
+const getDeltaiProduct = (inputId) => {
+    //teamplate String
+    return axios.get(`/api/get-deltai-product?id=${inputId}`)
 }
 
 
@@ -114,6 +119,32 @@ const updateSaleData = (inputData) => {
 }
 
 
+ // call api cua brand 
+
+const CreateBrand = (data) => {
+    return axios.post('/api/create-new-brand', data)
+}
+const deleteBrand = (productId) => {
+
+        return axios.delete('/api/delete-brand', {
+            data: {
+                id: productId
+            }
+        })
+    }
+    // lay tat ca loai san pham
+const getAllBrand = (inputType) => {
+    return axios.get(`/api/get-all-brand?id=${inputType}`)
+}
+
+const updateBrandData = (inputData) => {
+    return axios.put('/api/edit-brand', inputData)
+
+}
+
+
+
+
 
 
 
@@ -124,6 +155,7 @@ export {
     deleteUserService,
     editUserService,
     getAllProducts,
+    getDeltaiProduct,
     CreateProducts,
     deleteProducts,
     updateProductData,
@@ -137,7 +169,12 @@ export {
     getAllSale,
     CreateSale,
     deleteSale,
-    updateSaleData
+    updateSaleData,
+    CreateBrand,
+    deleteBrand,
+    getAllBrand,
+    updateBrandData,
+
 
 
 }

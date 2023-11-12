@@ -5,17 +5,19 @@ import { toast } from "react-toastify";
 import "./ModalProducts.scss";
 import _ from "lodash";
 import CommonUtils from "../../utils/CommonUtils";
-import {getAllCategories} from "../../userService";
+import {getAllCategories,getAllBrand} from "../../userService";
 
 class ModalProducts extends Component {
   constructor(props) {
     super(props);
     this.state = {
       arrCate:[],
+      arrBrand:[],
       name: "",
       price: "",
       quantity: "",
       idCate: "",
+      idBrand:"",
       avatar: "",
       previewImgURL: " ",
     };
@@ -29,6 +31,7 @@ class ModalProducts extends Component {
       price: "",
       quantity: "",
       idCate: "",
+      idBrand:"",
       avatar: "",
       previewImgURL: " ",
       });
@@ -36,6 +39,7 @@ class ModalProducts extends Component {
   };
  async componentDidMount() {
   await this.getAllCategoriesReact();
+  await this.getAllBrandReact();
   }
 
   getAllCategoriesReact = async () => {
@@ -46,6 +50,15 @@ class ModalProducts extends Component {
       });
     }
   };
+  getAllBrandReact = async () => {
+    let response = await getAllBrand("ALL");
+    if (response && response.errcode == 0) {
+      this.setState({
+        arrBrand: response.Brand,
+      });
+    }
+  };
+
 
   toggle = () => {
     this.props.toggleFromParent();
@@ -98,6 +111,7 @@ class ModalProducts extends Component {
       "price",
       "quantity",
       "idCate",
+      "idBrand",
       "avatar"
     ];
 
@@ -121,7 +135,7 @@ class ModalProducts extends Component {
       //  console.log('check props child:',this.props);
       this.props.createNewUser(this.state);
       // console.log('data modal:',this.state)
-      toast.success("Tạo Thành công");
+      
     }
   };
 
@@ -143,6 +157,7 @@ class ModalProducts extends Component {
 
     const formattedPrice = new Intl.NumberFormat('en-US').format(this.state.price);
     let category=this.state.arrCate;
+    let brand=this.state.arrBrand;
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -206,7 +221,7 @@ class ModalProducts extends Component {
                 </div>
                 <div className="form-row">
                   
-                  <div className="form-group col-md-3">
+                  <div className="form-group col-md-6">
                     <label>Loại</label> 
                     <select className="form-control"
                      onChange={(event) => {
@@ -217,6 +232,25 @@ class ModalProducts extends Component {
                      {
                       category&&category.length>0
                       &&category.map((item,index)=>{
+                        return(
+                          <option  value={item.id}>{item.name}</option>
+                        )
+                      })
+                     }
+                     
+                    </select>
+                  </div>
+                  <div className="form-group col-md-6">
+                    <label>Hãng</label> 
+                    <select className="form-control"
+                     onChange={(event) => {
+                      this.handleOnChangeInput(event, "idBrand");
+                    }}
+                    value={this.state.idBrand}>
+                         <option  value=''>Chọn Hãng sản phẩm</option>
+                     {
+                      brand&&brand.length>0
+                      &&brand.map((item,index)=>{
                         return(
                           <option  value={item.id}>{item.name}</option>
                         )

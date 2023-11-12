@@ -3,7 +3,7 @@ import db from "../models/index";
 const { Sequelize, Op } = require('sequelize');
 
 
-let getAllProducts = (productId, idne, priceRange, orderBy) => {
+let getAllProducts = (productId, idne,idbrand, priceRange, orderBy) => {
     return new Promise(async(resolve, reject) => {
         try {
             let products = '';
@@ -19,6 +19,9 @@ let getAllProducts = (productId, idne, priceRange, orderBy) => {
             // Lọc theo ID hãng
             if (idne && idne !== '') {
                 queryConditions.idCate = idne;
+            }
+            if (idbrand && idbrand !== '') {
+                queryConditions.idBrand = idbrand;
             }
 
             // Lọc theo mức giá
@@ -44,14 +47,24 @@ let getAllProducts = (productId, idne, priceRange, orderBy) => {
             products = await db.Products.findAll({
                 where: queryConditions,
                 order: orderCondition,
-                include: [{
-                    model: db.Categories,
-                    as: 'idCateData',
-                    attributes: ['name'],
-                }],
+                include: [
+                    {
+                        model: db.Categories,
+                        as: 'idCateData',
+                        attributes: ['name'],
+                    },
+                    {
+                        model: db.Brands,
+                        as: 'idBrandData',
+                        attributes: ['name'],
+                    },
+                ],
                 raw: true,
                 nest: true,
             });
+
+
+             
 
             resolve(products);
         } catch (e) {
@@ -59,6 +72,47 @@ let getAllProducts = (productId, idne, priceRange, orderBy) => {
         }
     });
 };
+
+
+
+
+let DeltaiProduct = (productId) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            let products = '';
+
+         if (productId && productId !== 'ALL') {
+                products = await db.Products.findOne({
+                    where: { id: productId },
+                    include: [
+                        {
+                            model: db.Categories,
+                            as: 'idCateData',
+                            attributes: ['name'],
+                        },
+                        {
+                            model: db.Brands,
+                            as: 'idBrandData',
+                            attributes: ['name'],
+                        },
+                    ],
+                    raw: true,
+                    nest: true,
+
+                });
+            }
+
+
+
+            resolve(products);
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+
+
 
 
 let checkproductname = (name) => {
@@ -98,7 +152,8 @@ let CreateProducts = (data) => {
                     price: data.price,
                     quantity: data.quantity,
                     image: data.avatar,
-                    idCate: data.idCate
+                    idCate: data.idCate,
+                    idBrand:data.idBrand,
                 });
                 if (data && data.image) {
                     data.image = Buffer.from(data.image, 'base64').toString('binary');
@@ -166,6 +221,7 @@ let updateProductData = (data) => {
                 products.price = data.price;
                 products.quantity = data.quantity;
                 products.idCate = data.idCate;
+                products.idBrand=data.idBrand;
                 if (data.avatar) {
                     products.image = data.avatar;
 
@@ -215,6 +271,27 @@ let checkcategoriesname = (name) => {
     })
 }
 
+let checkbrandname = (name) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            let brands = await db.Brands.findOne({
+
+                where: { name: name },
+
+            });
+            if (brands) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+
+        } catch (e) {
+            reject(e);
+
+        }
+    })
+}
+
 
 
 
@@ -224,12 +301,19 @@ let CreateCategories = (data) => {
         try {
             // check taikhoan is exist??
             let check = await checkcategoriesname(data.name);
+            let check1 = await checkbrandname(data.name);
             if (check == true) {
                 resolve({
                     errcode: 1,
                     errMessage: "Tên loại sản phẩm này đã tồn tại"
                 })
-            } else {
+            } else if(check1==true){
+                resolve({
+                    errcode: 1,
+                    errMessage: "Tên hãng sản phẩm này đã tồn tại"
+                })
+            }
+            else {
                 await db.Categories.create({
                     name: data.name,
 
@@ -352,12 +436,13 @@ let getAllCategories = (categoriesId) => {
 
 module.exports = {
     getAllProducts: getAllProducts,
+    DeltaiProduct:DeltaiProduct,
     CreateProducts: CreateProducts,
     deleteProducts: deleteProducts,
     updateProductData: updateProductData,
     CreateCategories: CreateCategories,
     deleteCategories: deleteCategories,
     getAllCategories: getAllCategories,
-    updateCategoriesData: updateCategoriesData
+    updateCategoriesData: updateCategoriesData,
 
 }

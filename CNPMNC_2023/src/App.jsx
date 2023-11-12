@@ -26,6 +26,7 @@ import ProductAdmin from "./Admin/ProductAdmin";
 import CategoriesAdmin from "./Admin/CategoriesAdmin";
 import {  useEffect } from "react";
 import OrderAdmin from "./Admin/OrderAdmin";
+import BrandAdmin from "./Admin/BrandAdmin";
 function App() {
   //step 1: fetch data from DB
   const { productItems } = Data;
@@ -112,6 +113,12 @@ function App() {
              
             
              <OrderAdmin/>
+          
+        </Route>
+        <Route path="/admin/brand" exact>
+             
+            
+             <BrandAdmin/>
           
         </Route>
         

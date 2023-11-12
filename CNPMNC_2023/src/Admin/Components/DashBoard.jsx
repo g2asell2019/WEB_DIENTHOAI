@@ -13,6 +13,9 @@ export const DashBoard = () => {
   const handleManageCategories = () => {
     history.replace("/admin/categories"); // Sử dụng replace thay vì push
   };
+  const handleManageBrand = () => {
+    history.replace("/admin/brand"); // Sử dụng replace thay vì push
+  };
 
   const handleManageOrders = () => {
     history.replace("/admin/orders"); // Sử dụng replace thay vì push
@@ -30,25 +33,29 @@ export const DashBoard = () => {
             </Link>
           </li>
           <li onClick={() => handleManageUser()}>
-            <i className="fas fa-user"></i>
+            <i className="fas fa-user mr-2"></i>
             <span>Quản lý Tài khoản </span>
           </li>
           <li onClick={() => handleManageProduct()}>
-            <i className="fas fa-mobile-alt"></i>
+          <i className="fas fa-store mr-2"></i>
             <span>Quản lý Sản phẩm </span>
           </li>
 
           <li onClick={() => handleManageCategories()}>
-            <i className="fas fa-mobile-alt"></i>
+          <i className="fas fa-vial mr-2"></i>
             <span>Quản lý Loại sản phẩm</span>
+          </li>
+          <li onClick={() => handleManageBrand()}>
+          <i class="fas fa-parking mr-2"></i>
+            <span>Quản lý Hãng sản phẩm</span>
           </li>
 
           <li onClick={() => handleManageOrders()}>
-            <i className="fas fa-mobile-alt"></i>
+          <i className="fas fa-shuttle-van mr-2"></i>
             <span>Quản lý Đơn hàng</span>
           </li>
           <li className="logout">
-            <i className="fas fa-sign-out-alt"></i>
+            <i className="fas fa-sign-out-alt mr-2"></i>
             <span>Đăng xuất</span>
           </li>
         </ul>

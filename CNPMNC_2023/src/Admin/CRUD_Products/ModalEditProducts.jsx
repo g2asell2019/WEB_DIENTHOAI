@@ -13,10 +13,12 @@ class ModalEditProducts extends Component {
     super(props);
     this.state = {
       arrCate:[],
+      arrBrand:[],
       name: "",
       price: "",
       quantity: "",
       idCate: "",
+      idBrand:"",
       avatar: "",
       previewImgURL: " ",
     };
@@ -24,6 +26,7 @@ class ModalEditProducts extends Component {
 
   async componentDidMount() {
     await this.getAllCategoriesReact();
+    await this.getAllBrandReact();
     let user = this.props.currentUser;
     // cachs 2 //let {CurrentUser}=this.props;
     if (user && !_.isEmpty(user)) {
@@ -38,6 +41,7 @@ class ModalEditProducts extends Component {
         price: user.price,
         quantity: user.quantity,
         idCate: user.idCate,
+        idBrand: user.idBrand,
         avatar: user.avatar,
         previewImgURL: imageBase64,
       });
@@ -56,7 +60,14 @@ class ModalEditProducts extends Component {
       });
     }
   };
-
+  getAllBrandReact = async () => {
+    let response = await getAllBrand("ALL");
+    if (response && response.errcode == 0) {
+      this.setState({
+        arrBrand: response.Brand,
+      });
+    }
+  };
   handleOnChangeInput = (event, id) => {
     //good code
     let copyState = { ...this.state };
@@ -76,7 +87,7 @@ class ModalEditProducts extends Component {
 
   checkValideInputEdit = () => {
     let isValid = true;
-    let arrInput = ["name", "price", "quantity", "idCate"];
+    let arrInput = ["name", "price", "quantity", "idCate","idBrand"];
 
     for (let i = 0; i < arrInput.length; i++) {
       console.log("check inside loop", this.state[arrInput[i]], arrInput[i]);
@@ -128,6 +139,7 @@ class ModalEditProducts extends Component {
   render() {
     const formattedPrice = new Intl.NumberFormat('en-US').format(this.state.price);
     let category=this.state.arrCate;
+    let brand=this.state.arrBrand;
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -190,7 +202,7 @@ class ModalEditProducts extends Component {
                   </div>
                 </div>
                 <div className="form-row">
-                <div className="form-group col-md-3">
+                <div className="form-group col-md-6">
                     <label>Loại</label> 
                     <select className="form-control"
                      onChange={(event) => {
@@ -201,6 +213,25 @@ class ModalEditProducts extends Component {
                      {
                       category&&category.length>0
                       &&category.map((item,index)=>{
+                        return(
+                          <option  value={item.id}>{item.name}</option>
+                        )
+                      })
+                     }
+                     
+                    </select>
+                  </div>
+                  <div className="form-group col-md-6">
+                    <label>Hãng</label> 
+                    <select className="form-control"
+                     onChange={(event) => {
+                      this.handleOnChangeInput(event, "idBrand");
+                    }}
+                    value={this.state.idBrand}>
+                         <option  value=''>Chọn Hãng sản phẩm</option>
+                     {
+                      brand&&brand.length>0
+                      &&brand.map((item,index)=>{
                         return(
                           <option  value={item.id}>{item.name}</option>
                         )

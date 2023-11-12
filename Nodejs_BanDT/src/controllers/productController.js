@@ -4,6 +4,7 @@ import productServices from "../services/productServices"
 let handleGetAllProducts = async(req, res) => {
     let id = req.query.id; //all, id
     let idCate = req.query.idCate;
+    let idBrand=req.query.idBrand;
     let price = req.query.price;
     let orderBy = req.query.orderBy
     if (!id) {
@@ -14,7 +15,7 @@ let handleGetAllProducts = async(req, res) => {
         })
 
     }
-    let products = await productServices.getAllProducts(id, idCate, price, orderBy);
+    let products = await productServices.getAllProducts(id, idCate,idBrand, price, orderBy);
     console.log(products);
     return res.status(200).json({
         errcode: 0,
@@ -23,6 +24,44 @@ let handleGetAllProducts = async(req, res) => {
 
     })
 }
+
+
+let handleDeltaiProduct = async(req, res) => {
+    let id = req.query.id; //all, id
+   
+    if (!id) {
+        return res.status(200).json({
+            errcode: 1,
+            errMessage: 'Missing require parameters',
+            products: []
+        })
+
+    }
+    let products = await productServices.DeltaiProduct(id);
+    console.log(products);
+    return res.status(200).json({
+        errcode: 0,
+        errMessage: 'OK',
+        products
+
+    })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 let handleCreateProducts = async(req, res) => {
     let message = await productServices.CreateProducts(req.body);
     console.log(message);
@@ -131,6 +170,7 @@ module.exports = {
     handlegetAllCategories: handlegetAllCategories,
     handleCreateCategories: handleCreateCategories,
     handleDeleteCategories: handleDeleteCategories,
-    handleEditCategories: handleEditCategories
+    handleEditCategories: handleEditCategories,
+    handleDeltaiProduct:handleDeltaiProduct
 
 }

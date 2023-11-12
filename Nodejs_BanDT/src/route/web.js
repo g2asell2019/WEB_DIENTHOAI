@@ -35,6 +35,7 @@ let initWebRouters = (app) => {
 
     //api cua san pham
     router.get('/api/get-all-products', productController.handleGetAllProducts);
+    router.get('/api/get-deltai-product', productController.handleDeltaiProduct);
     router.post('/api/create-new-products', productController.handleCreateProducts);
     router.put('/api/edit-products', productController.handleEditProducts);
     router.delete('/api/delete-products', productController.handleDeleteProducts);
