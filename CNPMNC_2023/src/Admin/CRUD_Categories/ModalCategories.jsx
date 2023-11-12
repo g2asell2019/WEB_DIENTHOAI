@@ -4,13 +4,16 @@ import { emitter } from "../../utils/emitter";
 import { toast } from "react-toastify";
 import "./ModalProducts.scss";
 import _ from "lodash";
+import CommonUtils from "../../utils/CommonUtils";
 
 
 class ModalCategories extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "" 
+      name: "" ,
+      avatar: "",
+      previewImgURL: " ",
     };
     this.listenToEmitter();
   }
@@ -19,6 +22,8 @@ class ModalCategories extends Component {
       //reset state
       this.setState({
       name: "",
+      avatar: "",
+      previewImgURL: " ",
       });
     });
   };
@@ -48,7 +53,7 @@ class ModalCategories extends Component {
   checkValideInput = () => {
     let isValid = true;
     let arrInput = [
-      "name",
+      "name","avatar",
     ];
 
     for (let i = 0; i < arrInput.length; i++) {
@@ -74,6 +79,21 @@ class ModalCategories extends Component {
       toast.success("Tạo Thành công");
     }
   };
+
+  handleOnChangeImage = async (event) => {
+    let data = event.target.files;
+    let file = data[0];
+    if (file) {
+      let base64 = await CommonUtils.getBase64(file);
+
+      let objectUrl = URL.createObjectURL(file);
+      this.setState({
+        previewImgURL: objectUrl,
+        avatar: base64,
+      });
+    }
+  };
+
   render() {
     return (
       <Modal
@@ -108,6 +128,28 @@ class ModalCategories extends Component {
                       }}
                       value={this.state.name}
                     />
+                  </div>
+                  <div className="form-group col-md-3">
+                    <label>Hình ảnh</label>
+                    <div className="lamdep">
+                      <input
+                        type="file"
+                        id="previewImg"
+                        hidden
+                        onChange={(event) => this.handleOnChangeImage(event)}
+                      ></input>
+
+                      <label className="label-upload" htmlFor="previewImg">
+                        tải ảnh <i className="fas fa-upload"></i>
+                      </label>
+                      <div
+                        className="preview-image"
+                        onClick={this.handleImageClick}
+                        style={{
+                          backgroundImage: `url(${this.state.previewImgURL})`,
+                        }}
+                      ></div>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -8,6 +8,8 @@ let getAllProducts = (productId, idne,idbrand, priceRange, orderBy) => {
         try {
             let products = '';
 
+            
+
             // Khởi tạo các điều kiện truy vấn
             let queryConditions = {};
 
@@ -63,6 +65,8 @@ let getAllProducts = (productId, idne,idbrand, priceRange, orderBy) => {
                 nest: true,
             });
 
+         
+         
 
              
 
@@ -316,8 +320,16 @@ let CreateCategories = (data) => {
             else {
                 await db.Categories.create({
                     name: data.name,
+                    image: data.avatar
 
                 });
+                if (data && data.image) {
+                    data.image = Buffer.from(data.image, 'base64').toString('binary');
+
+                }
+                if (!data) {
+                    data = {};
+                }
                 resolve({
                     errcode: 0,
                     data: data
@@ -378,6 +390,12 @@ let updateCategoriesData = (data) => {
             })
             if (categories) {
                 categories.name = data.name;
+                if (data.avatar) {
+                    categories.image = data.avatar;
+
+                }
+
+                categories.image = data.avatar;
 
 
 
@@ -407,7 +425,7 @@ let getAllCategories = (categoriesId) => {
             if (categoriesId == 'ALL') {
                 categories = db.Categories.findAll({
                     order: [
-                        ["createdAt", "DESC"]
+                        ["createdAt", "ASC"]
                     ],
                 })
 

@@ -6,7 +6,7 @@ import "./ModalEditProducts.scss";
 import _ from "lodash";
 import { Buffer } from "buffer";
 import CommonUtils from "../../utils/CommonUtils";
-import {getAllCategories} from "../../userService";
+import {getAllCategories, getAllBrand} from "../../userService";
 
 class ModalEditProducts extends Component {
   constructor(props) {

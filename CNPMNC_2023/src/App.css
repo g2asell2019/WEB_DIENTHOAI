@@ -107,7 +107,8 @@ button {
     width: 30px;
     height: 30px;
     margin-top: 10px;
-    object-fit: contain;
+    object-fit: cover; /* Sử dụng object-fit để điều chỉnh kích thước và vị trí của hình */
+    cursor: pointer;
 }
 
 .category span {

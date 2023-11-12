@@ -4,6 +4,8 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 import "./ModalEditProducts.scss";
 import _ from "lodash";
+import { Buffer } from "buffer";
+import CommonUtils from "../../utils/CommonUtils";
 
 
 class ModalEditCategories extends Component {
@@ -11,16 +13,25 @@ class ModalEditCategories extends Component {
     super(props);
     this.state = {
       name: "",
+      avatar: "",
+      previewImgURL: "",
     };
   }
 
   componentDidMount() {
     let user = this.props.currentUser;
     // cachs 2 //let {CurrentUser}=this.props;
+    let imageBase64 = "";
+    if (user.image) {
+      // const imageBuffer = Buffer.from(JSON.stringify(user.image));
+      imageBase64 = new Buffer.from(user.image, "base64").toString("binary");
+    }
     if (user && !_.isEmpty(user)) {
       this.setState({
         id: user.id,
         name: user.name,
+        avatar: user.avatar,
+        previewImgURL: imageBase64,
       });
     }
   }
@@ -69,6 +80,21 @@ class ModalEditCategories extends Component {
       this.props.editUser(this.state);
     }
   };
+
+
+  handleOnChangeImage = async (event) => {
+    let data = event.target.files;
+    let file = data[0];
+    if (file) {
+      let base64 = await CommonUtils.getBase64(file);
+
+      let objectUrl = URL.createObjectURL(file);
+      this.setState({
+        previewImgURL: objectUrl,
+        avatar: base64,
+      });
+    }
+  };
   render() {
     return (
       <Modal
@@ -103,6 +129,28 @@ class ModalEditCategories extends Component {
                       }}
                       value={this.state.name}
                     />
+                  </div>
+                  <div className="form-group col-md-3">
+                    <label>Hình ảnh</label>
+                    <div className="lamdep">
+                      <input
+                        type="file"
+                        id="previewImg"
+                        hidden
+                        onChange={(event) => this.handleOnChangeImage(event)}
+                      ></input>
+
+                      <label className="label-upload" htmlFor="previewImg">
+                        tải ảnh <i className="fas fa-upload"></i>
+                      </label>
+                      <div
+                        className="preview-image"
+                        onClick={this.handleImageClick}
+                        style={{
+                          backgroundImage: `url(${this.state.previewImgURL})`,
+                        }}
+                      ></div>
+                    </div>
                   </div>
                 </div>
               </div>

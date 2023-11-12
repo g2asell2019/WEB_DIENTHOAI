@@ -35,8 +35,16 @@ let CreateBrands = (data) => {
             } else {
                 await db.Brands.create({
                     name: data.name,
+                    image: data.avatar
 
                 });
+                if (data && data.image) {
+                    data.image = Buffer.from(data.image, 'base64').toString('binary');
+
+                }
+                if (!data) {
+                    data = {};
+                }
                 resolve({
                     errcode: 0,
                     data: data
@@ -97,6 +105,12 @@ let updateBrandsData = (data) => {
             })
             if (Brands) {
                 Brands.name = data.name;
+                if (data.avatar) {
+                    Brands.image = data.avatar;
+
+                }
+
+                Brands.image = data.avatar;
 
 
 

@@ -12,6 +12,10 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import ModalBrand from "./ModalBrand";
 import ModalEditBrand from "./ModalEditBrand";
+import { Buffer } from "buffer";
+import "./ModalProducts.scss";
+
+
 
 
 
@@ -181,18 +185,30 @@ class BrandManager extends Component {
                         <tr>
                           <th>STT</th>
                           <th>Tên Hãng sản phẩm</th>
+                          <th>Hình ảnh</th>
                           <th>Hành động</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentProducts &&
                           currentProducts.map((item, index) => {
-                    
+                            let imageBase64 = "";
+                            if (item.image) {
+                              imageBase64 = Buffer.from(
+                                item.image,
+                                "base64"
+                              ).toString("binary");
+                            }
                             return (
                               <tr key={index}>
                                 <td>{index+1}</td>
                                 <td>{item.name}</td>
-  
+                                <div
+                                    className="imagene"
+                                    style={{
+                                      backgroundImage: `url(${imageBase64})`,
+                                    }}
+                                  ></div>
                                 <td>
                                   <button
                                     className="btn-edit"
