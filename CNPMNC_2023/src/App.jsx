@@ -193,7 +193,7 @@ function App() {
             <Route path="/products">
               <Products productItems={productItems} addToCart={addToCart} />
             </Route>
-            <Route path="/phone">
+            <Route path="/phone/:id">
               <Phone phoneItems={phoneItems} addToCart={addToCart} />
             </Route>
           </Switch>

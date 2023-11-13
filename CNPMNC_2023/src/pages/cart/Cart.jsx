@@ -24,6 +24,10 @@ export const Cart = ({
     (price, item) => price + item.qty * item.price,
     0
   );
+  const handleContinueShopping = () => {
+    // Sử dụng history.goBack() để quay lại trang trước đó
+    history.goBack();
+  };
 
   function formatCurrency(number) {
     // Sử dụng Intl.NumberFormat để định dạng số
@@ -48,9 +52,9 @@ export const Cart = ({
     <>
       <section className="cart-items">
       <div className="container title ">
-          <Link to={"../phone"}>
-            <button>Tiếp tục mua hàng</button>
-          </Link>
+      
+        <button onClick={handleContinueShopping}>Tiếp tục mua hàng</button>
+     
           <h1>Giỏ hàng</h1>
         </div>
         <div className="container d_flex">

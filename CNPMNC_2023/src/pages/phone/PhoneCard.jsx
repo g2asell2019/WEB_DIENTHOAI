@@ -1,72 +1,110 @@
 import React, { useState, useEffect } from "react";
-import { getAllProducts} from "../../userService";
+import { getAllProducts, getAllBrand } from "../../userService";
 import { Buffer } from "buffer";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export const PhoneCard = ({ addToCart }) => {
+  const { id } = useParams();
+
   const [arrProducts, setArrProducts] = useState([]);
-  const [idne, setidne] = useState('');
+  const [arrbrand, setArrbrand] = useState('');
   const [idbrand, setidbrand] = useState('');
   const [orderBy, setordeby] = useState('');
   const [selectedPriceRange, setgia] = useState('');
   useEffect(() => {
     getAllUserFromReact();
-  }, []);
+    getAllBrandFromReact();
+  }, [idbrand, orderBy]);
 
-
-  
   const getAllUserFromReact = async () => {
-    let response = await getAllProducts("ALL",idne,idbrand,orderBy,selectedPriceRange);
+    let idCate = '';
+    if (id && id == 20) {
+      idCate = '';
+    } else {
+      idCate = id;
+    }
+    let response = await getAllProducts("ALL", idCate, idbrand, selectedPriceRange, orderBy);
     if (response && response.errcode === 0) {
       setArrProducts(response.products);
     }
   };
+
+  const getAllBrandFromReact = async () => {
+    let response = await getAllBrand("ALL");
+    if (response && response.errcode === 0) {
+      setArrbrand(response.Brand);
+    }
+  };
+
   const itemsPerPage = 8;
   const [currentPage, setCurrentPage] = useState(1);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  console.log({ endIndex });
+
   const currentItems = arrProducts.slice(startIndex, endIndex);
-  console.log({ currentItems });
+
   const totalPages = Math.ceil(arrProducts.length / itemsPerPage);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
+
   function formatCurrency(number) {
-    // Sử dụng Intl.NumberFormat để định dạng số
     const formatter = new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
-      minimumFractionDigits: 0, // Loại bỏ phần thập phân
+      minimumFractionDigits: 0,
     });
 
-    // Lấy chuỗi đã định dạng số
     const formattedNumber = formatter.format(number);
 
-    // Loại bỏ khoảng trắng giữa số và đơn vị tiền tệ (₫)
     return formattedNumber.replace(/\s/g, "");
   }
 
+  const handleBrandClick = (clickedId) => {
+    setidbrand(clickedId);
+  };
 
+  const handleOrderClick = (order) => {
+    setordeby(order);
+  };
 
-  
   return (
-    
     <>
+      {arrbrand && arrbrand.map((gia, stt) => {
+        let imageBase63 = '';
+        if (gia.image) {
+          imageBase63 = Buffer.from(gia.image, 'base64').toString('binary');
+        }
+        return (
+          <div className="list-Brand" key={stt} onClick={() => handleBrandClick(gia.id)}>
+            <img src={imageBase63} alt="" />
+          </div>
+        );
+      })}
+
+      <hr />
+
+      <div className="sapxep">
+        Sắp xếp theo
+      </div>
+      <span className={`high ${orderBy === "price-desc" ? "active" : ""}`} onClick={() => handleOrderClick("price-desc")}>
+        <i className="fas fa-sort-amount-up-alt mr-2"></i>Giá Cao-Thấp
+      </span>
+      <span className={`low ${orderBy === "price-asc" ? "active" : ""}`} onClick={() => handleOrderClick("price-asc")}>
+        <i className="fas fa-sort-amount-down mr-2"></i>Giá Thấp-Cao
+      </span>
+
       <div className="grid1-p">
-        {currentItems.map((item,index) => {
-              let imageBase64='';
-              if(item.image){
-      
-               
-                 imageBase64=Buffer.from(item.image,'base64').toString('binary');
-              
-      
-            }
+        {currentItems.map((item, index) => {
+          let imageBase64 = '';
+          if (item.image) {
+            imageBase64 = Buffer.from(item.image, 'base64').toString('binary');
+          }
           return (
-            <div className="box">
+            <div className="box" key={index}>
               <div className="product mtop ">
                 <div className="img">
                   <span className="discount">{}% Off</span>
@@ -98,7 +136,6 @@ export const PhoneCard = ({ addToCart }) => {
                       </button>
                     </Link>
                     <button onClick={() => addToCart(item)}>
-                      {/* <i className="fa fa-plus"></i> */}
                       <span>Mua ngay</span>
                     </button>
                   </div>
