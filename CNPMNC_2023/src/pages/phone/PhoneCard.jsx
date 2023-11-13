@@ -15,7 +15,7 @@ export const PhoneCard = ({ addToCart }) => {
   useEffect(() => {
     getAllUserFromReact();
     getAllBrandFromReact();
-  }, [idbrand, orderBy]);
+  }, [idbrand, orderBy,selectedPriceRange]);
 
   const getAllUserFromReact = async () => {
     let idCate = '';
@@ -70,6 +70,11 @@ export const PhoneCard = ({ addToCart }) => {
   const handleOrderClick = (order) => {
     setordeby(order);
   };
+  const handleOnChangeInput = (event) => {
+    // Thực hiện các hành động khi input thay đổi
+    // Ví dụ: cập nhật giá trị selectedPriceRange
+    setgia(event.target.value);
+  };
 
   return (
     <>
@@ -86,6 +91,27 @@ export const PhoneCard = ({ addToCart }) => {
       })}
 
       <hr />
+      <div className="sapxep">
+        Chọn giá theo tiêu chí
+        <select
+      className="form-control col-3 mr-2"
+      onChange={(event) => handleOnChangeInput(event, 'selectedPriceRange')}
+      value={selectedPriceRange}
+    >
+      <option value="">Tất cả giá</option>
+      <option value="0-5000000">0 - 5 triệu</option>
+      <option value="5000000-10000000">5 triệu - 10 triệu</option>
+      <option value="10000000-20000000">10 triệu - 20 triệu</option>
+      <option value="20000000-30000000">20 triệu - 30 triệu</option>
+      <option value="30000000-50000000">30 triệu - 50 triệu</option>
+      <option value="50000000-100000000">50 triệu - 100 triệu</option>
+      <option value="100000000-200000000">100 triệu - 200 triệu</option>
+      <option value="200000000-999999999999999999">200 triệu - không giới hạn</option>
+    </select>
+
+      </div>
+     
+      <hr />
 
       <div className="sapxep">
         Sắp xếp theo
@@ -96,7 +122,7 @@ export const PhoneCard = ({ addToCart }) => {
       <span className={`low ${orderBy === "price-asc" ? "active" : ""}`} onClick={() => handleOrderClick("price-asc")}>
         <i className="fas fa-sort-amount-down mr-2"></i>Giá Thấp-Cao
       </span>
-
+      <hr />
       <div className="grid1-p">
         {currentItems.map((item, index) => {
           let imageBase64 = '';
