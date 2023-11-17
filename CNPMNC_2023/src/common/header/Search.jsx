@@ -14,7 +14,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 export const Search = ({ cartItem }) => {
+  const history = useHistory();
+  const [user, setUser] = useState({ taikhoan: "" });
 
+
+const [isSearchResultsVisible, setSearchResultsVisible] = useState(false);
 
 
   window.addEventListener("scroll", function () {
@@ -30,10 +34,11 @@ export const Search = ({ cartItem }) => {
     setAnchorEl(null);
   };
 
-  const history = useHistory();
-  const [user, setUser] = useState({ taikhoan: "" });
-
+  
   useEffect(() => {
+
+
+    
     // Sử dụng một hàm async để lấy dữ liệu từ Local Storage
     const getUserDataFromLocalStorage = async () => {
       const userData = localStorage.getItem("user");
@@ -46,6 +51,36 @@ export const Search = ({ cartItem }) => {
     };
 
     getUserDataFromLocalStorage(); // Gọi hàm để lấy dữ liệu từ Local Storage
+
+
+    const handleClickOutside = (event) => {
+      const searchResultsContainer = document.querySelector(".dataResult");
+  
+      if (
+        searchResultsContainer &&
+        !searchResultsContainer.contains(event.target)
+      ) {
+        // Nếu người dùng click ra ngoài bảng danh sách, ẩn nó
+        setSearchResultsVisible(false);
+      }
+    };
+  
+    document.addEventListener("click", handleClickOutside);
+  
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+
+
+
+
+
+
+
+
+
+
+
   }, []);
 
 
@@ -65,7 +100,10 @@ export const Search = ({ cartItem }) => {
     user && <Search/>;
   }
 
-
+  const handleSearch = () => {
+    // Xử lý tìm kiếm, ví dụ chuyển hướng đến '/search' với query string.
+    history.push(`/pageSearch?query=${wordEntered}`);
+  };
 
 
 
@@ -98,13 +136,16 @@ export const Search = ({ cartItem }) => {
     const newFilter = arrProducts.filter((value) => {
       return value.name.toLowerCase().includes(searchWord.toLowerCase());
     });
-
+  
     if (searchWord === "") {
+      setSearchResultsVisible(false);
       setFilteredData([]);
     } else {
+      setSearchResultsVisible(true);
       setFilteredData(newFilter);
     }
   };
+  
 
 
 
@@ -132,14 +173,15 @@ export const Search = ({ cartItem }) => {
             <i className="fa fa-search"></i>
             <input type="text"  placeholder="Tìm kiếm..."
             value={wordEntered}
+          
             onChange={handleFilter}
             />
-            <input type="submit" className="submit" value="Tìm kiếm"/>
+            <button type="submit " className="submit btn btn-primary"  onClick={handleSearch}>Tìm kiếm</button>
 
             
           </div>
           <div className="benduoi">
-          {filteredData.length !== 0 && (
+          {isSearchResultsVisible && filteredData.length !== 0 && (
         <div className="dataResult">
           <div className="title-product">Sản phẩm gợi ý</div>
        

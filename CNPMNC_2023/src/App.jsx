@@ -27,6 +27,7 @@ import CategoriesAdmin from "./Admin/CategoriesAdmin";
 import {  useEffect } from "react";
 import OrderAdmin from "./Admin/OrderAdmin";
 import BrandAdmin from "./Admin/BrandAdmin";
+import { pageSearch } from "./common/header/pageSearch";
 function App() {
   //step 1: fetch data from DB
   const { productItems } = Data;
@@ -196,6 +197,8 @@ function App() {
             <Route path="/phone/:id">
               <Phone phoneItems={phoneItems} addToCart={addToCart} />
             </Route>
+
+            <Route path="/pageSearch" component={pageSearch} />
           </Switch>
           <Footer />
 
