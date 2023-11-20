@@ -42,7 +42,10 @@ let CreateCart = (data) => {
                     idproduct:data.idproduct
 
                 });
-              
+                if (data && data.image) {
+                    data.image = Buffer.from(data.image, 'base64');
+
+                }
                 if (!data) {
                     data = {};
                 }
@@ -106,6 +109,7 @@ let updateCartData = (data) => {
             })
             if (Cart) {
                 Cart.quantity=data.quantity;
+                Cart.price=data.price;
                 await Cart.save();
                 resolve({
                     errcode: 0,

@@ -2,44 +2,17 @@ import db from "../models/index";
 
 
 
-let checkOrderDetailsname = (name) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            let OrderDetails = await db.OrderDetails.findOne({
 
-                where: { name: name },
-
-            });
-            if (OrderDetails) {
-                resolve(true);
-            } else {
-                resolve(false);
-            }
-
-        } catch (e) {
-            reject(e);
-
-        }
-    })
-}
 let CreateOrderDetails = (data) => {
     return new Promise(async(resolve, reject) => {
         try {
-            // check taikhoan is exist??
-            let check = await checkOrderDetailsname(data.name);
-            if (check == true) {
-                resolve({
-                    errcode: 1,
-                    errMessage: " Sản phẩm này đã tồn tại trong giỏ hàng"
-                })
-            } else {
+        
+        
                 await db.OrderDetails.create({
-                    name: data.name,
-                    price: data.price,
+                    order_id: data.order_id,
+                    product_id: data.product_id,
                     quantity: data.quantity,
-                    image: data.image,
-                    iduser: data.iduser,
-                    idproduct:data.idproduct
+                    total_price: data,total_price,
 
                 });
               
@@ -55,7 +28,7 @@ let CreateOrderDetails = (data) => {
                     errcode: 0,
                     message: 'OK'
                 })
-            }
+         
 
 
 

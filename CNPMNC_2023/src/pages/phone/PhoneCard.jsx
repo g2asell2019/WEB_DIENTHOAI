@@ -98,17 +98,13 @@ export const PhoneCard = ({ addToCart }) => {
 
 
   const handleAddCart = (data) => {
+    const imageBuffer = Buffer.from(data.image, 'base64').toString("binary");
 
-
-    let hinhne = '';
-          if (data.image) {
-            hinhne= Buffer.from(data.image, 'binary').toString('base64');
-          }
       themvaogiohang({
         name: data.name,
         price: data.price,
         quantity: 1,
-        image: hinhne,
+        image: imageBuffer,
         iduser: user.id,
         idproduct:data.id
       });

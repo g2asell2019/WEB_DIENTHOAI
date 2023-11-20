@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     };
     Orders.init({
-
+        id_order:DataTypes.STRING,
         receiver: DataTypes.STRING,
         order_status: DataTypes.STRING,
         receiving_point: DataTypes.STRING,

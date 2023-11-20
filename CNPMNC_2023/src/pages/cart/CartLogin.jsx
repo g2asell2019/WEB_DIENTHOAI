@@ -82,7 +82,8 @@ export const CartLogin = () => {
    let tangsoluong=product.quantity+1;
  tanggiamsoluong({
   id:product.id,
-  quantity:tangsoluong
+  quantity:tangsoluong,
+
  })
   };
 
@@ -94,7 +95,8 @@ export const CartLogin = () => {
       let giamsoluong=product.quantity-1;
       tanggiamsoluong({
        id:product.id,
-       quantity:giamsoluong
+       quantity:giamsoluong,
+      
       })
     }
 
@@ -184,7 +186,9 @@ export const CartLogin = () => {
             {arrCart.map((item) => {
               const productQty = item.price * item.quantity;
               let imageBase64 = "";
+             
               if (item.image) {
+              
                 imageBase64 = Buffer.from(item.image, "base64").toString(
                   "binary"
                 );

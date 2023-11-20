@@ -161,7 +161,7 @@ const deleteCart = (productId) => {
             }
         })
     }
-    // lay tat ca loai san pham
+
 const getAllCart = (inputType) => {
     return axios.get(`/api/get-all-cart?id=${inputType}`)
 }
@@ -175,6 +175,26 @@ const updateCartData = (inputData) => {
 
 
 
+const CreateOrderdetail = (data) => {
+    return axios.post('/api/create-new-Orderdetail', data)
+}
+const deleteOrderdetail = (productId) => {
+
+        return axios.delete('/api/delete-Orderdetail', {
+            data: {
+                id: productId
+            }
+        })
+    }
+
+const getAllOrderdetail = (inputType) => {
+    return axios.get(`/api/get-all-Orderdetail?id=${inputType}`)
+}
+
+const updateOrderdetailData = (inputData) => {
+    return axios.put('/api/edit-Orderdetail', inputData)
+
+}
 
 
 
@@ -208,7 +228,11 @@ export {
     CreateCart,
     deleteCart,
     getAllCart,
-    updateCartData
+    updateCartData,
+    CreateOrderdetail,
+    deleteOrderdetail,
+    getAllOrderdetail,
+    updateOrderdetailData
 
 
 

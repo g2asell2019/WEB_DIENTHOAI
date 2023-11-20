@@ -10,6 +10,7 @@ import brandController from "../controllers/brandController";
 import SaleController from "../controllers/saleController";
 
 import CartController from "../controllers/cartController";
+import OrderdetailController from "../controllers/orderdetailController";
 
 let router = express.Router();
 
@@ -52,6 +53,12 @@ let initWebRouters = (app) => {
     router.put('/api/edit-cart', CartController.handleEditCart);
     router.get('/api/get-all-cart', CartController.handlegetAllCart);
 
+
+    //api cua oderdetail
+    router.post('/api/create-new-Orderdetail', OrderdetailController.handleCreateOderdetail);
+    router.delete('/api/delete-Orderdetail', OrderdetailController.handleDeleteOderdetail);
+    router.put('/api/edit-Orderdetail', OrderdetailController.handleEditOderdetail);
+    router.get('/api/get-all-Orderdetail', OrderdetailController.handlegetAllOderdetail);
 
 
 

@@ -16,7 +16,9 @@ module.exports = {
 
 
 
-
+            id_order: {
+                type: Sequelize.STRING
+            },
             receiver: {
                 type: Sequelize.STRING
             },

@@ -88,16 +88,12 @@ export const FlashCard = ({ productItems, addToCart }) => {
 
   const handleAddCart = (data) => {
 
-
-    let hinhne = '';
-          if (data.image) {
-            hinhne= Buffer.from(data.image, 'binary').toString('base64');
-          }
+    const imageBuffer = Buffer.from(data.image, 'base64').toString("binary");
       themvaogiohang({
         name: data.name,
         price: data.price,
         quantity: 1,
-        image: hinhne,
+        image: imageBuffer,
         iduser: user.id,
         idproduct:arrProducts.id
       });
