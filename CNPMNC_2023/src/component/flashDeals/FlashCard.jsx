@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { getAllProducts} from "../../userService";
+import { getAllProducts,CreateCart} from "../../userService";
 import { Buffer } from "buffer";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
+
+import { toast } from 'react-toastify';
 
 const NextArrow = (props) => {
   const { onClick } = props;
@@ -26,6 +28,7 @@ const PrevArrow = (props) => {
   );
 };
 export const FlashCard = ({ productItems, addToCart }) => {
+  const [user, setUser] = useState({ taikhoan: "" });
   const [count, setCount] = useState(0);
   const increment = () => {
     setCount(count + 1);
@@ -61,17 +64,93 @@ export const FlashCard = ({ productItems, addToCart }) => {
   const [orderBy, setordeby] = useState('');
   const [selectedPriceRange, setgia] = useState('');
   useEffect(() => {
+    const getUserDataFromLocalStorage = async () => {
+      const userData = localStorage.getItem("user");
+  
+  
+      if (userData) {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+      }
+    };
+  
+    getUserDataFromLocalStorage(); // Gọi hàm để lấy dữ liệu từ Local Storage
+  
     getAllUserFromReact();
   }, []);
 
 
   
+
+
+
+
+
+  const handleAddCart = (data) => {
+
+
+    let hinhne = '';
+          if (data.image) {
+            hinhne= Buffer.from(data.image, 'binary').toString('base64');
+          }
+      themvaogiohang({
+        name: data.name,
+        price: data.price,
+        quantity: 1,
+        image: hinhne,
+        iduser: user.id,
+        idproduct:arrProducts.id
+      });
+  
+  };
+
+
+
+
+
+
+
+
+  const themvaogiohang = async (data) => {
+    try {
+      const response = await CreateCart(data);
+      if (response && response.errcode !== 0) {
+        toast.error('Thêm giỏ hàng thất bại !');
+        alert(response.errMessage);
+      } else {
+        toast.success('Thêm giỏ hàng thành công !');
+       
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const getAllUserFromReact = async () => {
     let response = await getAllProducts("ALL",idne,idbrand,orderBy,selectedPriceRange);
     if (response && response.errcode === 0) {
       setArrProducts(response.products);
     }
   };
+  {
+    user && <FlashCard />;
+  }
   return (
     <>
       <Slider {...settings}>
@@ -126,7 +205,7 @@ export const FlashCard = ({ productItems, addToCart }) => {
                           <span>Chi tiết</span>
                         </button>
                       </Link>
-                      <button onClick={() => addToCart(arrProducts)}>
+                      <button onClick={user && user.id ? () => handleAddCart(arrProducts) :  () => addToCart(arrProducts)}>
                         {/* <i className="fa fa-plus"></i> */}
                         <span>Mua ngay</span>
                       </button>

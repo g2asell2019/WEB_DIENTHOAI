@@ -148,6 +148,37 @@ const updateBrandData = (inputData) => {
 
 
 
+
+
+const CreateCart = (data) => {
+    return axios.post('/api/create-new-cart', data)
+}
+const deleteCart = (productId) => {
+
+        return axios.delete('/api/delete-cart', {
+            data: {
+                id: productId
+            }
+        })
+    }
+    // lay tat ca loai san pham
+const getAllCart = (inputType) => {
+    return axios.get(`/api/get-all-cart?id=${inputType}`)
+}
+
+const updateCartData = (inputData) => {
+    return axios.put('/api/edit-cart', inputData)
+
+}
+
+
+
+
+
+
+
+
+
 export {
     handleLoginApi,
     getAllUser,
@@ -174,6 +205,10 @@ export {
     deleteBrand,
     getAllBrand,
     updateBrandData,
+    CreateCart,
+    deleteCart,
+    getAllCart,
+    updateCartData
 
 
 

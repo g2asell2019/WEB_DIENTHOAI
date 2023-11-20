@@ -76,6 +76,7 @@ export const Order = () => {
         receiver: state.receiver,
         order_status: "Đang chờ để duyệt",
         receiving_point: state.receiving_point,
+        order_date:new Date(),
         total_value:totalPrice,
         phoneNumber: state.phoneNumber,
         note: state.note,

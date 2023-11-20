@@ -1,21 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { getAllProducts, getAllBrand } from "../../userService";
+import { getAllProducts, getAllBrand,CreateCart } from "../../userService";
 import { Buffer } from "buffer";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 export const PhoneCard = ({ addToCart }) => {
   const { id } = useParams();
+  const [user, setUser] = useState({ taikhoan: "" });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const [arrProducts, setArrProducts] = useState([]);
   const [arrbrand, setArrbrand] = useState('');
   const [idbrand, setidbrand] = useState('');
   const [orderBy, setordeby] = useState('');
   const [selectedPriceRange, setgia] = useState('');
-  useEffect(() => {
-    getAllUserFromReact();
-    getAllBrandFromReact();
-  }, [idbrand, orderBy,selectedPriceRange]);
+
 
   const getAllUserFromReact = async () => {
     let idCate = '';
@@ -76,6 +94,91 @@ export const PhoneCard = ({ addToCart }) => {
     setgia(event.target.value);
   };
 
+
+
+
+  const handleAddCart = (data) => {
+
+
+    let hinhne = '';
+          if (data.image) {
+            hinhne= Buffer.from(data.image, 'binary').toString('base64');
+          }
+      themvaogiohang({
+        name: data.name,
+        price: data.price,
+        quantity: 1,
+        image: hinhne,
+        iduser: user.id,
+        idproduct:data.id
+      });
+  
+  };
+
+
+
+
+
+
+
+
+  const themvaogiohang = async (data) => {
+    try {
+      const response = await CreateCart(data);
+      if (response && response.errcode !== 0) {
+        toast.error('Thêm giỏ hàng thất bại !');
+        alert(response.errMessage);
+      } else {
+        toast.success('Thêm giỏ hàng thành công !');
+       
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+
+
+  useEffect(() => {
+    // Sử dụng một hàm async để lấy dữ liệu từ Local Storage
+    const getUserDataFromLocalStorage = async () => {
+     const userData = localStorage.getItem("user");
+ 
+ 
+     if (userData) {
+       const parsedUser = JSON.parse(userData);
+       setUser(parsedUser);
+     }
+   };
+ 
+   getUserDataFromLocalStorage(); // Gọi hàm để lấy dữ liệu từ Local Storage
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+     getAllUserFromReact();
+     getAllBrandFromReact();
+   }, [idbrand, orderBy,selectedPriceRange]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {
+    user && <PhoneCard />;
+  }
   return (
     <>
       {arrbrand && arrbrand.map((gia, stt) => {
@@ -161,7 +264,7 @@ export const PhoneCard = ({ addToCart }) => {
                         <span>Chi tiết</span>
                       </button>
                     </Link>
-                    <button onClick={() => addToCart(item)}>
+                    <button onClick={user && user.id ? () => handleAddCart(item) :  () => addToCart(item)}>
                       <span>Mua ngay</span>
                     </button>
                   </div>

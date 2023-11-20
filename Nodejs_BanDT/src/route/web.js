@@ -9,6 +9,8 @@ import brandController from "../controllers/brandController";
 
 import SaleController from "../controllers/saleController";
 
+import CartController from "../controllers/cartController";
+
 let router = express.Router();
 
 let initWebRouters = (app) => {
@@ -39,6 +41,26 @@ let initWebRouters = (app) => {
     router.post('/api/create-new-products', productController.handleCreateProducts);
     router.put('/api/edit-products', productController.handleEditProducts);
     router.delete('/api/delete-products', productController.handleDeleteProducts);
+
+
+
+
+
+    //api cua  cart
+    router.post('/api/create-new-cart', CartController.handleCreateCart);
+    router.delete('/api/delete-cart', CartController.handleDeleteCart);
+    router.put('/api/edit-cart', CartController.handleEditCart);
+    router.get('/api/get-all-cart', CartController.handlegetAllCart);
+
+
+
+
+
+
+
+
+
+
 
 
     //api cua brand

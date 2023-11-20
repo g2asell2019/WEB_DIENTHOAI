@@ -42,6 +42,7 @@ let CreateOrders = (data) => {
                 receiving_point: data.receiving_point,
                 phoneNumber: data.phoneNumber,
                 total_value: data.total_value,
+                order_date:data.order_date,
                 note: data.note,
                 payment: data.payment,
                 order_idUser: data.order_idUser

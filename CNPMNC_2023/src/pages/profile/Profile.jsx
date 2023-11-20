@@ -70,9 +70,9 @@ export const Profile = () => {
                 <p>{user.address}</p>
               </div>
 
-              <a href="">
+              <Link to="PurchaseHistory">
                 <span>Đơn đặt hàng</span>
-              </a>
+              </Link>
               <a href="./ChangePassword">
                 <span>Thay đổi mật khẩu </span>
               </a>

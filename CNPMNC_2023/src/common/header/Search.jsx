@@ -12,10 +12,12 @@ import "./Search.css";
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { getAllCart } from "../../userService";
 
 export const Search = ({ cartItem }) => {
   const history = useHistory();
   const [user, setUser] = useState({ taikhoan: "" });
+  const [arrCart, setListCart] = useState([]);
 
 
 const [isSearchResultsVisible, setSearchResultsVisible] = useState(false);
@@ -42,7 +44,7 @@ const [isSearchResultsVisible, setSearchResultsVisible] = useState(false);
     // Sử dụng một hàm async để lấy dữ liệu từ Local Storage
     const getUserDataFromLocalStorage = async () => {
       const userData = localStorage.getItem("user");
-      console.log("userData", userData); // Kiểm tra giá trị userData
+     
 
       if (userData) {
         const parsedUser = JSON.parse(userData);
@@ -51,7 +53,7 @@ const [isSearchResultsVisible, setSearchResultsVisible] = useState(false);
     };
 
     getUserDataFromLocalStorage(); // Gọi hàm để lấy dữ liệu từ Local Storage
-
+    laydanhsachgiohang();
 
     const handleClickOutside = (event) => {
       const searchResultsContainer = document.querySelector(".dataResult");
@@ -81,11 +83,20 @@ const [isSearchResultsVisible, setSearchResultsVisible] = useState(false);
 
 
 
-  }, []);
+  }, [user.id]);
 
 
 
-
+  const laydanhsachgiohang = async () => {
+    try {
+      let response = await getAllCart(user.id);
+      if (response && response.errcode === 0) {
+        setListCart(response.Cart);
+      }
+    } catch (error) {
+      console.error("Error fetching cart data:", error);
+    }
+  };
 
 
  
@@ -218,32 +229,24 @@ const [isSearchResultsVisible, setSearchResultsVisible] = useState(false);
           </div>
          
 
-         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
           <div className="icon f_flex width">
             <div className="cart">
-              <Link to="/cart/Cart">
-                <i className="fa fa-shopping-bag icon-circle"></i>
-                <span>{cartItem.length == 0 ? "" : cartItem.length}</span>
-              </Link>
+              { user&&user.id?
+               <Link to="/cart-login">
+               <i className="fa fa-shopping-bag icon-circle"></i>
+               <span>{arrCart.length == 0 ? "" : arrCart.length}</span>
+             </Link>
+              
+             :
+             <Link to="/cart/Cart">
+               <i className="fa fa-shopping-bag icon-circle"></i>
+               <span>{cartItem.length == 0 ? "" : cartItem.length}</span>
+             </Link>
+
+
+              }
+             
             </div>
             <div
               className="login"

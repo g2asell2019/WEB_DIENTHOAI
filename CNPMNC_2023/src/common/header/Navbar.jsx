@@ -10,7 +10,7 @@ export const Navbar = () => {
     // Sử dụng một hàm async để lấy dữ liệu từ Local Storage
     const getUserDataFromLocalStorage = async () => {
       const userData = localStorage.getItem("user");
-      console.log("userData", userData); // Kiểm tra giá trị userData
+    
 
       if (userData) {
         const parsedUser = JSON.parse(userData);
