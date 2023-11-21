@@ -28,7 +28,8 @@ import {  useEffect } from "react";
 import OrderAdmin from "./Admin/OrderAdmin";
 import BrandAdmin from "./Admin/BrandAdmin";
 import { pageSearch } from "./common/header/pageSearch";
-import PurchaseHistory from "./pages/profile/PurchaseHistory";
+import OrderHistory from "./pages/profile/OrderHistory";
+import OrderDetail from "./pages/profile/OrderDetail";
 import { CartLogin } from "./pages/cart/CartLogin";
 function App() {
   //step 1: fetch data from DB
@@ -193,11 +194,20 @@ function App() {
                 deleteProduct={deleteProduct}
               />
             </Route>
-            <Route path="/profile/PurchaseHistory" exact>
-              <Header cartItem={cartItem} />
-              <PurchaseHistory />
-              <Footer />
+            <Route path="/profile/OrderHistory" exact>
+              
+              <OrderHistory />
+            
             </Route>
+            <Route path="/profile/OrderDetail/:id_order" exact>
+              <OrderDetail />
+            </Route>
+
+
+
+
+
+
             <Route path="/productdetail/:id">
               <ProductDetail
                 productItems={productItems}

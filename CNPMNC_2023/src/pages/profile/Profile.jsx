@@ -70,7 +70,7 @@ export const Profile = () => {
                 <p>{user.address}</p>
               </div>
 
-              <Link to="PurchaseHistory">
+              <Link to="/profile/OrderHistory">
                 <span>Đơn đặt hàng</span>
               </Link>
               <a href="./ChangePassword">

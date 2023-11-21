@@ -82,6 +82,10 @@ const updateCategoriesData = (inputData) => {
 const getAllOders = (inputType) => {
     return axios.get(`/api/get-all-orders?id=${inputType}`)
 }
+
+const Layhoadon = (inputType) => {
+    return axios.get(`/api/get-lay-hoa-don?id=${inputType}`)
+}
 const CreateOrders = (data) => {
     return axios.post('/api/create-new-orders', data)
 }
@@ -93,6 +97,11 @@ const deleteOrders = (productId) => {
             id: productId
         }
     })
+}
+
+const updateorderData = (inputData) => {
+    return axios.put('/api/edit-orders', inputData)
+
 }
 
 
@@ -215,8 +224,10 @@ export {
     getAllCategories,
     updateCategoriesData,
     getAllOders,
+    Layhoadon,
     deleteOrders,
     CreateOrders,
+    updateorderData,
     getAllSale,
     CreateSale,
     deleteSale,
@@ -232,7 +243,8 @@ export {
     CreateOrderdetail,
     deleteOrderdetail,
     getAllOrderdetail,
-    updateOrderdetailData
+    updateOrderdetailData,
+    
 
 
 

@@ -1,5 +1,5 @@
 import ProductManager from "./CRUD_Products/ProductManager";
-import "./Admin.css";
+import "./Admin.scss";
 import { DashBoard } from "./Components/DashBoard";
 import { Header } from "./Components/Header";
 export const ProductAdmin = () => {

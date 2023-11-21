@@ -59,6 +59,7 @@ let initWebRouters = (app) => {
     router.delete('/api/delete-Orderdetail', OrderdetailController.handleDeleteOderdetail);
     router.put('/api/edit-Orderdetail', OrderdetailController.handleEditOderdetail);
     router.get('/api/get-all-Orderdetail', OrderdetailController.handlegetAllOderdetail);
+    router.get('/api/get-lay-hoa-don', OrderdetailController.handleLayhoadon);
 
 
 
@@ -91,8 +92,10 @@ let initWebRouters = (app) => {
 
     //api cua orders
     router.get('/api/get-all-orders', orderController.handleGetAllOrders);
+  
     router.post('/api/create-new-orders', orderController.handleCreateOrders);
     router.delete('/api/delete-orders', orderController.handleDeleteOrders);
+    router.put('/api/edit-orders', orderController.handleEditOder);
 
 
 

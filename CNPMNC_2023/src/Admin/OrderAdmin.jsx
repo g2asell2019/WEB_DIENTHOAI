@@ -1,5 +1,5 @@
 import OrderManager from "./Manager_Order/OrderManager";
-import "./Admin.css";
+import "./Admin.scss";
 import { DashBoard } from "./Components/DashBoard";
 import { Header } from "./Components/Header";
 export const OrderAdmin = () => {

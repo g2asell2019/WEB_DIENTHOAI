@@ -16,8 +16,8 @@ let getAllOders = (orderId) => {
                     ],
                 });
             } else if (orderId && orderId !== 'ALL') {
-                orders = await db.Orders.findOne({
-                    where: { id: orderId },
+                orders = await db.Orders.findAll({
+                    where: { order_idUser: orderId },
 
                 });
             }
@@ -30,6 +30,10 @@ let getAllOders = (orderId) => {
         }
     });
 };
+
+
+
+
 
 
 
@@ -108,7 +112,39 @@ let deleteOrders = (orderId) => {
     })
 }
 
+let updateOrderData = (data) => {
+    return new Promise(async(resolve, reject) => {
+        try {
 
+            if (!data.id) {
+                resolve({
+                    errcode: 2,
+                    errMessage: "Missing required parameter"
+                })
+            }
+            let Order = await db.Orders.findOne({
+                where: { id: data.id },
+                raw: false
+            })
+            if (Order) {
+                Order.order_status="Đã xác nhận";
+                await Order.save();
+                resolve({
+                    errcode: 0,
+                    errMessage: "update Order succeeds !"
+                });
+            } else {
+                resolve({
+                    errcode: 1,
+                    errMessage: "Order not found !"
+                });
+            }
+        } catch (e) {
+            reject(e)
+
+        }
+    })
+}
 
 
 
@@ -123,6 +159,8 @@ module.exports = {
     getAllOders: getAllOders,
     CreateOrders: CreateOrders,
     deleteOrders: deleteOrders,
+    updateOrderData :updateOrderData,
+   
 
 
 }

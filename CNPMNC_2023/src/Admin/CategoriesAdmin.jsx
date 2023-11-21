@@ -1,5 +1,5 @@
 import CategoriesManager from "./CRUD_Categories/CategoriesManager";
-import "./Admin.css";
+import "./Admin.scss";
 import { DashBoard } from "./Components/DashBoard";
 import { Header } from "./Components/Header";
 export const CategoriesAdmin = () => {

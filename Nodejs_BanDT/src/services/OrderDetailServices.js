@@ -40,25 +40,37 @@ let CreateOrderDetails = (data) => {
 }
 let deleteOrderDetails = (OrderDetailsId) => {
     return new Promise(async(resolve, reject) => {
-        let category = await db.OrderDetails.findOne({
-            where: { id: OrderDetailsId }
-        })
-        if (!category) {
-            resolve({
-                errcode: 2,
-                errMessage: " sản phẩm  không tồn tại"
-            })
-        }
-        await db.OrderDetails.destroy({
-            where: { id: OrderDetailsId }
-        });
-        resolve({
-            errcode: 0,
-            errMessage: " sản phẩm đã bị xóa !"
+        try {
+            // Find all OrderDetails with the given order_id
+            let orderDetailsList = await db.OrderDetails.findAll({
+                where: { order_id: OrderDetailsId }
+            });
 
-        });
-    })
-}
+            if (orderDetailsList.length === 0) {
+                resolve({
+                    errcode: 2,
+                    errMessage: "No order details found with the given order_id"
+                });
+            }
+
+            // Delete all OrderDetails with the given order_id
+            await db.OrderDetails.destroy({
+                where: { order_id: OrderDetailsId }
+            });
+
+            resolve({
+                errcode: 0,
+                errMessage: "Order details have been deleted!"
+            });
+        } catch (error) {
+            reject({
+                errcode: 1,
+                errMessage: "Error deleting order details"
+            });
+        }
+    });
+};
+
 
 
 
@@ -104,7 +116,21 @@ let getAllOrderDetails = (OrderDetailsId) => {
             let OrderDetails = '';
        
                 OrderDetails = db.OrderDetails.findAll({
-                    where: { iduser: OrderDetailsId }
+                    where: { order_id: OrderDetailsId },
+                    include: [
+                        {
+                            model: db.Products,
+                            as: 'idProductData',
+                            attributes: ['name','image','price'],
+                        },
+                        {
+                            model: db.Orders,
+                            as: 'idOrderData',
+                            attributes: ['order_status'],
+                        },
+                    ],
+                    raw: true,
+                    nest: true,
                 })
 
             resolve(OrderDetails)
@@ -114,11 +140,32 @@ let getAllOrderDetails = (OrderDetailsId) => {
     })
 
 }
+let layhoadon = (orderId1) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            let orders1 = '';
+
+           if (orderId1 && orderId1 !== 'ALL') {
+                orders1 = await db.Orders.findOne({
+                    where: { id_order: orderId1 },
+
+                });
+            }
+
+
+
+            resolve(orders1);
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
 
 module.exports = {
     getAllOrderDetails: getAllOrderDetails,
     CreateOrderDetails: CreateOrderDetails,
     deleteOrderDetails: deleteOrderDetails,
     updateOrderDetailsData: updateOrderDetailsData,
+    layhoadon:layhoadon
 
 }

@@ -54,11 +54,32 @@ let handleEditOderdetail = async(req, res) => {
 
 }
 
+let handleLayhoadon = async(req, res) => {
+    let id = req.query.id; //all, id
+    if (!id) {
+        return res.status(200).json({
+            errcode: 1,
+            errMessage: 'Missing require parameters',
+           
+        })
+
+    }
+    let orders1 = await Oderdetailservices.layhoadon(id);
+
+    return res.status(200).json({
+        errcode: 0,
+        errMessage: 'OK',
+        orders1
+
+    })
+}
+
 
 module.exports = {
     handlegetAllOderdetail: handlegetAllOderdetail,
     handleCreateOderdetail: handleCreateOderdetail,
     handleDeleteOderdetail: handleDeleteOderdetail,
-    handleEditOderdetail: handleEditOderdetail
+    handleEditOderdetail: handleEditOderdetail,
+    handleLayhoadon:handleLayhoadon
 
 }

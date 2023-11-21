@@ -20,6 +20,20 @@ let handleGetAllOrders = async(req, res) => {
 
     })
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 let handleCreateOrders = async(req, res) => {
     let message = await OrderServices.CreateOrders(req.body);
     console.log(message);
@@ -45,7 +59,12 @@ let handleDeleteOrders = async(req, res) => {
 
 
 
+let handleEditOder = async(req, res) => {
+    let data = req.body;
+    let message = await OrderServices.updateOrderData(data);
+    return res.status(200).json(message)
 
+}
 
 
 
@@ -59,7 +78,9 @@ let handleDeleteOrders = async(req, res) => {
 module.exports = {
     handleGetAllOrders: handleGetAllOrders,
     handleCreateOrders: handleCreateOrders,
-    handleDeleteOrders: handleDeleteOrders
+    handleDeleteOrders: handleDeleteOrders,
+    handleEditOder:handleEditOder,
+ 
 
 
 

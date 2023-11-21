@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
   getAllOders,
-  deleteOrders
+  deleteOrders,
+  updateorderData
 } from "../../userService";
 import { toast } from "react-toastify";
 import Pagination from "@mui/material/Pagination";
@@ -40,6 +41,45 @@ const OrderManager = () => {
       console.log(e);
     }
   };
+
+const handlecapnhattrangthai=(data)=>{
+capnhattrangthai({
+  id:data.id,
+  
+})
+  }
+
+
+
+
+ const capnhattrangthai = async (user) => {
+    try {
+      let res = await updateorderData(user);
+      if (res && res.errcode === 0) {
+        await getAllOrdersFromReact();
+        toast.success("Xác nhận thành công");
+
+        
+      } else {
+        toast.error("Xác nhận thất bại");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
@@ -119,6 +159,16 @@ const OrderManager = () => {
                             <td>{item.order_status}</td>
                             <td>{item.note}</td>
                             <td>
+                            <button
+                                    className="btn-edit "
+                                    onClick={() => {
+                                      handlecapnhattrangthai(item);
+                                    }}
+                                  >
+                                   xác nhận
+                                  </button>
+
+                                  <span> </span>
                               <span> </span>
                               <button
                                 className="btn-del"

@@ -1,17 +1,22 @@
 
 import UserManage from "./CRUD_User/UserManage";
-import "./Admin.css";
+import "./Admin.scss";
 import { DashBoard } from "./Components/DashBoard";
 import { Header } from "./Components/Header";
 export const IndexAdmin = () => {
   return (
     <>
     
-      <div className="d_flex">
+      <div className="admin">
+      <Header />
+        
+        <div className="main--content d_flex">
+        <div>
         <DashBoard />
-        <div className="main--content">
-          <Header />
-          <UserManage/>
+        </div>
+        <div className="user_manage">
+        <UserManage/>
+        </div>
           
         </div>
         
