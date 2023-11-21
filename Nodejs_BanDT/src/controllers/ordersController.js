@@ -23,6 +23,30 @@ let handleGetAllOrders = async(req, res) => {
 
 
 
+let handleLocdonhang = async(req, res) => {
+    let id = req.query.id; //all, id
+    let createdAt=req.query.createdAt;
+    let order_status=req.query.order_status;
+    if (!id) {
+        return res.status(200).json({
+            errcode: 1,
+            errMessage: 'Missing require parameters',
+            products: []
+        })
+
+    }
+    let orders = await OrderServices.locdonhang(id,createdAt,order_status);
+
+    return res.status(200).json({
+        errcode: 0,
+        errMessage: 'OK',
+        orders
+
+    })
+}
+
+
+
 
 
 
@@ -80,6 +104,7 @@ module.exports = {
     handleCreateOrders: handleCreateOrders,
     handleDeleteOrders: handleDeleteOrders,
     handleEditOder:handleEditOder,
+    handleLocdonhang:handleLocdonhang
  
 
 

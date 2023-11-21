@@ -19,6 +19,7 @@
     "bootstrap": "^4.6.2",
     "buffer": "^6.0.3",
     "chart.js": "^4.4.0",
+    "date-fns": "^2.30.0",
     "events": "^3.3.0",
     "lodash": "^4.17.21",
     "numeral": "^2.0.6",

@@ -35,6 +35,68 @@ let getAllOders = (orderId) => {
 
 
 
+const locdonhang = (orderId, selectedDate, statusFilter) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let orders = '';
+        const queryOptions = {
+          order: [["createdAt", "DESC"]],
+          where: {},
+        };
+  
+        if (orderId && orderId !== 'ALL') {
+          queryOptions.where.order_idUser = orderId;
+        }
+  
+        if (selectedDate) {
+          const startDate = new Date(selectedDate);
+          startDate.setHours(0, 0, 0, 0); // Đặt giờ, phút và giây thành 00:00:00
+  
+          const endDate = new Date(selectedDate);
+          endDate.setHours(23, 59, 59, 999); // Đặt giờ, phút và giây thành 23:59:59:999
+  
+          queryOptions.where.createdAt = {
+            [Op.between]: [startDate, endDate],
+          };
+        }
+  
+        if (statusFilter) {
+          queryOptions.where.order_status = statusFilter;
+        }
+  
+        orders = await db.Orders.findAll(queryOptions);
+        resolve(orders);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -160,6 +222,7 @@ module.exports = {
     CreateOrders: CreateOrders,
     deleteOrders: deleteOrders,
     updateOrderData :updateOrderData,
+    locdonhang:locdonhang
    
 
 

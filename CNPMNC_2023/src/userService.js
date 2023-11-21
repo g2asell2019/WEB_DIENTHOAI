@@ -207,6 +207,13 @@ const updateOrderdetailData = (inputData) => {
 
 
 
+const locdonhang = (id,createdAt,order_status) => {
+    // Template String
+    return axios.get(`/api/loc-don-hang?id=${id}&createdAt=${createdAt}&order_status=${order_status}`);
+}
+
+
+
 
 export {
     handleLoginApi,
@@ -244,6 +251,7 @@ export {
     deleteOrderdetail,
     getAllOrderdetail,
     updateOrderdetailData,
+    locdonhang
     
 
 

@@ -97,6 +97,10 @@ let initWebRouters = (app) => {
     router.delete('/api/delete-orders', orderController.handleDeleteOrders);
     router.put('/api/edit-orders', orderController.handleEditOder);
 
+    router.get('/api/loc-don-hang', orderController.handleLocdonhang);
+
+    
+
 
 
 
