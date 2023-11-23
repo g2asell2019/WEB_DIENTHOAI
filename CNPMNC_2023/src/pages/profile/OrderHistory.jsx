@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./OrderHistory.scss";
-import DataPH from "./DataPH";
 import { getAllOders,deleteOrderdetail,deleteOrders } from "../../userService";
 import { toast } from 'react-toastify';
 import { Link, useHistory, Redirect } from "react-router-dom";
@@ -10,13 +9,6 @@ const OrderHistory = () => {
 
   const [user, setUser] = useState({ taikhoan: "" });
   const [hoadon, sethoadon] = useState([]);
-
-
-
- 
-  
-
-
   useEffect(() => {
     const getUserDataFromLocalStorage = async () => {
       const userData = localStorage.getItem("user");
@@ -42,11 +34,6 @@ const OrderHistory = () => {
     toast.error("Đơn hàng đã xác nhận không thể hủy !!!!")
   }
 
-
-
-
-
-  
   const huydonhang = async (data) => {
     try {
       let res = await deleteOrders(data.id);
@@ -122,28 +109,9 @@ const OrderHistory = () => {
     return formattedNumber.replace(/\s/g, "");
   }
 
-
-
-
-
-
-
 {
   user && <OrderHistory />;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   return (
     <>
