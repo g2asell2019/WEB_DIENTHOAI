@@ -24,7 +24,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { IndexAdmin } from "../src/Admin/IndexAdmin";
 import ProductAdmin from "./Admin/ProductAdmin";
 import CategoriesAdmin from "./Admin/CategoriesAdmin";
-import {  useEffect } from "react";
+import { useEffect } from "react";
 import OrderAdmin from "./Admin/OrderAdmin";
 import BrandAdmin from "./Admin/BrandAdmin";
 import { pageSearch } from "./common/header/pageSearch";
@@ -40,13 +40,8 @@ function App() {
   const [productItem, setProductItem] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cartItem));
+    localStorage.setItem("cart", JSON.stringify(cartItem));
   }, [cartItem]);
-
-  
-  
-
-
 
   const addToCart = (product) => {
     const productExit = cartItem.find((item) => item.id == product.id);
@@ -88,7 +83,6 @@ function App() {
   const deleteProduct = (product) => {
     setCardItem(cartItem.filter((item) => item.id !== product.id));
   };
-  
 
   return (
     <>
@@ -96,36 +90,21 @@ function App() {
         <Router>
           <Switch>
             <Route path="/admin/User" exact>
-             
-            
-                 <IndexAdmin/>
-              
+              <IndexAdmin />
             </Route>
             <Route path="/admin/product" exact>
-             
-            
-                 <ProductAdmin/>
-              
+              <ProductAdmin />
             </Route>
             <Route path="/admin/categories" exact>
-             
-            
-             <CategoriesAdmin/>
-          
-        </Route>
-        <Route path="/admin/orders" exact>
-             
-            
-             <OrderAdmin/>
-          
-        </Route>
-        <Route path="/admin/brand" exact>
-             
-            
-             <BrandAdmin/>
-          
-        </Route>
-        
+              <CategoriesAdmin />
+            </Route>
+            <Route path="/admin/orders" exact>
+              <OrderAdmin />
+            </Route>
+            <Route path="/admin/brand" exact>
+              <BrandAdmin />
+            </Route>
+
             <ToastContainer
               position="bottom-right"
               autoClose={5000}
@@ -144,10 +123,9 @@ function App() {
 
       <div>
         <Router>
-        <Header cartItem={cartItem} />
           <Switch>
             <Route path="/" exact>
-           
+              <Header cartItem={cartItem} />
 
               <Pages
                 productItems={productItems}
@@ -155,14 +133,20 @@ function App() {
                 itemDetail={itemDetail}
                 shopItems={shopItems}
               />
+              <Footer />
             </Route>
             <Route path="/login-signup/Login" exact>
+              <Header cartItem={cartItem} />
               <Login />
+              <Footer />
             </Route>
             <Route path="/login-signup/Signup" exact>
+              <Header cartItem={cartItem} />
               <Signup />
+              <Footer />
             </Route>
             <Route path="/cart/Cart" exact>
+              <Header cartItem={cartItem} />
               <Cart
                 cartItem={cartItem}
                 addToCart={addToCart}
@@ -170,23 +154,30 @@ function App() {
                 deleteProduct={deleteProduct}
                 setCardItem={setCardItem}
               />
+              <Footer />
             </Route>
             <Route path="/cart-login" exact>
-              <CartLogin
-            
-              
-              />
+              <Header cartItem={cartItem} />
+              <CartLogin />
+              <Footer />
             </Route>
             <Route path="/profile/Profile" exact>
+              <Header cartItem={cartItem} />
               <Profile />
+              <Footer />
             </Route>
             <Route path="/profile/ProfileUpdate" exact>
+              <Header cartItem={cartItem} />
               <ProfileUpdate />
+              <Footer />
             </Route>
             <Route path="/profile/ChangePassword" exact>
+              <Header cartItem={cartItem} />
               <ChangePassword />
+              <Footer />
             </Route>
             <Route path="/cart/Checkout" exact>
+              <Header cartItem={cartItem} />
               <Order
                 cartItem={cartItem}
                 addToCart={addToCart}
@@ -194,36 +185,41 @@ function App() {
                 deleteProduct={deleteProduct}
               />
             </Route>
+            <Footer />
             <Route path="/profile/OrderHistory" exact>
-              
+              <Header cartItem={cartItem} />
               <OrderHistory />
-            
+              <Footer />
             </Route>
+
             <Route path="/profile/OrderDetail/:id_order" exact>
+              <Header cartItem={cartItem} />
               <OrderDetail />
+              <Footer />
             </Route>
-
-
-
-
-
 
             <Route path="/productdetail/:id">
+              <Header cartItem={cartItem} />
               <ProductDetail
                 productItems={productItems}
-                addToCart={addToCart}
+                addTo
+                Cart={addToCart}
               />
+              <Footer />
             </Route>
             <Route path="/products">
+              <Header cartItem={cartItem} />
               <Products productItems={productItems} addToCart={addToCart} />
+              <Footer />
             </Route>
             <Route path="/phone/:id">
+              <Header cartItem={cartItem} />
               <Phone phoneItems={phoneItems} addToCart={addToCart} />
+              <Footer />
             </Route>
 
             <Route path="/pageSearch" component={pageSearch} />
           </Switch>
-          <Footer />
 
           <ToastContainer
             position="bottom-right"

@@ -5,15 +5,16 @@ import { Header } from "./Components/Header";
 export const BrandAdmin = () => {
   return (
     <>
-    
-      <div className="d_flex">
-        <DashBoard />
-        <div className="main--content">
-          <Header />
+    <div className="admin">
+        <Header />
+        <div className="main--content d_flex">
+          <div>
+            <DashBoard />
+          </div>
+          <div className="user_manage">
           <BrandManager/>
-          
+          </div>
         </div>
-        
       </div>
      
     </>

@@ -5,17 +5,19 @@ import { Header } from "./Components/Header";
 export const ProductAdmin = () => {
   return (
     <>
-    
-      <div className="d_flex">
-        <DashBoard />
-        <div className="main--content">
-          <Header />
-          <ProductManager/>
-          
+      <div className="admin">
+        <Header />
+
+        <div className="main--content d_flex">
+          <div>
+            <DashBoard />
+          </div>
+
+          <div className="user_manage">
+            <ProductManager />
+          </div>
         </div>
-        
       </div>
-     
     </>
   );
 };

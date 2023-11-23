@@ -6,12 +6,16 @@ export const OrderAdmin = () => {
   return (
     <>
     
-      <div className="d_flex">
+      <div className="admin">
+      <Header />
+        
+        <div className="main--content d_flex">
+          <div>
         <DashBoard />
-        <div className="main--content">
-          <Header />
-          <OrderManager/>
-          
+        </div>
+        <div className="user_manage">
+        <OrderManager/>
+        </div>
         </div>
         
       </div>
