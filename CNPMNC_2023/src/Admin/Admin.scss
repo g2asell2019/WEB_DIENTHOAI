@@ -1,4 +1,11 @@
 .admin{
+    .header_wrapper{
+        background-color: #0f3460;
+        padding: 10px 0;
+        color: #fff;
+        height: 80px;
+    }
+
     .dashboard{
 
     }
@@ -528,8 +535,8 @@
     
     /* --user----- */
     
-    .page_admin h1 {
-        padding: 8px;
+    .page_admin h2 {
+        padding: 12px;
     }
     
     .username_logout {

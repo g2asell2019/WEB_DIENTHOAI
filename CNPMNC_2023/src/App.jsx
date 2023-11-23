@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import "./App.css";
 import * as React from "react";
 import { Header } from "./common/header/Header";
@@ -135,16 +134,19 @@ function App() {
               />
               <Footer />
             </Route>
+
             <Route path="/login-signup/Login" exact>
               <Header cartItem={cartItem} />
               <Login />
               <Footer />
             </Route>
+
             <Route path="/login-signup/Signup" exact>
               <Header cartItem={cartItem} />
               <Signup />
               <Footer />
             </Route>
+
             <Route path="/cart/Cart" exact>
               <Header cartItem={cartItem} />
               <Cart
@@ -156,26 +158,31 @@ function App() {
               />
               <Footer />
             </Route>
+
             <Route path="/cart-login" exact>
               <Header cartItem={cartItem} />
               <CartLogin />
               <Footer />
             </Route>
+
             <Route path="/profile/Profile" exact>
               <Header cartItem={cartItem} />
               <Profile />
               <Footer />
             </Route>
+
             <Route path="/profile/ProfileUpdate" exact>
               <Header cartItem={cartItem} />
               <ProfileUpdate />
               <Footer />
             </Route>
+
             <Route path="/profile/ChangePassword" exact>
               <Header cartItem={cartItem} />
               <ChangePassword />
               <Footer />
             </Route>
+
             <Route path="/cart/Checkout" exact>
               <Header cartItem={cartItem} />
               <Order
@@ -185,7 +192,7 @@ function App() {
                 deleteProduct={deleteProduct}
               />
             </Route>
-            <Footer />
+
             <Route path="/profile/OrderHistory" exact>
               <Header cartItem={cartItem} />
               <OrderHistory />
@@ -207,11 +214,13 @@ function App() {
               />
               <Footer />
             </Route>
+
             <Route path="/products">
               <Header cartItem={cartItem} />
               <Products productItems={productItems} addToCart={addToCart} />
               <Footer />
             </Route>
+
             <Route path="/phone/:id">
               <Header cartItem={cartItem} />
               <Phone phoneItems={phoneItems} addToCart={addToCart} />
