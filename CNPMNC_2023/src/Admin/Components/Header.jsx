@@ -1,11 +1,6 @@
-
 import React, { useState, useEffect } from "react";
 import { Link, useHistory, Redirect } from "react-router-dom";
-
-
-import NavDropdown from 'react-bootstrap/NavDropdown';
-
-
+import NavDropdown from "react-bootstrap/NavDropdown";
 
 export const Header = () => {
   const history = useHistory();
@@ -39,38 +34,35 @@ export const Header = () => {
 
   return (
     <>
-      <div className="head d_flex">
+      <div className="header_wrapper d_flex">
         <div className="page_admin">
-          <h1>Admin Page</h1>
+          <h2>TRANG CHỦ ADMIN</h2>
         </div>
         <div className="d_flex username_logout">
           <h3>{user.fullName}</h3>
-          
-         
         </div>
         <div>
-        <h3>
-        <NavDropdown
-         
-         title={<i className="fas fa-cogs" style={{background:"white"}}></i>}
-         id="basic-nav-dropdown"
-       >
-         <NavDropdown.Item >
-           <i className="fas fa-key mr-3"></i>
-           Đổi mật khẩu
-         </NavDropdown.Item>
+          <h3>
+            <NavDropdown
+              title={
+                <i className="fas fa-cogs" style={{ background: "white" }}></i>
+              }
+              id="basic-nav-dropdown"
+            >
+              <NavDropdown.Item>
+                <i className="fas fa-key mr-3"></i>
+                Đổi mật khẩu
+              </NavDropdown.Item>
 
-         <NavDropdown.Divider />
+              <NavDropdown.Divider />
 
-         <NavDropdown.Item onClick={handleLogout}>
-           <i className="fas fa-sign-out-alt mr-3"></i>
-           Đăng xuất
-         </NavDropdown.Item>
-       </NavDropdown>
-        </h3>
+              <NavDropdown.Item onClick={handleLogout}>
+                <i className="fas fa-sign-out-alt mr-3"></i>
+                Đăng xuất
+              </NavDropdown.Item>
+            </NavDropdown>
+          </h3>
         </div>
-       
-        
       </div>
     </>
   );
