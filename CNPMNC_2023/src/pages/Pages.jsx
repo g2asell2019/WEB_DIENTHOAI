@@ -23,7 +23,7 @@ export const Pages = ({
         addToCart={addToCart}
         itemDetail={itemDetail}
       />
-      <TopCate />
+      {/* <TopCate />
       <NewArrivals />
       <Discount />
       <Shop
@@ -31,7 +31,7 @@ export const Pages = ({
         addToCart={addToCart}
         itemDetail={itemDetail}
       />
-      <Anno />
+      <Anno /> */}
       <Wrapper />
     </>
   );

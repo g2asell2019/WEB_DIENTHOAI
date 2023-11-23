@@ -49,7 +49,7 @@ export const Order = () => {
 
   const checkValidInput = () => {
     let isValid = true;
-
+    const emailRegex = /^[A-Za-z0-9._%+-]+@gmail\.com$/;
     const phoneNumber = state.phoneNumber;
     const arrInput = ["receiver", "receiving_point", "phoneNumber"];
 
@@ -64,6 +64,12 @@ export const Order = () => {
         alert("Số điện thoại phải là số và phải có 10 số");
         break;
       }
+      // else if (!emailRegex.test(this.state.email)) {
+      //   isValid = false;
+      //   alert('Email không đúng định dạng');
+      //   break;
+      
+      // }
     }
     return isValid;
   };
@@ -74,8 +80,8 @@ export const Order = () => {
   const handleAddOrders = async() => {
   
     const isValid = checkValidInput();
-    if (isValid) {
-
+    if (isValid ) {
+console.log("xem produclist", arrCart);
   
       taomoidonhang({
         receiver: state.receiver,

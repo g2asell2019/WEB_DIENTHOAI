@@ -9,25 +9,6 @@ export const PhoneCard = ({ addToCart }) => {
   const { id } = useParams();
   const [user, setUser] = useState({ taikhoan: "" });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   const [arrProducts, setArrProducts] = useState([]);
   const [arrbrand, setArrbrand] = useState('');
   const [idbrand, setidbrand] = useState('');

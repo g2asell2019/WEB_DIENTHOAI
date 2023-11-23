@@ -4,6 +4,7 @@ import { Buffer } from "buffer";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
 
+
 import { toast } from 'react-toastify';
 
 const NextArrow = (props) => {
@@ -89,13 +90,14 @@ export const FlashCard = ({ productItems, addToCart }) => {
   const handleAddCart = (data) => {
 
     const imageBuffer = Buffer.from(data.image, 'base64').toString("binary");
+   
       themvaogiohang({
         name: data.name,
         price: data.price,
         quantity: 1,
         image: imageBuffer,
         iduser: user.id,
-        idproduct:arrProducts.id
+        idproduct:data.id
       });
   
   };
@@ -150,25 +152,25 @@ export const FlashCard = ({ productItems, addToCart }) => {
   return (
     <>
       <Slider {...settings}>
-        {arrProducts.map((arrProducts) => {
+        {arrProducts.map((item,index) => {
              let imageBase64='';
-             if(arrProducts.image){
+             if(item.image){
      
               
-                imageBase64=Buffer.from(arrProducts.image,'base64').toString('binary');
+                imageBase64=Buffer.from(item.image,'base64').toString('binary');
              
      
            }
              
           return (
-            <article key={arrProducts.id}>
+            <article key={index.id}>
               <div className="box">
                 <div className="product mtop">
                   <div className="img">
                     <span className="discount">
-                      {arrProducts.discount}% Off
+                      {item.discount}% Off
                     </span>
-                    <Link to={`/productdetail/${arrProducts.id}`}>
+                    <Link to={`/productdetail/${item.id}`}>
                     <img src={imageBase64} alt="" />
                     </Link>
 
@@ -179,7 +181,7 @@ export const FlashCard = ({ productItems, addToCart }) => {
                   </div> */}
                   </div>
                   <div className="product-details">
-                    <h3>{arrProducts.name}</h3>
+                    <h3>{item.name}</h3>
                     <div className="rate">
                       <i className="fa fa-star"></i>
                       <i className="fa fa-star"></i>
@@ -189,19 +191,19 @@ export const FlashCard = ({ productItems, addToCart }) => {
                     </div>
                     <div className="d_flex">
                       <div className="price">
-                        <h4>{formatCurrency(arrProducts.price)}</h4>
+                        <h4>{formatCurrency(item.price)}</h4>
                       </div>
                       <div className="price-discount">
                         <strike>123$</strike>
                       </div>
                     </div>
                     <div className="d_flex">
-                      <Link to={`/productdetail/${arrProducts.id}`}>
+                      <Link to={`/productdetail/${item.id}`}>
                         <button>
                           <span>Chi tiết</span>
                         </button>
                       </Link>
-                      <button onClick={user && user.id ? () => handleAddCart(arrProducts) :  () => addToCart(arrProducts)}>
+                      <button onClick={user && user.id ? () => handleAddCart(item) :  () => addToCart(item)}>
                         {/* <i className="fa fa-plus"></i> */}
                         <span>Mua ngay</span>
                       </button>

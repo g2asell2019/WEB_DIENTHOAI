@@ -9,7 +9,7 @@ import { getAllCart, updateCartData, deleteCart } from "../../userService";
 export const CartLogin = () => {
   const [user, setUser] = useState({ taikhoan: "" });
   const [arrCart, setListCart] = useState([]);
-  const isInitialRender = useRef(true);
+
 
 
   useEffect(() => {

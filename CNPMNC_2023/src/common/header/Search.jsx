@@ -36,8 +36,11 @@ const [isSearchResultsVisible, setSearchResultsVisible] = useState(false);
     setAnchorEl(null);
   };
 
+
   
   useEffect(() => {
+
+    
 
 
     
@@ -85,6 +88,14 @@ const [isSearchResultsVisible, setSearchResultsVisible] = useState(false);
 
   }, [user.id]);
 
+  const [cartCount, setCartCount] = useState(0);
+  useEffect(() => {
+    setCartCount(arrCart.length);
+  }, [arrCart]);
+ 
+
+
+
 
 
   const laydanhsachgiohang = async () => {
@@ -92,6 +103,7 @@ const [isSearchResultsVisible, setSearchResultsVisible] = useState(false);
       let response = await getAllCart(user.id);
       if (response && response.errcode === 0) {
         setListCart(response.Cart);
+       // Update cartCount immediately
       }
     } catch (error) {
       console.error("Error fetching cart data:", error);
@@ -99,7 +111,6 @@ const [isSearchResultsVisible, setSearchResultsVisible] = useState(false);
   };
 
 
- 
   const handleLogout = () => {
     localStorage.removeItem("user");
     setUser(null);
@@ -157,7 +168,6 @@ const [isSearchResultsVisible, setSearchResultsVisible] = useState(false);
     }
   };
   
-
 
 
  
@@ -235,13 +245,13 @@ const [isSearchResultsVisible, setSearchResultsVisible] = useState(false);
               { user&&user.id?
                <Link to="/cart-login">
                <i className="fa fa-shopping-bag icon-circle"></i>
-               <span>{arrCart.length == 0 ? "" : arrCart.length}</span>
+               <span>{cartCount === 0 ? "" : cartCount}</span>
              </Link>
               
              :
              <Link to="/cart/Cart">
                <i className="fa fa-shopping-bag icon-circle"></i>
-               <span>{cartItem.length == 0 ? "" : cartItem.length}</span>
+               <span>{cartItem&&cartItem.length === 0 ? "" : cartItem.length}</span>
              </Link>
 
 

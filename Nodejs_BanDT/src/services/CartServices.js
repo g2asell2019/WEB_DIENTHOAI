@@ -2,13 +2,11 @@ import db from "../models/index";
 
 
 
-let checkCartname = (name) => {
+let checkCart = (data) => {
     return new Promise(async(resolve, reject) => {
         try {
             let Cart = await db.Cart.findOne({
-
-                where: { name: name },
-
+                where: { iduser: data.iduser, name: data.name },
             });
             if (Cart) {
                 resolve(true);
@@ -18,15 +16,15 @@ let checkCartname = (name) => {
 
         } catch (e) {
             reject(e);
-
         }
     })
 }
+
 let CreateCart = (data) => {
     return new Promise(async(resolve, reject) => {
         try {
             // check taikhoan is exist??
-            let check = await checkCartname(data.name);
+            let check = await checkCart(data);
             if (check == true) {
                 resolve({
                     errcode: 1,

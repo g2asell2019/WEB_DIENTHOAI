@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { getAllProducts, getAllBrand } from "../../userService";
+import { getAllProducts, getAllBrand ,CreateCart } from "../../userService";
 import { Buffer } from "buffer";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { toast } from 'react-toastify';
+import { Header } from "./Header";
 
 export const pageSearch = ({ addToCart,location}) => {
 
@@ -12,7 +14,19 @@ export const pageSearch = ({ addToCart,location}) => {
   const [idbrand, setidbrand] = useState('');
   const [orderBy, setordeby] = useState('');
   const [selectedPriceRange, setgia] = useState('');
+  const [user, setUser] = useState({ taikhoan: "" });
   useEffect(() => {
+    const getUserDataFromLocalStorage = async () => {
+      const userData = localStorage.getItem("user");
+  
+  
+      if (userData) {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+      }
+    };
+  
+    getUserDataFromLocalStorage(); // Gọi hàm để lấy dữ liệu từ Local Storage
     getAllUserFromReact();
     getAllBrandFromReact();
   }, [idbrand, orderBy,selectedPriceRange]);
@@ -84,12 +98,41 @@ export const pageSearch = ({ addToCart,location}) => {
     );
 
 
-    console.log("xem san pham loc ",filteredData);
+    const handleAddCart = (data) => {
+      const imageBuffer = Buffer.from(data.image, 'base64').toString("binary");
+      themvaogiohang({
+        name: data.name,
+        price: data.price,
+        quantity: 1,
+        image:imageBuffer,
+        iduser: user.id,
+        idproduct:data.id
+      });
+  
+  };
+
+ 
+  const themvaogiohang = async (data) => {
+    try {
+      const response = await CreateCart(data);
+      if (response && response.errcode !== 0) {
+        toast.error('Thêm giỏ hàng thất bại !');
+        alert(response.errMessage);
+      } else {
+        toast.success('Thêm giỏ hàng thành công !');
+       
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
 
 
 
 
+  
+    const [cartItem, setCardItem] = useState([]);
 
 
 
@@ -98,6 +141,9 @@ export const pageSearch = ({ addToCart,location}) => {
 
   return (
     <>
+    
+    <Header cartItem={cartItem}></Header>
+    <h1>Kết quả tìm kiếm</h1>
       {arrbrand && arrbrand.map((gia, stt) => {
         let imageBase63 = '';
         if (gia.image) {
@@ -181,7 +227,7 @@ export const pageSearch = ({ addToCart,location}) => {
                         <span>Chi tiết</span>
                       </button>
                     </Link>
-                    <button onClick={() => addToCart(item)}>
+                    <button onClick={user && user.id ? () => handleAddCart(item) :  () => addToCart(item)}>
                       <span>Mua ngay</span>
                     </button>
                   </div>
