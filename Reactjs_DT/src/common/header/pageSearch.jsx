@@ -12,7 +12,7 @@ export const pageSearch = ({ addToCart, location }) => {
   const [idbrand, setidbrand] = useState("");
   const [orderBy, setordeby] = useState("");
   const [selectedPriceRange, setgia] = useState("");
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
   useEffect(() => {
     const getUserDataFromLocalStorage = async () => {
       const userData = localStorage.getItem("user");

@@ -16,7 +16,7 @@ import { getAllCart } from "../../userService";
 
 export const Search = ({ cartItem }) => {
   const history = useHistory();
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
   const [arrCart, setListCart] = useState([]);
 
   const [isSearchResultsVisible, setSearchResultsVisible] = useState(false);

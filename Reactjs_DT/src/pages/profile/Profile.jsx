@@ -5,7 +5,7 @@ import "./Profile.css";
 import user from "../../../public/images/search/user.png";
 export const Profile = () => {
   const history = useHistory();
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
 
   useEffect(() => {
     // Sử dụng một hàm async để lấy dữ liệu từ Local Storage
@@ -21,14 +21,10 @@ export const Profile = () => {
 
     getUserDataFromLocalStorage(); // Gọi hàm để lấy dữ liệu từ Local Storage
   }, []);
-  let imageBase64='';
-  if(user.image){
-
-   
-     imageBase64=Buffer.from(user.image,'base64').toString('binary');
-  
-
-}
+  let imageBase64 = "";
+  if (user.image) {
+    imageBase64 = Buffer.from(user.image, "base64").toString("binary");
+  }
 
   {
     user && <Profile />;
@@ -47,7 +43,7 @@ export const Profile = () => {
             <div className="profile-right ">
               <div className="d_flex profile_item">
                 <h3>Tên tài khoản: </h3>
-                <p>{user.taikhoan}</p>
+                <p>{user.username}</p>
               </div>
 
               <div className="d_flex profile_item">

@@ -5,7 +5,7 @@ import db from "../models/index";
 let CreateSale = (data) => {
     return new Promise(async(resolve, reject) => {
         try {
-            // check taikhoan is exist??
+            // check username is exist??
 
             await db.Sales.create({
                 sale_date: data.sale_date,

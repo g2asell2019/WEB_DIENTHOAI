@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { Link, useHistory, Redirect } from "react-router-dom";
 
 const OrderHistory = () => {
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
   const [hoadon, sethoadon] = useState([]);
   useEffect(() => {
     const getUserDataFromLocalStorage = async () => {

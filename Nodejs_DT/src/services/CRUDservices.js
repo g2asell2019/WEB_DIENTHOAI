@@ -6,7 +6,7 @@ const salt = bcrypt.genSaltSync(10);
 let createNewUser = async (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let hashPasswordFromBcrypt = await hashUserPassword(data.password);
+      let hashPasswordFromBcrypt = await hashPassword(data.password);
       await db.User.create({
         email: data.email,
         password: hashPasswordFromBcrypt,
@@ -26,7 +26,7 @@ let createNewUser = async (data) => {
 };
 
 // chuyển mật khẩu sang bảo mật
-let hashUserPassword = (password) => {
+let hashPassword = (password) => {
   return new Promise(async (resolve, reject) => {
     try {
       let hashPassword = await bcrypt.hashSync(password, salt);
@@ -66,7 +66,7 @@ let getUserInfoById = (userId) => {
   });
 };
 
-let updateUserData = (data) => {
+let updateUser = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       let user = await db.User.findOne({
@@ -112,6 +112,6 @@ module.exports = {
   createNewUser: createNewUser,
   getAllUser: getAllUser,
   getUserInfoById: getUserInfoById,
-  updateUserData: updateUserData,
+  updateUser: updateUser,
   deleteUserById: deleteUserById,
 };

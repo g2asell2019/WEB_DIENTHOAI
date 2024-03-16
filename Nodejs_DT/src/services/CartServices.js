@@ -20,7 +20,7 @@ let checkCart = (data) => {
 let CreateCart = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // check taikhoan is exist??
+      // check username is exist??
       let check = await checkCart(data);
       if (check == true) {
         resolve({

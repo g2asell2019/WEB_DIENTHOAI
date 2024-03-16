@@ -7,7 +7,7 @@ export const Order = () => {
   const location = useLocation();
   const [totalPrice, setTotalPrice] = useState(location.state.totalPrice);
 
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
   const [arrCart, setListCart] = useState([]);
 
   const [state, setState] = useState({

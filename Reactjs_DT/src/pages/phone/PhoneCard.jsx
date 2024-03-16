@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 export const PhoneCard = ({ addToCart }) => {
   const { id } = useParams();
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
 
   const [arrProducts, setArrProducts] = useState([]);
   const [arrbrand, setArrbrand] = useState("");

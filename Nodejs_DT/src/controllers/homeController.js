@@ -57,7 +57,7 @@ let getEditCRUD = async (req, res) => {
 
 let putCRUD = async (req, res) => {
   let data = req.body;
-  await CRUDservices.updateUserData(data);
+  await CRUDservices.updateUser(data);
   return res.redirect("/get-crud");
 };
 

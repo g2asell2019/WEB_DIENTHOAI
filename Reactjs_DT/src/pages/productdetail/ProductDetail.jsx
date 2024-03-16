@@ -22,7 +22,7 @@ export const ProductDetail = ({ addToCart }) => {
   }
 
   const { id } = useParams();
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
 
   const [detailProducts, setdetailProducts] = useState({});
   let imageBase64 = "";

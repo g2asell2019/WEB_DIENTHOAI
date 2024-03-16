@@ -10,7 +10,7 @@ class ModalUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      taikhoan: "",
+      username: "",
       password: "",
       fullName: "",
       address: "",
@@ -26,7 +26,7 @@ class ModalUser extends Component {
     emitter.on("EVENT_CLEAR_MODAL_DATA", () => {
       //reset state
       this.setState({
-        taikhoan: "",
+        username: "",
         password: "",
         fullName: "",
         address: "",
@@ -63,7 +63,7 @@ class ModalUser extends Component {
   checkValideInput = () => {
     let isValid = true;
     let arrInput = [
-      "taikhoan",
+      "username",
       "password",
       "fullName",
       "address",
@@ -140,9 +140,9 @@ class ModalUser extends Component {
                       className="form-control"
                       placeholder="UserName"
                       onChange={(event) => {
-                        this.handleOnChangeInput(event, "taikhoan");
+                        this.handleOnChangeInput(event, "username");
                       }}
-                      value={this.state.taikhoan}
+                      value={this.state.username}
                     />
                   </div>
                   <div className="form-group col-md-6">

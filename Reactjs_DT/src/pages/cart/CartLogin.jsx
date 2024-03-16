@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { getAllCart, updateCartData, deleteCart } from "../../userService";
 
 export const CartLogin = () => {
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
   const [arrCart, setListCart] = useState([]);
 
   useEffect(() => {

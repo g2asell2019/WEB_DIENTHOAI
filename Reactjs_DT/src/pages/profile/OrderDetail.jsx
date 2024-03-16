@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./OrderHistory.scss";
-import { useParams } from 'react-router-dom';
-import { getAllOders, getAllOrderdetail,Layhoadon } from "../../userService";
+import { useParams } from "react-router-dom";
+import { getAllOders, getAllOrderdetail, Layhoadon } from "../../userService";
 import { Buffer } from "buffer";
- const OrderDetail = () => {
+const OrderDetail = () => {
   const { id_order } = useParams();
 
-
-
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
   const [orderData, setOrderData] = useState({
     hoadon: { id_order: "" },
     chitiethoadon: [],
   });
-
 
   const [hoadon, sethoadon] = useState("");
 
@@ -38,9 +35,7 @@ import { Buffer } from "buffer";
   }, [user.id]);
 
   useEffect(() => {
-  
-      laychitiethoadon();
-    
+    laychitiethoadon();
   }, []);
 
   const laymahdcuataikhoan = async () => {
@@ -71,9 +66,6 @@ import { Buffer } from "buffer";
     }
   };
 
-
-
-
   const layhoadon = async () => {
     try {
       let response = await Layhoadon(id_order);
@@ -87,14 +79,14 @@ import { Buffer } from "buffer";
 
   const formatDate = (isoDate) => {
     const dateObject = new Date(isoDate);
- 
+
     const day = dateObject.getDate();
     const month = dateObject.getMonth() + 1;
     const year = dateObject.getFullYear();
 
     return `${day}/${month}/${year}`;
   };
- const  formatCurrency=(number)=> {
+  const formatCurrency = (number) => {
     // Sử dụng Intl.NumberFormat để định dạng số
     const formatter = new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -107,12 +99,9 @@ import { Buffer } from "buffer";
 
     // Loại bỏ khoảng trắng giữa số và đơn vị tiền tệ (₫)
     return formattedNumber.replace(/\s/g, "");
-  }
+  };
 
-
-
-  console.log("xem hoa don",hoadon);
- 
+  console.log("xem hoa don", hoadon);
 
   return (
     <>
@@ -132,7 +121,6 @@ import { Buffer } from "buffer";
             </tr>
           </table>
           <table>
-
             <thead>
               <tr className="history">
                 <th>Sản phẩm đặt mua</th>
@@ -143,33 +131,33 @@ import { Buffer } from "buffer";
               </tr>
             </thead>
             <tbody>
-              {orderData.chitiethoadon.map((value, index) =>{
-                 let imageBase64 = "";
-                 if (value.idProductData.image) {
-                   imageBase64 = Buffer.from(
-                     value.idProductData.image,
-                     "base64"
-                   ).toString("binary");
-                 }
-                return(
+              {orderData.chitiethoadon.map((value, index) => {
+                let imageBase64 = "";
+                if (value.idProductData.image) {
+                  imageBase64 = Buffer.from(
+                    value.idProductData.image,
+                    "base64"
+                  ).toString("binary");
+                }
+                return (
                   <tr className="description" key={index}>
-                  <td>{value.idProductData.name}</td>
-                  <td><img src={imageBase64} alt="" /></td>
-                  <td>{formatCurrency(value.idProductData.price)}</td>
-                  <td>{value.quantity}</td>
-                  <td>{formatCurrency(value.total_price)}</td>
-                </tr>
-                )
+                    <td>{value.idProductData.name}</td>
+                    <td>
+                      <img src={imageBase64} alt="" />
+                    </td>
+                    <td>{formatCurrency(value.idProductData.price)}</td>
+                    <td>{value.quantity}</td>
+                    <td>{formatCurrency(value.total_price)}</td>
+                  </tr>
+                );
               })}
-             
-             
             </tbody>
             <tfoot>
-    <tr>
-      <th colSpan={1}>Tổng tiền</th>
-      <td colSpan={6}> {formatCurrency(hoadon.total_value)} </td>
-    </tr>
-  </tfoot>
+              <tr>
+                <th colSpan={1}>Tổng tiền</th>
+                <td colSpan={6}> {formatCurrency(hoadon.total_value)} </td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>
