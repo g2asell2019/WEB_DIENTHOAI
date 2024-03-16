@@ -1,12 +1,12 @@
 import db from "../models/index";
 
-let checkBrandsname = (name) => {
+let checkBrandName = (name) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let Brands = await db.Brands.findOne({
+      let brand = await db.Brands.findOne({
         where: { name: name },
       });
-      if (Brands) {
+      if (brand) {
         resolve(true);
       } else {
         resolve(false);
@@ -17,11 +17,11 @@ let checkBrandsname = (name) => {
   });
 };
 
-let CreateBrands = (data) => {
+let createBrand = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // check taikhoan is exist??
-      let check = await checkBrandsname(data.name);
+      let check = await checkBrandName(data.name);
+
       if (check == true) {
         resolve({
           errcode: 1,
@@ -41,10 +41,6 @@ let CreateBrands = (data) => {
         resolve({
           errcode: 0,
           data: data,
-        });
-
-        resolve({
-          errcode: 0,
           message: "OK",
         });
       }
@@ -53,28 +49,33 @@ let CreateBrands = (data) => {
     }
   });
 };
-let deleteBrands = (BrandsId) => {
+
+let deleteBrand = (brandId) => {
   return new Promise(async (resolve, reject) => {
-    let category = await db.Brands.findOne({
-      where: { id: BrandsId },
-    });
-    if (!category) {
-      resolve({
-        errcode: 2,
-        errMessage: "loại sản phẩm  không tồn tại",
+    try {
+      let category = await db.Brands.findOne({
+        where: { id: brandId },
       });
+      if (!category) {
+        resolve({
+          errcode: 2,
+          errMessage: "Loại sản phẩm không tồn tại",
+        });
+      }
+      await db.Brands.destroy({
+        where: { id: brandId },
+      });
+      resolve({
+        errcode: 0,
+        errMessage: "Loại sản phẩm đã bị xóa !",
+      });
+    } catch (e) {
+      reject(e);
     }
-    await db.Brands.destroy({
-      where: { id: BrandsId },
-    });
-    resolve({
-      errcode: 0,
-      errMessage: "loại sản phẩm đã bị xóa !",
-    });
   });
 };
 
-let updateBrandsData = (data) => {
+let updateBrand = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.id) {
@@ -83,22 +84,20 @@ let updateBrandsData = (data) => {
           errMessage: "Missing required parameter",
         });
       }
-      let Brands = await db.Brands.findOne({
+      let brand = await db.Brands.findOne({
         where: { id: data.id },
         raw: false,
       });
-      if (Brands) {
-        Brands.name = data.name;
+      if (brand) {
+        brand.name = data.name;
         if (data.avatar) {
-          Brands.image = data.avatar;
+          brand.image = data.avatar;
         }
 
-        Brands.image = data.avatar;
-
-        await Brands.save();
+        await brand.save();
         resolve({
           errcode: 0,
-          errMessage: "update Brands succeeds !",
+          errMessage: "Update brands succeeds !",
         });
       } else {
         resolve({
@@ -112,21 +111,21 @@ let updateBrandsData = (data) => {
   });
 };
 
-let getAllBrands = (BrandsId) => {
+let getAllBrands = (brandId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let Brands = "";
-      if (BrandsId == "ALL") {
-        Brands = db.Brands.findAll({
+      let brands = "";
+      if (brandId == "ALL") {
+        brands = db.Brands.findAll({
           order: [["createdAt", "DESC"]],
         });
       }
-      if (BrandsId && BrandsId !== "ALL") {
-        Brands = await db.Brands.findOne({
-          where: { id: BrandsId }, //  productId laf cais tham so truyen vao
+      if (brandId && brandId !== "ALL") {
+        brands = await db.Brands.findOne({
+          where: { id: brandId },
         });
       }
-      resolve(Brands);
+      resolve(brands);
     } catch (e) {
       reject(e);
     }
@@ -135,7 +134,7 @@ let getAllBrands = (BrandsId) => {
 
 module.exports = {
   getAllBrands: getAllBrands,
-  CreateBrands: CreateBrands,
-  deleteBrands: deleteBrands,
-  updateBrandsData: updateBrandsData,
+  createBrand: createBrand,
+  deleteBrand: deleteBrand,
+  updateBrand: updateBrand,
 };

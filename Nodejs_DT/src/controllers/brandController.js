@@ -18,7 +18,7 @@ let handlegetAllBrand = async (req, res) => {
 };
 
 let handleCreateBrand = async (req, res) => {
-  let message = await brandServices.CreateBrands(req.body);
+  let message = await brandServices.createBrand(req.body);
   console.log(message);
   return res.status(200).json(message);
 };
@@ -30,14 +30,14 @@ let handleDeleteBrand = async (req, res) => {
       errMessage: "Missing required parameters !",
     });
   }
-  let message = await brandServices.deleteBrands(req.body.id);
+  let message = await brandServices.deleteBrand(req.body.id);
   console.log(message);
   return res.status(200).json(message);
 };
 
 let handleEditBrand = async (req, res) => {
   let data = req.body;
-  let message = await brandServices.updateBrandsData(data);
+  let message = await brandServices.updateBrand(data);
   return res.status(200).json(message);
 };
 
