@@ -26,7 +26,7 @@ let postCRUD = async (reg, res) => {
   let message = await CRUDservices.createNewUser(reg.body);
   console.log(message);
 
-  return res.send("post crud from sever");
+  return res.send("post crud from server");
 };
 
 // biến data  sẽ gọi hàm  lấy  dữ liệu bên services.
