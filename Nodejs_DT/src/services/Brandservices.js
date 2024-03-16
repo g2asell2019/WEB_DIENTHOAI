@@ -97,12 +97,12 @@ let updateBrand = (data) => {
         await brand.save();
         resolve({
           errcode: 0,
-          errMessage: "Update brands succeeds !",
+          errMessage: "Update brand succeeds !",
         });
       } else {
         resolve({
           errcode: 1,
-          errMessage: "Brands not found !",
+          errMessage: "Brand not found !",
         });
       }
     } catch (e) {

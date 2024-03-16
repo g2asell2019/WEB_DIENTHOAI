@@ -1,7 +1,6 @@
 import express from "express";
 import homeController from "../controllers/homeController";
 import userController from "../controllers/userController";
-import specialtyController from "../controllers/specialtyController";
 import productController from "../controllers/productController";
 import orderController from "../controllers/ordersController";
 import brandController from "../controllers/brandController";
@@ -101,10 +100,6 @@ let initWebRouters = (app) => {
   router.put("/api/edit-orders", orderController.handleEditOder);
 
   router.get("/api/loc-don-hang", orderController.handleLocdonhang);
-
-  //api cua chuyen khoa
-  router.post("/api/create-new-specialty", specialtyController.createSpecialty);
-  router.get("/api/get-all-specialty", specialtyController.getAllSpecialty);
 
   // thêm  trang mới  khi /tanh
   router.get("/tanh", (req, res) => {
