@@ -77,7 +77,7 @@ export const Order = () => {
 
       taomoidonhang({
         receiver: state.receiver,
-        order_status: "Đang chờ để duyệt",
+        order_status: "Đang chờ duyệt",
         receiving_point: state.receiving_point,
         total_value: totalPrice,
         phoneNumber: state.phoneNumber,
@@ -147,7 +147,6 @@ export const Order = () => {
   {
     user && <Order />;
   }
-
   return (
     <>
       <div className="order">

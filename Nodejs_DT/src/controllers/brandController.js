@@ -1,4 +1,4 @@
-import Brandservices from "../services/Brandservices";
+import brandServices from "../services/brandServices";
 
 let handlegetAllBrand = async (req, res) => {
   let id = req.query.id; //all, id
@@ -9,7 +9,7 @@ let handlegetAllBrand = async (req, res) => {
       products: [],
     });
   }
-  let Brand = await Brandservices.getAllBrands(id);
+  let Brand = await brandServices.getAllBrands(id);
   return res.status(200).json({
     errcode: 0,
     errMessage: "OK",
@@ -18,7 +18,7 @@ let handlegetAllBrand = async (req, res) => {
 };
 
 let handleCreateBrand = async (req, res) => {
-  let message = await Brandservices.CreateBrands(req.body);
+  let message = await brandServices.CreateBrands(req.body);
   console.log(message);
   return res.status(200).json(message);
 };
@@ -30,14 +30,14 @@ let handleDeleteBrand = async (req, res) => {
       errMessage: "Missing required parameters !",
     });
   }
-  let message = await Brandservices.deleteBrands(req.body.id);
+  let message = await brandServices.deleteBrands(req.body.id);
   console.log(message);
   return res.status(200).json(message);
 };
 
 let handleEditBrand = async (req, res) => {
   let data = req.body;
-  let message = await Brandservices.updateBrandsData(data);
+  let message = await brandServices.updateBrandsData(data);
   return res.status(200).json(message);
 };
 
