@@ -93,7 +93,7 @@ class BrandManager extends Component {
     }
   };
 
-  handleEditUser = (user) => {
+  handleUpdateUser = (user) => {
     this.setState({
       isOpenModalEditProduct: true,
       productEdit: user,
@@ -203,7 +203,7 @@ class BrandManager extends Component {
                                   <button
                                     className="btn-edit"
                                     onClick={() => {
-                                      this.handleEditUser(item);
+                                      this.handleUpdateUser(item);
                                     }}
                                   >
                                     <i className="fa-regular fa-pen-to-square"></i>

@@ -3,7 +3,7 @@ import userSevices from "../services/userServices";
 let handleLogin = async (req, res) => {
   let username = req.body.username;
   let password = req.body.password;
-  //check username exist
+
   if (!username || !password) {
     return res.status(500).json({
       errcode: 1,
@@ -11,20 +11,17 @@ let handleLogin = async (req, res) => {
     });
   }
 
-  //compare password
-
-  // return userInfor
-  //access_token:jWT JSON web token
   let userData = await userSevices.handleLogin(username, password);
-  console.log(userData);
+
   return res.status(200).json({
     errcode: userData.errcode,
     message: userData.errMessage,
-    user: userData.user ? userData.user : {}, // check trên api in ra
+    user: userData.user ? userData.user : {},
   });
 };
-let handleGetAllUser = async (req, res) => {
-  let id = req.query.id; //all, id
+
+let handleGetAllUsers = async (req, res) => {
+  let id = req.query.id;
   if (!id) {
     return res.status(200).json({
       errcode: 1,
@@ -33,16 +30,15 @@ let handleGetAllUser = async (req, res) => {
     });
   }
   let users = await userSevices.getAllUsers(id);
-  console.log(users);
   return res.status(200).json({
     errcode: 0,
     errMessage: "OK",
     users,
   });
 };
-let handleCreateNewUser = async (req, res) => {
+
+let handleCreateUser = async (req, res) => {
   let message = await userSevices.createUser(req.body);
-  console.log(message);
   return res.status(200).json(message);
 };
 
@@ -54,33 +50,33 @@ let handleDeleteUser = async (req, res) => {
     });
   }
   let message = await userSevices.deleteUser(req.body.id);
-  console.log(message);
   return res.status(200).json(message);
 };
-let handleEditUser = async (req, res) => {
+
+let handleUpdateUser = async (req, res) => {
   let data = req.body;
   let message = await userSevices.updateUser(data);
   return res.status(200).json(message);
 };
 
-let getAllCode = async (req, res) => {
+let handleGetAllCodes = async (req, res) => {
   try {
     let data = await userSevices.getAllCodeService(req.query.type);
     return res.status(200).json(data);
   } catch (e) {
-    console.log("get allcode error", e);
+    console.log("Get allcode error", e);
     return res.status(200).json({
       errcode: -1,
-      errMessage: "Error from sever",
+      errMessage: "Error from server",
     });
   }
 };
 
 module.exports = {
   handleLogin: handleLogin,
-  handleGetAllUser: handleGetAllUser,
-  handleCreateNewUser: handleCreateNewUser,
-  handleEditUser: handleEditUser,
+  handleGetAllUsers: handleGetAllUsers,
+  handleCreateUser: handleCreateUser,
+  handleUpdateUser: handleUpdateUser,
   handleDeleteUser: handleDeleteUser,
-  getAllCode: getAllCode,
+  handleGetAllCodes: handleGetAllCodes,
 };

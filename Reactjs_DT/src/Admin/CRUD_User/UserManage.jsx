@@ -86,7 +86,7 @@ class UserManage extends Component {
     }
   };
 
-  handleEditUser = (user) => {
+  handleUpdateUser = (user) => {
     this.setState({
       isOpenModalEditUser: true,
       userEdit: user,
@@ -177,7 +177,7 @@ class UserManage extends Component {
                                   <button
                                     className="btn-edit"
                                     onClick={() => {
-                                      this.handleEditUser(item);
+                                      this.handleUpdateUser(item);
                                     }}
                                   >
                                     <i className="fa-regular fa-pen-to-square"></i>

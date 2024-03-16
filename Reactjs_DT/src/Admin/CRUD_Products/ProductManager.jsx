@@ -7,7 +7,7 @@ import {
   CreateCategories,
   deleteCategories,
   getAllCategories,
-  getAllBrand
+  getAllBrand,
 } from "../../userService";
 import { emitter } from "../../utils/emitter";
 import { toast } from "react-toastify";
@@ -25,9 +25,9 @@ class ProductManager extends Component {
     this.state = {
       arrProducts: [],
       arrCate: [],
-      arrBrand:[],
+      arrBrand: [],
       idne: "",
-      idbrand:"",
+      idbrand: "",
       isOpenModalProduct: false,
       isOpenModalEditProduct: false,
       isOpenModalCategories: false,
@@ -35,10 +35,8 @@ class ProductManager extends Component {
       currentPage: 1,
       productsPerPage: 5,
       previewImgURL: "",
-      
-       orderBy:'',
-      
 
+      orderBy: "",
 
       selectedPriceRange: "", // Lưu trữ mức giá đã chọn
     };
@@ -56,7 +54,12 @@ class ProductManager extends Component {
       () => {
         //console.log('check good state: ',this.state.idne);
         // muốn lấy giá trị từ hàm render thì phải bỏ vào đây
-        this.getAllUserFromReact(this.state.idne,this.state.idbrand,this.state.selectedPriceRange,this.state.orderBy);
+        this.getAllUserFromReact(
+          this.state.idne,
+          this.state.idbrand,
+          this.state.selectedPriceRange,
+          this.state.orderBy
+        );
       }
     );
     //console.log('copystate: ',copyState);
@@ -65,10 +68,14 @@ class ProductManager extends Component {
   };
 
   async componentDidMount() {
-
     await this.getAllCategoriesReact();
     await this.getAllBrandReact();
-    await this.getAllUserFromReact(this.state.idne,this.state.idbrand,this.state.selectedPriceRange,this.state.orderBy);
+    await this.getAllUserFromReact(
+      this.state.idne,
+      this.state.idbrand,
+      this.state.selectedPriceRange,
+      this.state.orderBy
+    );
   }
   getAllCategoriesReact = async () => {
     let response = await getAllCategories("ALL");
@@ -87,11 +94,16 @@ class ProductManager extends Component {
     }
   };
 
-
-  getAllUserFromReact = async (idne,idbrand,selectedPriceRange,orderBy) => {
+  getAllUserFromReact = async (idne, idbrand, selectedPriceRange, orderBy) => {
     console.log("id cuar toi: ", idne);
 
-    let response = await getAllProducts("ALL", idne,idbrand,selectedPriceRange,orderBy);
+    let response = await getAllProducts(
+      "ALL",
+      idne,
+      idbrand,
+      selectedPriceRange,
+      orderBy
+    );
 
     if (response && response.errcode == 0) {
       this.setState({
@@ -132,7 +144,12 @@ class ProductManager extends Component {
       if (response && response.errcode !== 0) {
         alert(response.errMessage);
       } else {
-        await this.getAllUserFromReact(this.state.idne,this.state.idbrand,this.state.selectedPriceRange,this.state.orderBy);
+        await this.getAllUserFromReact(
+          this.state.idne,
+          this.state.idbrand,
+          this.state.selectedPriceRange,
+          this.state.orderBy
+        );
         this.setState({
           isOpenModalProduct: false,
         });
@@ -152,14 +169,17 @@ class ProductManager extends Component {
         alert(response.errMessage);
         toast.error("tạo thất bại");
       } else {
-        
-        await this.getAllUserFromReact(this.state.idne,this.state.idbrand,this.state.selectedPriceRange,this.state.orderBy);
+        await this.getAllUserFromReact(
+          this.state.idne,
+          this.state.idbrand,
+          this.state.selectedPriceRange,
+          this.state.orderBy
+        );
 
         this.setState({
           isOpenModalCategories: false,
-          
         });
-        toast.success('tạo thành công');
+        toast.success("tạo thành công");
         emitter.emit("EVENT_CLEAR_MODAL_DATA");
       }
       //  console.log("response create user: " , response)
@@ -176,7 +196,12 @@ class ProductManager extends Component {
         alert(res.errMessage);
         toast.error("Xóa thất bại");
       } else {
-        await this.getAllUserFromReact(this.state.idne,this.state.idbrand,this.state.selectedPriceRange,this.state.orderBy);
+        await this.getAllUserFromReact(
+          this.state.idne,
+          this.state.idbrand,
+          this.state.selectedPriceRange,
+          this.state.orderBy
+        );
         toast.success("Xóa Thành công");
       }
       console.log(res);
@@ -185,7 +210,7 @@ class ProductManager extends Component {
     }
   };
 
-  handleEditUser = (user) => {
+  handleUpdateUser = (user) => {
     this.setState({
       isOpenModalEditProduct: true,
       productEdit: user,
@@ -196,7 +221,12 @@ class ProductManager extends Component {
     try {
       let res = await updateProductData(user);
       if (res && res.errcode === 0) {
-        await this.getAllUserFromReact(this.state.idne,this.state.idbrand,this.state.selectedPriceRange,this.state.orderBy);
+        await this.getAllUserFromReact(
+          this.state.idne,
+          this.state.idbrand,
+          this.state.selectedPriceRange,
+          this.state.orderBy
+        );
         toast.success("Sửa Thành công");
         this.setState({
           isOpenModalEditProduct: false,
@@ -215,7 +245,7 @@ class ProductManager extends Component {
     });
   }
 
-   formatCurrency(number) {
+  formatCurrency(number) {
     // Sử dụng Intl.NumberFormat để định dạng số
     const formatter = new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -238,9 +268,10 @@ class ProductManager extends Component {
    */
 
   render() {
-    const { selectedPriceRange,orderBy } = this.state;
-    let { idne,idbrand } = this.state;
-    const { arrProducts, arrCate,arrBrand, currentPage, productsPerPage } = this.state;
+    const { selectedPriceRange, orderBy } = this.state;
+    let { idne, idbrand } = this.state;
+    const { arrProducts, arrCate, arrBrand, currentPage, productsPerPage } =
+      this.state;
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     const currentProducts = arrProducts.slice(
@@ -327,13 +358,27 @@ class ProductManager extends Component {
                     >
                       <option value="">Tất cả giá</option>
                       <option value="0-5000000">0 - 5 triệu</option>
-                      <option value="5000000-10000000">5 triệu - 10 triệu</option>
-                      <option value="10000000-20000000">10 triệu - 20 triệu</option>
-                      <option value="20000000-30000000">20 triệu - 30 triệu</option>
-                      <option value="30000000-50000000">30 triệu - 50 triệu</option>
-                      <option value="50000000-100000000">50 triệu - 100 triệu</option>
-                      <option value="100000000-200000000">100 triệu - 200 triệu</option>
-                      <option value="200000000-999999999999999999">200 triệu - không giới hạn</option>
+                      <option value="5000000-10000000">
+                        5 triệu - 10 triệu
+                      </option>
+                      <option value="10000000-20000000">
+                        10 triệu - 20 triệu
+                      </option>
+                      <option value="20000000-30000000">
+                        20 triệu - 30 triệu
+                      </option>
+                      <option value="30000000-50000000">
+                        30 triệu - 50 triệu
+                      </option>
+                      <option value="50000000-100000000">
+                        50 triệu - 100 triệu
+                      </option>
+                      <option value="100000000-200000000">
+                        100 triệu - 200 triệu
+                      </option>
+                      <option value="200000000-999999999999999999">
+                        200 triệu - không giới hạn
+                      </option>
                     </select>
 
                     <select
@@ -344,9 +389,12 @@ class ProductManager extends Component {
                       value={orderBy}
                     >
                       <option value="">sắp xếp theo giá</option>
-                      <option value="price-asc">Sắp xếp theo giá tăng dần</option>
-                      <option value="price-desc">Sắp xếp theo giá giảm dần</option>
-                     
+                      <option value="price-asc">
+                        Sắp xếp theo giá tăng dần
+                      </option>
+                      <option value="price-desc">
+                        Sắp xếp theo giá giảm dần
+                      </option>
                     </select>
                   </div>
 
@@ -354,7 +402,7 @@ class ProductManager extends Component {
                     <table>
                       <thead>
                         <tr>
-                        <th>STT</th>
+                          <th>STT</th>
                           <th>Tên sản phẩm</th>
                           <th>giá</th>
                           <th>số lượng</th>
@@ -377,7 +425,7 @@ class ProductManager extends Component {
 
                             return (
                               <tr key={index}>
-                                <td>{index+1}</td>
+                                <td>{index + 1}</td>
                                 <td>{item.name}</td>
                                 <td>{this.formatCurrency(item.price)}</td>
                                 <td>{item.quantity}</td>
@@ -396,7 +444,7 @@ class ProductManager extends Component {
                                   <button
                                     className="btn-edit"
                                     onClick={() => {
-                                      this.handleEditUser(item);
+                                      this.handleUpdateUser(item);
                                     }}
                                   >
                                     <i className="fa-regular fa-pen-to-square"></i>
