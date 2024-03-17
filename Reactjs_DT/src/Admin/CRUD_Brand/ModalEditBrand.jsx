@@ -6,6 +6,7 @@ import _ from "lodash";
 import { Buffer } from "buffer";
 import CommonUtils from "../../utils/CommonUtils";
 import ImageUtility from "./ImageUtility";
+import {validateInput} from "./CRUDUltility";
 class ModalEditBrand extends Component {
   constructor(props) {
     super(props);
@@ -55,24 +56,8 @@ class ModalEditBrand extends Component {
     // console.log(event.target.value,id)
   };
 
-  checkValideInputEdit = () => {
-    let isValid = true;
-    let arrInput = ["name"];
-
-    for (let i = 0; i < arrInput.length; i++) {
-      console.log("check inside loop", this.state[arrInput[i]], arrInput[i]);
-      if (!this.state[arrInput[i]]) {
-        isValid = false;
-        alert("Missing parameter: " + arrInput[i]);
-        break;
-      }
-    }
-
-    return isValid;
-  };
-
   handleSaveUser = () => {
-    let isValid = this.checkValideInputEdit();
+    let isValid = validateInput(["name"]);
 
     if (isValid == true) {
       this.props.editUser(this.state);
