@@ -4,6 +4,7 @@ import { emitter } from "../../utils/emitter";
 import { toast } from "react-toastify";
 import "./ModalProducts.scss";
 import _ from "lodash";
+import { validateInput } from "../Utility/CRUDUltility";
 
 class ModalCategories extends Component {
   constructor(props) {
@@ -43,24 +44,9 @@ class ModalCategories extends Component {
 
     // console.log(event.target.value,id)
   };
-  checkValideInput = () => {
-    let isValid = true;
-    let arrInput = ["name"];
-
-    for (let i = 0; i < arrInput.length; i++) {
-      console.log("check inside loop", this.state[arrInput[i]], arrInput[i]);
-      if (!this.state[arrInput[i]]) {
-        isValid = false;
-        alert("Missing parameter: " + arrInput[i]);
-        break;
-      }
-    }
-
-    return isValid;
-  };
 
   handleAddCategories = () => {
-    let isValid = this.checkValideInput();
+    let isValid = validateInput(["name"]);
 
     if (isValid == true) {
       //call api create modal
