@@ -57,7 +57,7 @@ export const FlashCard = ({ productItems, addToCart }) => {
   }
 
   const [arrProducts, setArrProducts] = useState([]);
-  const [idne, setidne] = useState("");
+  const [cateId, setcateId] = useState("");
   const [idbrand, setidbrand] = useState("");
   const [orderBy, setordeby] = useState("");
   const [selectedPriceRange, setgia] = useState("");
@@ -106,7 +106,7 @@ export const FlashCard = ({ productItems, addToCart }) => {
   const getAllUserFromReact = async () => {
     let response = await getAllProducts(
       "ALL",
-      idne,
+      cateId,
       idbrand,
       orderBy,
       selectedPriceRange

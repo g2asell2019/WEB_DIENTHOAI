@@ -35,9 +35,8 @@ let handleLogin = (username, password) => {
           where: { username: username },
           raw: true,
         });
-        if (user) {
-          //Compare password
-          let checkPassword = await bcryptjs.compareSync(
+        if (user) { //Compare password
+            let checkPassword = await bcryptjs.compareSync(
             password,
             user.password
           );
@@ -88,8 +87,7 @@ let getAllUsers = (userId) => {
       let users = "";
       if (userId == "ALL") {
         users = db.User.findAll({
-          attributes: {
-            // Hide password
+          attributes: { // Hide password
             exclude: ["password"],
           },
           order: [["createdAt", "DESC"]],
@@ -118,7 +116,7 @@ let createUser = (data) => {
         resolve({
           errcode: 1,
           errMessage:
-            "Tên người dùng đã tồn tại vui lòng nhập tên người dùng  khác",
+            "Tên người dùng đã tồn tại, vui lòng nhập tên người dùng khác",
         });
       } else {
         let hashPasswordFromBcrypt = await hashPassword(data.password);
@@ -141,10 +139,6 @@ let createUser = (data) => {
         resolve({
           errcode: 0,
           data: data,
-        });
-
-        resolve({
-          errcode: 0,
           message: "OK",
         });
       }

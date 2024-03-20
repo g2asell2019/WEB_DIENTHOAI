@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import {
-  updateCategoriesData,
-  CreateCategories,
-  deleteCategories,
+  updateCategory,
+  createCategory,
+  deleteCategory,
   getAllCategories,
 } from "../../userService";
 import { emitter } from "../../utils/emitter";
@@ -59,7 +59,7 @@ class CategoriesManager extends Component {
 
   createNewCategories = async (data) => {
     try {
-      let response = await CreateCategories(data);
+      let response = await createCategory(data);
       if (response && response.errcode !== 0) {
         alert(response.errMessage);
       } else {
@@ -78,7 +78,7 @@ class CategoriesManager extends Component {
 
   handleDeleteUser = async (user) => {
     try {
-      let res = await deleteCategories(user.id);
+      let res = await deleteCategory(user.id);
       if (res && res.errcode !== 0) {
         alert(res.errMessage);
         toast.error("Xóa thất bại");
@@ -101,7 +101,7 @@ class CategoriesManager extends Component {
 
   doEditUser = async (user) => {
     try {
-      let res = await updateCategoriesData(user);
+      let res = await updateCategory(user);
       if (res && res.errcode === 0) {
         await this.getAllCategoriesReact();
         toast.success("Sửa Thành công");

@@ -2,7 +2,7 @@ import categories from "../models/categories";
 import db from "../models/index";
 const { Sequelize, Op } = require("sequelize");
 
-let getAllProducts = (productId, idne, idbrand, priceRange, orderBy) => {
+let getAllProducts = (productId, cateId, idbrand, priceRange, orderBy) => {
   return new Promise(async (resolve, reject) => {
     try {
       let products = "";
@@ -16,8 +16,8 @@ let getAllProducts = (productId, idne, idbrand, priceRange, orderBy) => {
       }
 
       // Lọc theo ID hãng
-      if (idne && idne !== "") {
-        queryConditions.idCate = idne;
+      if (cateId && cateId !== "") {
+        queryConditions.idCate = cateId;
       }
       if (idbrand && idbrand !== "") {
         queryConditions.idBrand = idbrand;
@@ -71,7 +71,7 @@ let getAllProducts = (productId, idne, idbrand, priceRange, orderBy) => {
   });
 };
 
-let DeltaiProduct = (productId) => {
+let getProductDetail = (productId) => {
   return new Promise(async (resolve, reject) => {
     try {
       let products = "";
@@ -103,7 +103,7 @@ let DeltaiProduct = (productId) => {
   });
 };
 
-let checkproductname = (name) => {
+let checkProductName = (name) => {
   return new Promise(async (resolve, reject) => {
     try {
       let products = await db.Products.findOne({
@@ -120,16 +120,14 @@ let checkproductname = (name) => {
   });
 };
 
-let CreateProducts = (data) => {
+let createProduct = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // check username is exist??
-      let check = await checkproductname(data.name);
+      let check = await checkProductName(data.name);
       if (check == true) {
         resolve({
           errcode: 1,
-          errMessage:
-            "Tên người dùng đã tồn tại vui lòng nhập tên người dùng  khác",
+          errMessage: "Tên sản phẩm đã tồn tại",
         });
       } else {
         await db.Products.create({
@@ -149,10 +147,6 @@ let CreateProducts = (data) => {
         resolve({
           errcode: 0,
           data: data,
-        });
-
-        resolve({
-          errcode: 0,
           message: "OK",
         });
       }
@@ -161,15 +155,16 @@ let CreateProducts = (data) => {
     }
   });
 };
-let deleteProducts = (productId) => {
+
+let deleteProduct = (productId) => {
   return new Promise(async (resolve, reject) => {
-    let products = await db.Products.findOne({
+    let product = await db.Products.findOne({
       where: { id: productId },
     });
-    if (!products) {
+    if (!product) {
       resolve({
         errcode: 2,
-        errMessage: "product isn't exist !",
+        errMessage: "Product Id isn't exist !",
       });
     }
     await db.Products.destroy({
@@ -177,11 +172,12 @@ let deleteProducts = (productId) => {
     });
     resolve({
       errcode: 0,
-      errMessage: "product is deleted !",
+      errMessage: "Product is deleted !",
     });
   });
 };
-let updateProductData = (data) => {
+
+let updateProduct = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.id || !data.name) {
@@ -222,7 +218,7 @@ let updateProductData = (data) => {
   });
 };
 
-let checkcategoriesname = (name) => {
+let checkCategoryName = (name) => {
   return new Promise(async (resolve, reject) => {
     try {
       let category = await db.Categories.findOne({
@@ -239,7 +235,7 @@ let checkcategoriesname = (name) => {
   });
 };
 
-let checkbrandname = (name) => {
+let checkBrandName = (name) => {
   return new Promise(async (resolve, reject) => {
     try {
       let brands = await db.Brands.findOne({
@@ -256,12 +252,11 @@ let checkbrandname = (name) => {
   });
 };
 
-let CreateCategories = (data) => {
+let createCategory = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // check username is exist??
-      let check = await checkcategoriesname(data.name);
-      let check1 = await checkbrandname(data.name);
+      let check = await checkCategoryName(data.name);
+      let check1 = await checkBrandName(data.name);
       if (check == true) {
         resolve({
           errcode: 1,
@@ -298,10 +293,11 @@ let CreateCategories = (data) => {
     }
   });
 };
-let deleteCategories = (CategoriesId) => {
+
+let deleteCategory = (categoryId) => {
   return new Promise(async (resolve, reject) => {
     let category = await db.Categories.findOne({
-      where: { id: CategoriesId },
+      where: { id: categoryId },
     });
     if (!category) {
       resolve({
@@ -310,7 +306,7 @@ let deleteCategories = (CategoriesId) => {
       });
     }
     await db.Categories.destroy({
-      where: { id: CategoriesId },
+      where: { id: categoryId },
     });
     resolve({
       errcode: 0,
@@ -319,7 +315,7 @@ let deleteCategories = (CategoriesId) => {
   });
 };
 
-let updateCategoriesData = (data) => {
+let updateCategory = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.id) {
@@ -328,19 +324,16 @@ let updateCategoriesData = (data) => {
           errMessage: "Missing required parameter",
         });
       }
-      let categories = await db.Categories.findOne({
+      let category = await db.Categories.findOne({
         where: { id: data.id },
         raw: false,
       });
-      if (categories) {
-        categories.name = data.name;
+      if (category) {
+        category.name = data.name;
         if (data.avatar) {
-          categories.image = data.avatar;
+          category.image = data.avatar;
         }
-
-        categories.image = data.avatar;
-
-        await categories.save();
+        await category.save();
         resolve({
           errcode: 0,
           errMessage: "update categories succeeds !",
@@ -357,18 +350,18 @@ let updateCategoriesData = (data) => {
   });
 };
 
-let getAllCategories = (categoriesId) => {
+let getAllCategories = (categoryId) => {
   return new Promise(async (resolve, reject) => {
     try {
       let categories = "";
-      if (categoriesId == "ALL") {
+      if (categoryId == "ALL") {
         categories = db.Categories.findAll({
           order: [["createdAt", "ASC"]],
         });
       }
-      if (categoriesId && categoriesId !== "ALL") {
+      if (categoryId && categoryId !== "ALL") {
         categories = await db.Categories.findOne({
-          where: { id: categoriesId }, //  productId laf cais tham so truyen vao
+          where: { id: categoryId },
         });
       }
       resolve(categories);
@@ -380,12 +373,12 @@ let getAllCategories = (categoriesId) => {
 
 module.exports = {
   getAllProducts: getAllProducts,
-  DeltaiProduct: DeltaiProduct,
-  CreateProducts: CreateProducts,
-  deleteProducts: deleteProducts,
-  updateProductData: updateProductData,
-  CreateCategories: CreateCategories,
-  deleteCategories: deleteCategories,
+  getProductDetail: getProductDetail,
+  createProduct: createProduct,
+  deleteProduct: deleteProduct,
+  updateProduct: updateProduct,
+  createCategory: createCategory,
+  deleteCategory: deleteCategory,
   getAllCategories: getAllCategories,
-  updateCategoriesData: updateCategoriesData,
+  updateCategory: updateCategory,
 };

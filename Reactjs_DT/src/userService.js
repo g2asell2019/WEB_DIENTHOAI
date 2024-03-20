@@ -31,14 +31,14 @@ const editUserService = (inputData) => {
 
 const getAllProducts = (
   inputId,
-  idne,
+  cateId,
   idbrand,
   selectedPriceRange,
   orderBy
 ) => {
   // Template String
   return axios.get(
-    `api/get-all-products?id=${inputId}&idCate=${idne}&idBrand=${idbrand}&price=${selectedPriceRange}&orderBy=${orderBy}`
+    `api/get-all-products?id=${inputId}&idCate=${cateId}&idBrand=${idbrand}&price=${selectedPriceRange}&orderBy=${orderBy}`
   );
 };
 
@@ -47,26 +47,26 @@ const getDeltaiProduct = (inputId) => {
   return axios.get(`/api/get-deltai-product?id=${inputId}`);
 };
 
-const CreateProducts = (data) => {
+const createProduct = (data) => {
   return axios.post("/api/create-new-products", data);
 };
-const deleteProducts = (productId) => {
+const deleteProduct = (productId) => {
   return axios.delete("/api/delete-products", {
     data: {
       id: productId,
     },
   });
 };
-const updateProductData = (inputData) => {
+const updateProduct = (inputData) => {
   return axios.put("/api/edit-products", inputData);
 };
 
 // cua categories
 
-const CreateCategories = (data) => {
+const createCategory = (data) => {
   return axios.post("/api/create-new-categories", data);
 };
-const deleteCategories = (productId) => {
+const deleteCategory = (productId) => {
   return axios.delete("/api/delete-categories", {
     data: {
       id: productId,
@@ -78,7 +78,7 @@ const getAllCategories = (inputType) => {
   return axios.get(`/api/get-all-categories?id=${inputType}`);
 };
 
-const updateCategoriesData = (inputData) => {
+const updateCategory = (inputData) => {
   return axios.put("/api/edit-categories", inputData);
 };
 
@@ -200,13 +200,13 @@ export {
   editUserService,
   getAllProducts,
   getDeltaiProduct,
-  CreateProducts,
-  deleteProducts,
-  updateProductData,
-  CreateCategories,
-  deleteCategories,
+  createProduct,
+  deleteProduct,
+  updateProduct,
+  createCategory,
+  deleteCategory,
   getAllCategories,
-  updateCategoriesData,
+  updateCategory,
   getAllOders,
   Layhoadon,
   deleteOrders,

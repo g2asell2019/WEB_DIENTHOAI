@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import {
   getAllProducts,
-  CreateProducts,
-  deleteProducts,
-  updateProductData,
-  CreateCategories,
-  deleteCategories,
+  createProduct,
+  deleteProduct,
+  updateProduct,
+  createCategory,
+  deleteCategory,
   getAllCategories,
   getAllBrand,
 } from "../../userService";
@@ -26,7 +26,7 @@ class ProductManager extends Component {
       arrProducts: [],
       arrCate: [],
       arrBrand: [],
-      idne: "",
+      cateId: "",
       idbrand: "",
       isOpenModalProduct: false,
       isOpenModalEditProduct: false,
@@ -52,10 +52,10 @@ class ProductManager extends Component {
         ...copyState,
       },
       () => {
-        //console.log('check good state: ',this.state.idne);
+        //console.log('check good state: ',this.state.cateId);
         // muốn lấy giá trị từ hàm render thì phải bỏ vào đây
         this.getAllUserFromReact(
-          this.state.idne,
+          this.state.cateId,
           this.state.idbrand,
           this.state.selectedPriceRange,
           this.state.orderBy
@@ -71,7 +71,7 @@ class ProductManager extends Component {
     await this.getAllCategoriesReact();
     await this.getAllBrandReact();
     await this.getAllUserFromReact(
-      this.state.idne,
+      this.state.cateId,
       this.state.idbrand,
       this.state.selectedPriceRange,
       this.state.orderBy
@@ -94,12 +94,17 @@ class ProductManager extends Component {
     }
   };
 
-  getAllUserFromReact = async (idne, idbrand, selectedPriceRange, orderBy) => {
-    console.log("id cuar toi: ", idne);
+  getAllUserFromReact = async (
+    cateId,
+    idbrand,
+    selectedPriceRange,
+    orderBy
+  ) => {
+    console.log("id cuar toi: ", cateId);
 
     let response = await getAllProducts(
       "ALL",
-      idne,
+      cateId,
       idbrand,
       selectedPriceRange,
       orderBy
@@ -140,12 +145,12 @@ class ProductManager extends Component {
   };
   createNewUser = async (data) => {
     try {
-      let response = await CreateProducts(data);
+      let response = await createProduct(data);
       if (response && response.errcode !== 0) {
         alert(response.errMessage);
       } else {
         await this.getAllUserFromReact(
-          this.state.idne,
+          this.state.cateId,
           this.state.idbrand,
           this.state.selectedPriceRange,
           this.state.orderBy
@@ -164,13 +169,13 @@ class ProductManager extends Component {
 
   createNewCategories = async (data) => {
     try {
-      let response = await CreateCategories(data);
+      let response = await createCategory(data);
       if (response && response.errcode !== 0) {
         alert(response.errMessage);
         toast.error("tạo thất bại");
       } else {
         await this.getAllUserFromReact(
-          this.state.idne,
+          this.state.cateId,
           this.state.idbrand,
           this.state.selectedPriceRange,
           this.state.orderBy
@@ -191,13 +196,13 @@ class ProductManager extends Component {
 
   handleDeleteUser = async (user) => {
     try {
-      let res = await deleteProducts(user.id);
+      let res = await deleteProduct(user.id);
       if (res && res.errcode !== 0) {
         alert(res.errMessage);
         toast.error("Xóa thất bại");
       } else {
         await this.getAllUserFromReact(
-          this.state.idne,
+          this.state.cateId,
           this.state.idbrand,
           this.state.selectedPriceRange,
           this.state.orderBy
@@ -219,10 +224,10 @@ class ProductManager extends Component {
 
   doEditUser = async (user) => {
     try {
-      let res = await updateProductData(user);
+      let res = await updateProduct(user);
       if (res && res.errcode === 0) {
         await this.getAllUserFromReact(
-          this.state.idne,
+          this.state.cateId,
           this.state.idbrand,
           this.state.selectedPriceRange,
           this.state.orderBy
@@ -269,7 +274,7 @@ class ProductManager extends Component {
 
   render() {
     const { selectedPriceRange, orderBy } = this.state;
-    let { idne, idbrand } = this.state;
+    let { cateId, idbrand } = this.state;
     const { arrProducts, arrCate, arrBrand, currentPage, productsPerPage } =
       this.state;
     const indexOfLastProduct = currentPage * productsPerPage;
@@ -323,9 +328,9 @@ class ProductManager extends Component {
                     <select
                       className="form-control col-3 mr-2"
                       onChange={(event) => {
-                        this.handleOnChangeInput(event, "idne");
+                        this.handleOnChangeInput(event, "cateId");
                       }}
-                      value={idne}
+                      value={cateId}
                     >
                       <option value="">Tất cả loại sản phẩm</option>
                       {arrCate &&
