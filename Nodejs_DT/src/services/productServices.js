@@ -7,15 +7,12 @@ let getAllProducts = (productId, cateId, idbrand, priceRange, orderBy) => {
     try {
       let products = "";
 
-      // Khởi tạo các điều kiện truy vấn
       let queryConditions = {};
 
-      // Lọc theo ID sản phẩm
       if (productId && productId !== "ALL") {
         queryConditions.id = productId;
       }
 
-      // Lọc theo ID hãng
       if (cateId && cateId !== "") {
         queryConditions.idCate = cateId;
       }
@@ -23,7 +20,6 @@ let getAllProducts = (productId, cateId, idbrand, priceRange, orderBy) => {
         queryConditions.idBrand = idbrand;
       }
 
-      // Lọc theo mức giá
       if (priceRange && priceRange !== "") {
         const [minPrice, maxPrice] = priceRange
           .split("-")
@@ -33,18 +29,15 @@ let getAllProducts = (productId, cateId, idbrand, priceRange, orderBy) => {
         };
       }
 
-      // Thêm điều kiện sắp xếp
       let orderCondition = [];
       if (orderBy === "price-asc") {
         orderCondition.push(["price", "ASC"]);
       } else if (orderBy === "price-desc") {
         orderCondition.push(["price", "DESC"]);
       } else {
-        // Sắp xếp mặc định theo createdAt DESC nếu không có điều kiện sắp xếp
         orderCondition.push(["createdAt", "DESC"]);
       }
 
-      // Truy vấn database
       products = await db.Products.findAll({
         where: queryConditions,
         order: orderCondition,
@@ -63,7 +56,6 @@ let getAllProducts = (productId, cateId, idbrand, priceRange, orderBy) => {
         raw: true,
         nest: true,
       });
-
       resolve(products);
     } catch (e) {
       reject(e);
@@ -95,7 +87,6 @@ let getProductDetail = (productId) => {
           nest: true,
         });
       }
-
       resolve(products);
     } catch (e) {
       reject(e);
@@ -163,7 +154,7 @@ let deleteProduct = (productId) => {
     });
     if (!product) {
       resolve({
-        errcode: 2,
+        errcode: 1,
         errMessage: "Product Id isn't exist !",
       });
     }
@@ -182,7 +173,7 @@ let updateProduct = (data) => {
     try {
       if (!data.id || !data.name) {
         resolve({
-          errcode: 2,
+          errcode: 1,
           errMessage: "Missing required parameter",
         });
       }
@@ -190,28 +181,27 @@ let updateProduct = (data) => {
         where: { id: data.id },
         raw: false,
       });
-      if (products) {
-        products.name = data.name;
-        products.price = data.price;
-        products.quantity = data.quantity;
-        products.idCate = data.idCate;
-        products.idBrand = data.idBrand;
-        if (data.avatar) {
-          products.image = data.avatar;
-        }
 
-        products.image = data.avatar;
-        await products.save();
+      if (!products) {
         resolve({
-          errcode: 0,
-          errMessage: "update product succeeds !",
-        });
-      } else {
-        resolve({
-          errcode: 1,
+          errcode: 2,
           errMessage: "product not found !",
         });
       }
+        
+      products.name = data.name;
+      products.price = data.price;
+      products.quantity = data.quantity;
+      products.idCate = data.idCate;
+      products.idBrand = data.idBrand;
+      if (data.avatar) {
+        products.image = data.avatar;
+      }
+      await products.save();
+      resolve({
+        errcode: 0,
+        errMessage: "update product success !",
+      });
     } catch (e) {
       reject(e);
     }
@@ -226,9 +216,8 @@ let checkCategoryName = (name) => {
       });
       if (category) {
         resolve(true);
-      } else {
-        resolve(false);
       }
+      resolve(false);
     } catch (e) {
       reject(e);
     }
@@ -243,9 +232,8 @@ let checkBrandName = (name) => {
       });
       if (brands) {
         resolve(true);
-      } else {
-        resolve(false);
       }
+      resolve(false);
     } catch (e) {
       reject(e);
     }
@@ -255,14 +243,14 @@ let checkBrandName = (name) => {
 let createCategory = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let check = await checkCategoryName(data.name);
-      let check1 = await checkBrandName(data.name);
-      if (check == true) {
+      let checkCName = await checkCategoryName(data.name);
+      let checkBName = await checkBrandName(data.name);
+      if (checkCName == true) {
         resolve({
           errcode: 1,
           errMessage: "Tên loại sản phẩm này đã tồn tại",
         });
-      } else if (check1 == true) {
+      } else if (checkBName == true) {
         resolve({
           errcode: 1,
           errMessage: "Tên hãng sản phẩm này đã tồn tại",
@@ -281,10 +269,6 @@ let createCategory = (data) => {
         resolve({
           errcode: 0,
           data: data,
-        });
-
-        resolve({
-          errcode: 0,
           message: "OK",
         });
       }
@@ -320,7 +304,7 @@ let updateCategory = (data) => {
     try {
       if (!data.id) {
         resolve({
-          errcode: 2,
+          errcode: 1,
           errMessage: "Missing required parameter",
         });
       }
@@ -328,22 +312,22 @@ let updateCategory = (data) => {
         where: { id: data.id },
         raw: false,
       });
-      if (category) {
-        category.name = data.name;
-        if (data.avatar) {
-          category.image = data.avatar;
-        }
-        await category.save();
+      if (!category) {
         resolve({
-          errcode: 0,
-          errMessage: "update categories succeeds !",
-        });
-      } else {
-        resolve({
-          errcode: 1,
+          errcode: 2,
           errMessage: "categories not found !",
         });
       }
+
+      category.name = data.name;
+      if (data.avatar) {
+        category.image = data.avatar;
+      }
+      await category.save();
+      resolve({
+        errcode: 0,
+        errMessage: "update categories succeeds !",
+      });
     } catch (e) {
       reject(e);
     }
@@ -354,16 +338,17 @@ let getAllCategories = (categoryId) => {
   return new Promise(async (resolve, reject) => {
     try {
       let categories = "";
-      if (categoryId == "ALL") {
-        categories = db.Categories.findAll({
-          order: [["createdAt", "ASC"]],
-        });
-      }
+
       if (categoryId && categoryId !== "ALL") {
         categories = await db.Categories.findOne({
           where: { id: categoryId },
         });
       }
+
+      categories = db.Categories.findAll({
+        order: [["createdAt", "ASC"]],
+      });
+
       resolve(categories);
     } catch (e) {
       reject(e);
