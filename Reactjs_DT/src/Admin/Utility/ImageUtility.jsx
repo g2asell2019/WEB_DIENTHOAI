@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { emitter } from "../../utils/emitter";
-import "./ModalProducts.scss";
 import _ from "lodash";
 import CommonUtils from "../../utils/CommonUtils";
 
