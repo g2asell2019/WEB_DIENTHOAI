@@ -5,8 +5,8 @@ import "./ModalEditProducts.scss";
 import _ from "lodash";
 import { Buffer } from "buffer";
 import CommonUtils from "../../utils/CommonUtils";
-import ImageUtility from "./ImageUtility";
-import {validateInput} from "./CRUDUltility";
+import ImageUtility from "../Utility/ImageUtility";
+import {validateInput} from "../Utility/CRUDUltility";
 class ModalEditBrand extends Component {
   constructor(props) {
     super(props);
