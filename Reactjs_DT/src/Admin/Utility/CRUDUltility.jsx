@@ -1,4 +1,4 @@
-function validateInput(requiredArgument) {
+export function validateInput(requiredArgument) {
   let isValid = true;
   let arrInput = requiredArgument;
 
@@ -12,8 +12,4 @@ function validateInput(requiredArgument) {
   }
 
   return isValid;
-}
-
-module.exports = {
-  validateInput: validateInput,
 }
