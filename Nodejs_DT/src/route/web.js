@@ -100,6 +100,9 @@ let initWebRouters = (app) => {
   router.delete("/api/delete-orders", orderController.handleDeleteOrders);
   router.put("/api/edit-orders", orderController.handleEditOder);
 
+  router.get('/vnpay/vnpay_return', orderController.handleVnPayReturn);
+  router.post('/vnpay/create_order', orderController.handleCreatePayment);
+
   router.get("/api/loc-don-hang", orderController.handleLocdonhang);
 
   //api cua chuyen khoa
@@ -110,6 +113,12 @@ let initWebRouters = (app) => {
   router.get("/tanh", (req, res) => {
     return res.send("Hello world with NTanh");
   });
+  
+  router.get('/vnpay/create_order', function (req, res, next) {
+    return res.json({ "status": 502, "message": "Bạn chưa truyền tham số vào đơn hàng!" });
+  });
+
+  
 
   return app.use("/", router);
 };

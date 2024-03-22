@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "./Checkout.css";
-import { CreateOrders, getAllCart } from "../../userService";
-import { useLocation } from "react-router-dom";
+import { CreateOrders, getAllCart, PayWithVNPAY } from "../../userService";
+import { useLocation, useHistory  } from "react-router-dom";
+
+
 export const Order = () => {
   const location = useLocation();
+  const history = useHistory();
   const [totalPrice, setTotalPrice] = useState(location.state.totalPrice);
 
   const [user, setUser] = useState({ taikhoan: "" });
@@ -106,7 +109,13 @@ export const Order = () => {
 
   const taomoidonhang = async (data) => {
     try {
-      const response = await CreateOrders(data);
+      let response;
+      if (data?.payment === "atm") {
+        response = await PayWithVNPAY(data);
+      }
+      else {
+        response = await CreateOrders(data);
+      }
       if (response && response.errcode !== 0) {
         toast.error("Đặt hàng thất bại !");
         alert(response.errMessage);
@@ -150,6 +159,7 @@ export const Order = () => {
 
   return (
     <>
+    <form method="post" action={"http://localhost:8080/vnpay/create_order"}>
       <div className="order">
         <div className="container-o">
           <h1>Điền thông tin đơn đặt hàng</h1>
@@ -157,6 +167,7 @@ export const Order = () => {
             <input
               type="text"
               id="name"
+              name="receiver"
               required
               onChange={(event) => {
                 handleOnChangeInput(event, "receiver");
@@ -170,6 +181,7 @@ export const Order = () => {
             <input
               type="text"
               id="name"
+              name="phoneNumber"
               required
               onChange={(event) => {
                 handleOnChangeInput(event, "phoneNumber");
@@ -183,6 +195,7 @@ export const Order = () => {
             <input
               type="text"
               id="text"
+              name="receiving_point"
               required
               onChange={(event) => {
                 handleOnChangeInput(event, "receiving_point");
@@ -197,6 +210,7 @@ export const Order = () => {
             <input
               type="text"
               id="text"
+              name="note"
               required
               onChange={(event) => {
                 handleOnChangeInput(event, "note");
@@ -207,6 +221,7 @@ export const Order = () => {
             <label>Ghi chú</label>
           </div>
           <div className="input-data">
+            <input name="total_value" type="hidden" value={totalPrice} />
             Tổng số tiền: {formatCurrency(totalPrice)} vnd
             <select
               className="ml-5"
@@ -217,10 +232,10 @@ export const Order = () => {
               value={state.payment}
             >
               <option value="">chọn phương thức thanh toán</option>
-              <option value="Thanh toán bằng tiền mặt">
+              <option value="cod">
                 Thanh toán bằng tiền mặt
               </option>
-              <option value="Thanh toán bằng ngân hàng">
+              <option value="atm">
                 Thanh toán bằng ngân hàng
               </option>
             </select>
@@ -235,6 +250,7 @@ export const Order = () => {
           </button>
         </div>
       </div>
+      </form>
     </>
   );
 };
