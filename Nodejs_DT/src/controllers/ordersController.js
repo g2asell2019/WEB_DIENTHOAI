@@ -134,7 +134,7 @@ let handleCreatePayment = async(req, res) => {
     vnp_Params['vnp_Locale'] = locale;
     vnp_Params['vnp_CurrCode'] = currCode;
     vnp_Params['vnp_TxnRef'] = orderId;
-    vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId;
+    vnp_Params['vnp_OrderInfo'] = req.body.order_id;
     vnp_Params['vnp_OrderType'] = 'other';
     vnp_Params['vnp_Amount'] = parseInt(amount) * 100;
     vnp_Params['vnp_ReturnUrl'] = returnUrl;

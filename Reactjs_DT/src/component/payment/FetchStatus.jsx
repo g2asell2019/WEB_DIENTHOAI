@@ -10,7 +10,7 @@ const useFetch = (url) => {
       fetch(url)
         .then(res => {
           if (!res.ok) {
-            throw Error('sKiLl IsSuE :))))');
+            throw Error('');
           }
 
           return res.json();

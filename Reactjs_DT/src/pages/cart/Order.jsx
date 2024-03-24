@@ -3,7 +3,10 @@ import { toast } from "react-toastify";
 import "./Checkout.css";
 import { CreateOrders, getAllCart, PayWithVNPAY } from "../../userService";
 import { useLocation, useHistory  } from "react-router-dom";
-
+import PaymentGate from "../../component/payment/PaymentGate";
+import { VNPay } from "../../component/payment/VNPay";
+import { ViettelPay } from "../../component/payment/ViettelPay";
+import { COD } from "../../component/payment/COD";
 
 export const Order = () => {
   const location = useLocation();
@@ -80,7 +83,7 @@ export const Order = () => {
 
       taomoidonhang({
         receiver: state.receiver,
-        order_status: "Đang chờ để duyệt",
+        order_status: state.payment == "cod" ? "Đang chờ để duyệt" : "Đang chờ thanh toán",
         receiving_point: state.receiving_point,
         total_value: totalPrice,
         phoneNumber: state.phoneNumber,
@@ -110,12 +113,20 @@ export const Order = () => {
   const taomoidonhang = async (data) => {
     try {
       let response;
-      if (data?.payment === "atm") {
-        response = await PayWithVNPAY(data);
+      response = await CreateOrders(data);
+      let paymentGate = new PaymentGate();
+      if (data?.payment === "cod") {
+        paymentGate.setStrategy(new COD());
       }
-      else {
-        response = await CreateOrders(data);
+      else if (data?.payment === "atm") {
+        paymentGate.setStrategy(new VNPay());
+
       }
+      else if (data?.payment === "viettel_pay") {
+        paymentGate.setStrategy(new ViettelPay());
+      }
+      paymentGate.pay(response);
+
       if (response && response.errcode !== 0) {
         toast.error("Đặt hàng thất bại !");
         alert(response.errMessage);
@@ -236,12 +247,15 @@ export const Order = () => {
                 Thanh toán bằng tiền mặt
               </option>
               <option value="atm">
-                Thanh toán bằng ngân hàng
+                Thanh toán bằng VNPay
               </option>
+              <option value="viettel_pay" disabled>Thanh toán bằng ViettelPay</option>
             </select>
           </div>
+          <input type="text" style={{display: "none"}} name="order_id" id="order_id" value="" ></input>
+          <input id="checkOutSubmit" type="submit" style={{display: "none"}} ></input>
           <button
-            type="submit"
+            type="button"
             onClick={() => {
               handleAddOrders();
             }}
