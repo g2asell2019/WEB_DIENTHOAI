@@ -1,7 +1,7 @@
 import brandServices from "../services/brandServices";
 
-let handlegetAllBrand = async (req, res) => {
-  let id = req.query.id; //all, id
+let handleGetAllBrand = async (req, res) => {
+  let id = req.query.id;
   if (!id) {
     return res.status(200).json({
       errcode: 1,
@@ -19,7 +19,6 @@ let handlegetAllBrand = async (req, res) => {
 
 let handleCreateBrand = async (req, res) => {
   let message = await brandServices.createBrand(req.body);
-  console.log(message);
   return res.status(200).json(message);
 };
 
@@ -31,7 +30,6 @@ let handleDeleteBrand = async (req, res) => {
     });
   }
   let message = await brandServices.deleteBrand(req.body.id);
-  console.log(message);
   return res.status(200).json(message);
 };
 
@@ -42,7 +40,7 @@ let handleEditBrand = async (req, res) => {
 };
 
 module.exports = {
-  handlegetAllBrand: handlegetAllBrand,
+  handleGetAllBrand: handleGetAllBrand,
   handleCreateBrand: handleCreateBrand,
   handleDeleteBrand: handleDeleteBrand,
   handleEditBrand: handleEditBrand,

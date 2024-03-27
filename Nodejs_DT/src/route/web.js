@@ -67,7 +67,7 @@ let initWebRouters = (app) => {
   router.post("/api/create-new-brand", brandController.handleCreateBrand);
   router.delete("/api/delete-brand", brandController.handleDeleteBrand);
   router.put("/api/edit-brand", brandController.handleEditBrand);
-  router.get("/api/get-all-brand", brandController.handlegetAllBrand);
+  router.get("/api/get-all-brand", brandController.handleGetAllBrand);
 
   // api Sales
   router.post("/api/create-new-sale", SaleController.handleCreateSale);
