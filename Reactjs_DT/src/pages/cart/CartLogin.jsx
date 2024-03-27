@@ -5,13 +5,15 @@ import { Buffer } from "buffer";
 import { toast } from 'react-toastify';
 import {formatCurrency} from "../../utils/formatCurrency.js"
 import { getAllCart, updateCartData, deleteCart } from "../../userService";
-
+import { TotalPriceVisitor } from "./TotalPriceVisitor";
 export const CartLogin = () => {
+function acceptVisitor(cartItems, visitor) {
+  for (const cartItem of cartItems) {
+    visitor.visitCartItem(cartItem);
+  }
+}
   const [user, setUser] = useState({ taikhoan: "" });
   const [arrCart, setListCart] = useState([]);
-
-
-
   useEffect(() => {
     const getUserDataFromLocalStorage = async () => {
       const userData = localStorage.getItem("user");
@@ -39,31 +41,25 @@ export const CartLogin = () => {
       laydanhsachgiohang();
     }
   }, [user.id]);
-
-
-
   console.log("xem id user",user.id);
 
   const history = useHistory();
 
-  const totalPrice = arrCart.reduce(
-    (price, item) => price + item.quantity * item.price,
-    0
-  );
+
   const handleContinueShopping = () => {
     // Sử dụng history.goBack() để quay lại trang trước đó
     history.goBack();
   };
+const totalPriceVisitor = new TotalPriceVisitor();
+acceptVisitor(arrCart, totalPriceVisitor);
+const totalPrice1 = totalPriceVisitor.totalPrice;
 
   
 
   const handleCheckout = () => {
+
     history.push({ pathname: "./cart/Checkout", state: { totalPrice: totalPrice } });
   };
-
-
-
-
 
   const addToCart = (product) => {
    let tangsoluong=product.quantity+1;
