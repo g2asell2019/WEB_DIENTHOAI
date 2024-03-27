@@ -42,9 +42,8 @@ const getAllProducts = (
   );
 };
 
-const getDeltaiProduct = (inputId) => {
-  //teamplate String
-  return axios.get(`/api/get-deltai-product?id=${inputId}`);
+const getDetailProduct = (inputId) => {
+  return axios.get(`/api/get-detail-product?id=${inputId}`);
 };
 
 const createProduct = (data) => {
@@ -199,7 +198,7 @@ export {
   deleteUserService,
   editUserService,
   getAllProducts,
-  getDeltaiProduct,
+  getDetailProduct,
   createProduct,
   deleteProduct,
   updateProduct,

@@ -30,7 +30,7 @@ let initWebRouters = (app) => {
 
   //api Products
   router.get("/api/get-all-products", productController.handleGetAllProducts);
-  router.get("/api/get-deltai-product", productController.handleDetailProduct);
+  router.get("/api/get-detail-product", productController.handleDetailProduct);
   router.post(
     "/api/create-new-products",
     productController.handleCreateProduct
