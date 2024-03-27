@@ -1,5 +1,5 @@
 // Singleton Pattern (Dependency Injection)
-import ServiceFactory from "../services/ServiceFactory"; //Instance
+import ServiceFactory from "../services/productServices"; //Instance
 
 const productService = ServiceFactory.createService("product");
 const categoryService = ServiceFactory.createService("category");

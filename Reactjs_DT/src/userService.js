@@ -12,9 +12,11 @@ const getAllUser = (inputId) => {
   //teamplate String
   return axios.get(`/api/get-all-users?id=${inputId}`);
 };
+
 const createNewUseService = (data) => {
   return axios.post("/api/create-new-user", data);
 };
+
 const deleteUserService = (userId) => {
   //return axios.delete('/api/delete-user',{id:userId})
   return axios.delete("/api/delete-user", {
@@ -23,11 +25,10 @@ const deleteUserService = (userId) => {
     },
   });
 };
+
 const editUserService = (inputData) => {
   return axios.put("/api/edit-user", inputData);
 };
-
-// goi api cua products
 
 const getAllProducts = (
   inputId,
@@ -36,7 +37,6 @@ const getAllProducts = (
   selectedPriceRange,
   orderBy
 ) => {
-  // Template String
   return axios.get(
     `api/get-all-products?id=${inputId}&idCate=${cateId}&idBrand=${idbrand}&price=${selectedPriceRange}&orderBy=${orderBy}`
   );

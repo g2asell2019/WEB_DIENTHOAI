@@ -30,8 +30,8 @@ import { pageSearch } from "./common/header/pageSearch";
 import OrderHistory from "./pages/profile/OrderHistory";
 import OrderDetail from "./pages/profile/OrderDetail";
 import { CartLogin } from "./pages/cart/CartLogin";
+
 function App() {
-  //step 1: fetch data from DB
   const { productItems } = Data;
   const { shopItems } = Sdata;
   const { phoneItems } = PData;
@@ -125,7 +125,6 @@ function App() {
           <Switch>
             <Route path="/" exact>
               <Header cartItem={cartItem} />
-
               <Pages
                 productItems={productItems}
                 addToCart={addToCart}

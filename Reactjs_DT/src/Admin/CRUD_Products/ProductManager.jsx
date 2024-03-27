@@ -52,8 +52,6 @@ class ProductManager extends Component {
         ...copyState,
       },
       () => {
-        //console.log('check good state: ',this.state.cateId);
-        // muốn lấy giá trị từ hàm render thì phải bỏ vào đây
         this.getAllUserFromReact(
           this.state.cateId,
           this.state.idbrand,
@@ -62,9 +60,6 @@ class ProductManager extends Component {
         );
       }
     );
-    //console.log('copystate: ',copyState);
-
-    // console.log(event.target.value,id)
   };
 
   async componentDidMount() {
@@ -160,11 +155,9 @@ class ProductManager extends Component {
         });
         emitter.emit("EVENT_CLEAR_MODAL_DATA");
       }
-      //  console.log("response create user: " , response)
     } catch (e) {
       console.log(e);
     }
-    // console.log('check data from child',data)
   };
 
   createNewCategories = async (data) => {
@@ -187,11 +180,9 @@ class ProductManager extends Component {
         toast.success("tạo thành công");
         emitter.emit("EVENT_CLEAR_MODAL_DATA");
       }
-      //  console.log("response create user: " , response)
     } catch (e) {
       console.log(e);
     }
-    // console.log('check data from child',data)
   };
 
   handleDeleteUser = async (user) => {
@@ -209,7 +200,6 @@ class ProductManager extends Component {
         );
         toast.success("Xóa Thành công");
       }
-      console.log(res);
     } catch (e) {
       console.log(e);
     }
@@ -251,7 +241,6 @@ class ProductManager extends Component {
   }
 
   formatCurrency(number) {
-    // Sử dụng Intl.NumberFormat để định dạng số
     const formatter = new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",

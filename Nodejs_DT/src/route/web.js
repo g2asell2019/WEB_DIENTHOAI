@@ -8,9 +8,9 @@ import SaleController from "../controllers/saleController";
 import CartController from "../controllers/cartController";
 import OrderdetailController from "../controllers/orderdetailController";
 
-let router = express.Router();
+const router = express.Router();
 
-let initWebRouters = (app) => {
+const initWebRouters = (app) => {
   router.get("/", homeController.getHomePage);
   router.get("/about", homeController.getAboutPage);
   router.get("/crud", homeController.getCRUD);
@@ -20,7 +20,7 @@ let initWebRouters = (app) => {
   router.post("/put-crud", homeController.putCRUD);
   router.get("/delete-crud", homeController.deleteCRUD);
 
-  //api Users
+  //User routes
   router.post("/api/login", userController.handleLogin);
   router.get("/api/get-all-users", userController.handleGetAllUsers);
   router.post("/api/create-new-user", userController.handleCreateUser);
@@ -28,7 +28,7 @@ let initWebRouters = (app) => {
   router.delete("/api/delete-user", userController.handleDeleteUser);
   router.get("/api/allcode", userController.handleGetAllCodes);
 
-  //api Products
+  //Product route
   router.get("/api/get-all-products", productController.handleGetAllProducts);
   router.get("/api/get-detail-product", productController.handleDetailProduct);
   router.post(
@@ -38,13 +38,13 @@ let initWebRouters = (app) => {
   router.put("/api/edit-products", productController.handleEditProduct);
   router.delete("/api/delete-products", productController.handleDeleteProduct);
 
-  //api Carts
+  //Cart route
   router.post("/api/create-new-cart", CartController.handleCreateCart);
   router.delete("/api/delete-cart", CartController.handleDeleteCart);
   router.put("/api/edit-cart", CartController.handleEditCart);
   router.get("/api/get-all-cart", CartController.handlegetAllCart);
 
-  //api Orderdetails
+  //Orderdetail route
   router.post(
     "/api/create-new-Orderdetail",
     OrderdetailController.handleCreateOderdetail
@@ -63,19 +63,19 @@ let initWebRouters = (app) => {
   );
   router.get("/api/get-lay-hoa-don", OrderdetailController.handleLayhoadon);
 
-  //api Brands
+  //Brand route
   router.post("/api/create-new-brand", brandController.handleCreateBrand);
   router.delete("/api/delete-brand", brandController.handleDeleteBrand);
   router.put("/api/edit-brand", brandController.handleEditBrand);
   router.get("/api/get-all-brand", brandController.handleGetAllBrand);
 
-  // api Sales
+  //Sale route
   router.post("/api/create-new-sale", SaleController.handleCreateSale);
   router.delete("/api/delete-sale", SaleController.handleDeleteSale);
   router.put("/api/edit-sale", SaleController.handleEditSale);
   router.get("/api/get-all-sale", SaleController.handlegetAllSale);
 
-  //api Categories
+  //Category route
   router.post(
     "/api/create-new-categories",
     productController.handleCreateCategory
@@ -90,7 +90,7 @@ let initWebRouters = (app) => {
     productController.handlegetAllCategories
   );
 
-  //api Orders
+  //Order route
   router.get("/api/get-all-orders", orderController.handleGetAllOrders);
   router.post("/api/create-new-orders", orderController.handleCreateOrders);
   router.delete("/api/delete-orders", orderController.handleDeleteOrders);

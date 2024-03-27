@@ -28,10 +28,10 @@ let CreateOrderDetails = (data) => {
     }
   });
 };
+
 let deleteOrderDetails = (OrderDetailsId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // Find all OrderDetails with the given order_id
       let orderDetailsList = await db.OrderDetails.findAll({
         where: { order_id: OrderDetailsId },
       });

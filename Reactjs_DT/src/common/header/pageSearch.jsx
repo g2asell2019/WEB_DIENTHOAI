@@ -84,15 +84,12 @@ export const pageSearch = ({ addToCart, location }) => {
     setordeby(order);
   };
   const handleOnChangeInput = (event) => {
-    // Thực hiện các hành động khi input thay đổi
-    // Ví dụ: cập nhật giá trị selectedPriceRange
     setgia(event.target.value);
   };
 
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("query");
 
-  // Thực hiện tìm kiếm dựa trên query
   const filteredData = arrProducts.filter((item) =>
     item.name.toLowerCase().includes(query.toLowerCase())
   );

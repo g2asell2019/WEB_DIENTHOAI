@@ -17,7 +17,6 @@ export const Order = () => {
     total_value: totalPrice,
     note: "",
     phoneNumber: "",
-
     payment: "",
     order_idUser: user.id,
   });

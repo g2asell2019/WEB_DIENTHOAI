@@ -25,7 +25,7 @@ const OrderDetail = () => {
     };
 
     getUserDataFromLocalStorage();
-  }, []); // Thêm mảng rỗng để chỉ chạy một lần khi component mount
+  }, []);
 
   useEffect(() => {
     if (user.id) {
@@ -87,17 +87,14 @@ const OrderDetail = () => {
     return `${day}/${month}/${year}`;
   };
   const formatCurrency = (number) => {
-    // Sử dụng Intl.NumberFormat để định dạng số
     const formatter = new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
-      minimumFractionDigits: 0, // Loại bỏ phần thập phân
+      minimumFractionDigits: 0,
     });
 
-    // Lấy chuỗi đã định dạng số
     const formattedNumber = formatter.format(number);
 
-    // Loại bỏ khoảng trắng giữa số và đơn vị tiền tệ (₫)
     return formattedNumber.replace(/\s/g, "");
   };
 
