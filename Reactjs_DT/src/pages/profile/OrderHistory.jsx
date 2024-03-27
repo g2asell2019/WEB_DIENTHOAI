@@ -152,7 +152,6 @@ const OrderHistory = () => {
     <>
       <div className="oh_wrapper">
         <h1>LỊCH SỬ ĐẶT HÀNG</h1>
-
         <table>
           <thead>
             <tr className="history">
