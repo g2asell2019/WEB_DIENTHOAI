@@ -1,9 +1,16 @@
-import productServices from "../services/productServices";
+// Singleton Pattern (Dependency Injection)
+import ServiceFactory from "../services/ServiceFactory"; //Instance
+
+const productService = ServiceFactory.createService("product");
+const categoryService = ServiceFactory.createService("category");
+
+// Separation of Concerns (SoC)
+// Error Handling Patterns
 
 const handleGetAllProducts = async (req, res) => {
-  try{
-    let { id, idCate, idBrand, price, orderBy } = req.query;
-  
+  try {
+    const { id, idCate, idBrand, price, orderBy } = req.query;
+
     if (!id) {
       return res.status(200).json({
         errCode: 1,
@@ -11,30 +18,31 @@ const handleGetAllProducts = async (req, res) => {
         products: [],
       });
     }
-    const products = await productServices.getAllProducts(
+
+    const products = await productService.getAllProducts(
       id,
       idCate,
       idBrand,
       price,
       orderBy
     );
-  
+
     return res.status(200).json({
       errCode: 0,
       errMessage: "OK",
       products,
     });
-  }catch(e){
+  } catch (e) {
     return res.status(500).json({
       errCode: 500,
       errMessage: e.message || "Internal Server Error",
-      products: []
-    })
+      products: [],
+    });
   }
 };
 
 const handleDetailProduct = async (req, res) => {
-  try{
+  try {
     const { id } = req.query;
 
     if (!id) {
@@ -45,13 +53,13 @@ const handleDetailProduct = async (req, res) => {
       });
     }
 
-    const product = await productServices.getProductDetail(id);
+    const product = await productService.getProductDetail(id);
     return res.status(200).json({
       errCode: 0,
       errMessage: "OK",
       product,
     });
-  }catch(e) {
+  } catch (e) {
     return res.status(500).json({
       errCode: 500,
       errMessage: e.message || "Internal Server Error",
@@ -61,19 +69,12 @@ const handleDetailProduct = async (req, res) => {
 };
 
 const handleCreateProduct = async (req, res) => {
-  try {
-    const message = await productServices.createProduct(req.body);
-    return res.status(200).json(message);
-  } catch (e) {
-    return res.status(500).json({
-      errCode: 500,
-      errMessage: e.message || "Internal Server Error",
-    });
-  }
+  const message = await productService.createProduct(req.body);
+  return res.status(200).json(message);
 };
 
 const handleDeleteProduct = async (req, res) => {
-  try{
+  try {
     const { id } = req.body;
     if (!id) {
       return res.status(200).json({
@@ -81,9 +82,9 @@ const handleDeleteProduct = async (req, res) => {
         errMessage: "Missing required parameters",
       });
     }
-    const message = await productServices.deleteProduct(id);
+    const message = await productService.deleteProduct(id);
     return res.status(200).json(message);
-  }catch (e) {
+  } catch (e) {
     return res.status(500).json({
       errCode: 500,
       errMessage: e.message || "Internal Server Error",
@@ -94,7 +95,7 @@ const handleDeleteProduct = async (req, res) => {
 const handleEditProduct = async (req, res) => {
   try {
     const data = req.body;
-    const message = await productServices.updateProduct(data);
+    const message = await productService.updateProduct(data);
     return res.status(200).json(message);
   } catch (e) {
     return res.status(500).json({
@@ -104,8 +105,8 @@ const handleEditProduct = async (req, res) => {
   }
 };
 
-let handlegetAllCategories = async (req, res) => {
-  let id = req.query.id;
+const handlegetAllCategories = async (req, res) => {
+  const id = req.query.id;
   if (!id) {
     return res.status(200).json({
       errCode: 1,
@@ -113,7 +114,7 @@ let handlegetAllCategories = async (req, res) => {
       products: [],
     });
   }
-  let categories = await productServices.getAllCategories(id);
+  const categories = await categoryService.getAllCategories(id);
   console.log(categories);
   return res.status(200).json({
     errCode: 0,
@@ -122,25 +123,25 @@ let handlegetAllCategories = async (req, res) => {
   });
 };
 
-let handleCreateCategory = async (req, res) => {
-  let message = await productServices.createCategory(req.body);
+const handleCreateCategory = async (req, res) => {
+  const message = await categoryService.createCategory(req.body);
   return res.status(200).json(message);
 };
 
-let handleDeleteCategory = async (req, res) => {
+const handleDeleteCategory = async (req, res) => {
   if (!req.body.id) {
     return res.status(200).json({
       errCode: 1,
       errMessage: "Missing required parameters !",
     });
   }
-  let message = await productServices.deleteCategory(req.body.id);
+  const message = await categoryService.deleteCategory(req.body.id);
   return res.status(200).json(message);
 };
 
-let handleEditCategory = async (req, res) => {
-  let data = req.body;
-  let message = await productServices.updateCategory(data);
+const handleEditCategory = async (req, res) => {
+  const data = req.body;
+  const message = await categoryService.updateCategory(data);
   return res.status(200).json(message);
 };
 
