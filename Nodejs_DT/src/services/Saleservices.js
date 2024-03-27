@@ -13,12 +13,12 @@ let CreateSale = (data) => {
 
             });
             resolve({
-                errcode: 0,
+                errCode: 0,
                 data: data
             })
 
             resolve({
-                errcode: 0,
+                errCode: 0,
                 message: 'OK'
             })
         } catch (e) {
@@ -34,7 +34,7 @@ let deleteSale = (SaleId) => {
         })
         if (!sale) {
             resolve({
-                errcode: 2,
+                errCode: 2,
                 errMessage: "loại sản phẩm  không tồn tại"
             })
         }
@@ -42,7 +42,7 @@ let deleteSale = (SaleId) => {
             where: { id: SaleId }
         });
         resolve({
-            errcode: 0,
+            errCode: 0,
             errMessage: "sale sản phẩm đã bị xóa !"
 
         });
@@ -58,7 +58,7 @@ let updateSaleData = (data) => {
 
             if (!data.id) {
                 resolve({
-                    errcode: 2,
+                    errCode: 2,
                     errMessage: "Missing required parameter"
                 })
             }
@@ -76,12 +76,12 @@ let updateSaleData = (data) => {
 
                 await Sale.save();
                 resolve({
-                    errcode: 0,
+                    errCode: 0,
                     errMessage: "update Sale succeeds !"
                 });
             } else {
                 resolve({
-                    errcode: 1,
+                    errCode: 1,
                     errMessage: "Sale not found !"
                 });
             }

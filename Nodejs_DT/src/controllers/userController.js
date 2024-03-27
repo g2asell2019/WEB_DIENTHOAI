@@ -6,7 +6,7 @@ let handleLogin = async (req, res) => {
 
   if (!username || !password) {
     return res.status(500).json({
-      errcode: 1,
+      errCode: 1,
       message: "vui lòng điền đầy đủ thông tin",
     });
   }
@@ -14,7 +14,7 @@ let handleLogin = async (req, res) => {
   let userData = await userSevices.handleLogin(username, password);
 
   return res.status(200).json({
-    errcode: userData.errcode,
+    errCode: userData.errCode,
     message: userData.errMessage,
     user: userData.user ? userData.user : {},
   });
@@ -24,14 +24,14 @@ let handleGetAllUsers = async (req, res) => {
   let id = req.query.id;
   if (!id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing require parameters",
       users: [],
     });
   }
   let users = await userSevices.getAllUsers(id);
   return res.status(200).json({
-    errcode: 0,
+    errCode: 0,
     errMessage: "OK",
     users,
   });
@@ -45,7 +45,7 @@ let handleCreateUser = async (req, res) => {
 let handleDeleteUser = async (req, res) => {
   if (!req.body.id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing required parameters !",
     });
   }
@@ -66,7 +66,7 @@ let handleGetAllCodes = async (req, res) => {
   } catch (e) {
     console.log("Get allcode error", e);
     return res.status(200).json({
-      errcode: -1,
+      errCode: -1,
       errMessage: "Error from server",
     });
   }

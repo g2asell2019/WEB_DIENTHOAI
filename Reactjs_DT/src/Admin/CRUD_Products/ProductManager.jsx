@@ -79,7 +79,7 @@ class ProductManager extends Component {
   }
   getAllCategoriesReact = async () => {
     let response = await getAllCategories("ALL");
-    if (response && response.errcode == 0) {
+    if (response && response.errCode == 0) {
       this.setState({
         arrCate: response.categories,
       });
@@ -87,7 +87,7 @@ class ProductManager extends Component {
   };
   getAllBrandReact = async () => {
     let response = await getAllBrand("ALL");
-    if (response && response.errcode == 0) {
+    if (response && response.errCode == 0) {
       this.setState({
         arrBrand: response.Brand,
       });
@@ -110,7 +110,7 @@ class ProductManager extends Component {
       orderBy
     );
 
-    if (response && response.errcode == 0) {
+    if (response && response.errCode == 0) {
       this.setState({
         arrProducts: response.products,
       });
@@ -146,7 +146,7 @@ class ProductManager extends Component {
   createNewUser = async (data) => {
     try {
       let response = await createProduct(data);
-      if (response && response.errcode !== 0) {
+      if (response && response.errCode !== 0) {
         alert(response.errMessage);
       } else {
         await this.getAllUserFromReact(
@@ -170,7 +170,7 @@ class ProductManager extends Component {
   createNewCategories = async (data) => {
     try {
       let response = await createCategory(data);
-      if (response && response.errcode !== 0) {
+      if (response && response.errCode !== 0) {
         alert(response.errMessage);
         toast.error("tạo thất bại");
       } else {
@@ -197,7 +197,7 @@ class ProductManager extends Component {
   handleDeleteUser = async (user) => {
     try {
       let res = await deleteProduct(user.id);
-      if (res && res.errcode !== 0) {
+      if (res && res.errCode !== 0) {
         alert(res.errMessage);
         toast.error("Xóa thất bại");
       } else {
@@ -225,7 +225,7 @@ class ProductManager extends Component {
   doEditUser = async (user) => {
     try {
       let res = await updateProduct(user);
-      if (res && res.errcode === 0) {
+      if (res && res.errCode === 0) {
         await this.getAllUserFromReact(
           this.state.cateId,
           this.state.idbrand,

@@ -1,29 +1,24 @@
-import categories from "../models/categories";
 import db from "../models/index";
-const { Sequelize, Op } = require("sequelize");
+import { Op } from "sequelize";
 
-let getAllProducts = (productId, cateId, idbrand, priceRange, orderBy) => {
+const getAllProducts = (productId, cateId, idbrand, priceRange, orderBy) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let products = "";
-
       let queryConditions = {};
 
-      if (productId && productId !== "ALL") {
+      if (productId !== "ALL") {
         queryConditions.id = productId;
       }
 
-      if (cateId && cateId !== "") {
+      if (cateId) {
         queryConditions.idCate = cateId;
       }
-      if (idbrand && idbrand !== "") {
+      if (idbrand) {
         queryConditions.idBrand = idbrand;
       }
 
       if (priceRange && priceRange !== "") {
-        const [minPrice, maxPrice] = priceRange
-          .split("-")
-          .map((price) => parseFloat(price));
+        const [minPrice, maxPrice] = priceRange.split("-").map(parseFloat);
         queryConditions.price = {
           [Op.between]: [minPrice, maxPrice],
         };
@@ -38,7 +33,7 @@ let getAllProducts = (productId, cateId, idbrand, priceRange, orderBy) => {
         orderCondition.push(["createdAt", "DESC"]);
       }
 
-      products = await db.Products.findAll({
+      let products = await db.Products.findAll({
         where: queryConditions,
         order: orderCondition,
         include: [
@@ -66,10 +61,10 @@ let getAllProducts = (productId, cateId, idbrand, priceRange, orderBy) => {
 let getProductDetail = (productId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let products = "";
+      let product = null;
 
       if (productId && productId !== "ALL") {
-        products = await db.Products.findOne({
+        product = await db.Products.findOne({
           where: { id: productId },
           include: [
             {
@@ -87,40 +82,39 @@ let getProductDetail = (productId) => {
           nest: true,
         });
       }
-      resolve(products);
+      resolve(product);
     } catch (e) {
       reject(e);
     }
   });
 };
 
-let checkProductName = (name) => {
+const checkProductName = (name) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let products = await db.Products.findOne({
+      let product = await db.Products.findOne({
         where: { name: name },
       });
-      if (products) {
-        resolve(true);
-      } else {
-        resolve(false);
-      }
+      resolve(!!product);
     } catch (e) {
       reject(e);
     }
   });
 };
 
-let createProduct = (data) => {
+const createProduct = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let check = await checkProductName(data.name);
-      if (check == true) {
+      let isProductNameExist = await checkProductName(data.name);
+      if (isProductNameExist) {
         resolve({
-          errcode: 1,
-          errMessage: "Tên sản phẩm đã tồn tại",
+          errCode: 1,
+          errMessage: "Product name already exists",
         });
       } else {
+        if (!data) {
+          data = {};
+        }
         await db.Products.create({
           name: data.name,
           price: data.price,
@@ -132,13 +126,9 @@ let createProduct = (data) => {
         if (data && data.image) {
           data.image = Buffer.from(data.image, "base64").toString("binary");
         }
-        if (!data) {
-          data = {};
-        }
         resolve({
-          errcode: 0,
-          data: data,
-          message: "OK",
+          errCode: 0,
+          message: "Product created successfully",
         });
       }
     } catch (e) {
@@ -147,61 +137,43 @@ let createProduct = (data) => {
   });
 };
 
-let deleteProduct = (productId) => {
+const deleteProduct = (productId) => {
   return new Promise(async (resolve, reject) => {
-    let product = await db.Products.findOne({
-      where: { id: productId },
-    });
-    if (!product) {
-      resolve({
-        errcode: 1,
-        errMessage: "Product Id isn't exist !",
-      });
+    try {
+      let product = await db.Products.findOne({ where: { id: productId } });
+      if (!product) {
+        resolve({
+          errCode: 1,
+          errMessage: "Product doesn't exist",
+        });
+      } else {
+        await db.Products.destroy({ where: { id: productId } });
+        resolve({ errCode: 0, message: "Product deleted successfully" });
+      }
+    } catch (e) {
+      reject(e);
     }
-    await db.Products.destroy({
-      where: { id: productId },
-    });
-    resolve({
-      errcode: 0,
-      errMessage: "Product is deleted !",
-    });
   });
 };
 
-let updateProduct = (data) => {
+const updateProduct = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.id || !data.name) {
-        resolve({
-          errcode: 1,
-          errMessage: "Missing required parameter",
-        });
-      }
-      let products = await db.Products.findOne({
+      let product = await db.Products.findOne({
         where: { id: data.id },
         raw: false,
       });
 
-      if (!products) {
+      if (!product) {
         resolve({
-          errcode: 2,
-          errMessage: "product not found !",
+          errCode: 1,
+          errMessage: "Product not found",
         });
+      } else {
+        product.set(data);
+        await product.save();
+        resolve({ errCode: 0, message: "Product updated successfully" });
       }
-        
-      products.name = data.name;
-      products.price = data.price;
-      products.quantity = data.quantity;
-      products.idCate = data.idCate;
-      products.idBrand = data.idBrand;
-      if (data.avatar) {
-        products.image = data.avatar;
-      }
-      await products.save();
-      resolve({
-        errcode: 0,
-        errMessage: "update product success !",
-      });
     } catch (e) {
       reject(e);
     }
@@ -247,12 +219,12 @@ let createCategory = (data) => {
       let checkBName = await checkBrandName(data.name);
       if (checkCName == true) {
         resolve({
-          errcode: 1,
+          errCode: 1,
           errMessage: "Tên loại sản phẩm này đã tồn tại",
         });
       } else if (checkBName == true) {
         resolve({
-          errcode: 1,
+          errCode: 1,
           errMessage: "Tên hãng sản phẩm này đã tồn tại",
         });
       } else {
@@ -267,7 +239,7 @@ let createCategory = (data) => {
           data = {};
         }
         resolve({
-          errcode: 0,
+          errCode: 0,
           data: data,
           message: "OK",
         });
@@ -285,7 +257,7 @@ let deleteCategory = (categoryId) => {
     });
     if (!category) {
       resolve({
-        errcode: 2,
+        errCode: 2,
         errMessage: "loại sản phẩm  không tồn tại",
       });
     }
@@ -293,7 +265,7 @@ let deleteCategory = (categoryId) => {
       where: { id: categoryId },
     });
     resolve({
-      errcode: 0,
+      errCode: 0,
       errMessage: "loại sản phẩm đã bị xóa !",
     });
   });
@@ -304,7 +276,7 @@ let updateCategory = (data) => {
     try {
       if (!data.id) {
         resolve({
-          errcode: 1,
+          errCode: 1,
           errMessage: "Missing required parameter",
         });
       }
@@ -314,7 +286,7 @@ let updateCategory = (data) => {
       });
       if (!category) {
         resolve({
-          errcode: 2,
+          errCode: 2,
           errMessage: "categories not found !",
         });
       }
@@ -325,7 +297,7 @@ let updateCategory = (data) => {
       }
       await category.save();
       resolve({
-        errcode: 0,
+        errCode: 0,
         errMessage: "update categories succeeds !",
       });
     } catch (e) {

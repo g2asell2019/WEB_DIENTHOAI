@@ -12,7 +12,7 @@ export const Categories = () => {
 
   const getAllCategoriesReact = async () => {
     let response = await getAllCategories("ALL");
-    if (response && response.errcode === 0) {
+    if (response && response.errCode === 0) {
       // Assuming the response.categories is an array
       setCategories(response.categories);
 
@@ -30,9 +30,9 @@ export const Categories = () => {
     <>
       <div className="category">
         {arrCategories.map((value, index) => {
-          let imageBase64 = '';
+          let imageBase64 = "";
           if (value.image) {
-            imageBase64 = Buffer.from(value.image, 'base64').toString('binary');
+            imageBase64 = Buffer.from(value.image, "base64").toString("binary");
           }
           console.log(imageBase64);
 

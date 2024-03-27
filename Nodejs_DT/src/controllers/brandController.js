@@ -4,14 +4,14 @@ let handleGetAllBrand = async (req, res) => {
   let id = req.query.id;
   if (!id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing require parameters",
       products: [],
     });
   }
   let Brand = await brandServices.getAllBrands(id);
   return res.status(200).json({
-    errcode: 0,
+    errCode: 0,
     errMessage: "OK",
     Brand,
   });
@@ -25,7 +25,7 @@ let handleCreateBrand = async (req, res) => {
 let handleDeleteBrand = async (req, res) => {
   if (!req.body.id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing required parameters !",
     });
   }

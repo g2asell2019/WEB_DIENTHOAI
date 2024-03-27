@@ -92,7 +92,7 @@ export const FlashCard = ({ productItems, addToCart }) => {
   const themvaogiohang = async (data) => {
     try {
       const response = await CreateCart(data);
-      if (response && response.errcode !== 0) {
+      if (response && response.errCode !== 0) {
         toast.error("Thêm giỏ hàng thất bại !");
         alert(response.errMessage);
       } else {
@@ -111,7 +111,7 @@ export const FlashCard = ({ productItems, addToCart }) => {
       orderBy,
       selectedPriceRange
     );
-    if (response && response.errcode === 0) {
+    if (response && response.errCode === 0) {
       setArrProducts(response.products);
     }
   };

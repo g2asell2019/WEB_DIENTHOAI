@@ -93,7 +93,7 @@ export const Signup = (props) => {
   const taomoinguoidung = async (data) => {
     try {
       const response = await createNewUseService(data);
-      if (response && response.errcode !== 0) {
+      if (response && response.errCode !== 0) {
         toast.error("Tạo Tài khoản thất bại !");
         alert(response.errMessage);
       } else {

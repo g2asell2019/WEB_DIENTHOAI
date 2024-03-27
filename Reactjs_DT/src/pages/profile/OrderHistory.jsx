@@ -37,7 +37,7 @@ const OrderHistory = () => {
   const huydonhang = async (data) => {
     try {
       let res = await deleteOrders(data.id);
-      if (res && res.errcode !== 0) {
+      if (res && res.errCode !== 0) {
         alert(res.errMessage);
       } else {
         toast.success("Hủy đơn hàng Thành công");
@@ -51,7 +51,7 @@ const OrderHistory = () => {
   const laymahdcuataikhoan = async () => {
     try {
       let response = await getAllOders(user.id);
-      if (response && response.errcode === 0) {
+      if (response && response.errCode === 0) {
         sethoadon(response.orders);
       }
     } catch (error) {
@@ -62,7 +62,7 @@ const OrderHistory = () => {
   const xoachitietdonhang = async (data) => {
     try {
       let res = await deleteOrderdetail(data.id_order);
-      if (res && res.errcode !== 0) {
+      if (res && res.errCode !== 0) {
         alert(res.errMessage);
       } else {
       }

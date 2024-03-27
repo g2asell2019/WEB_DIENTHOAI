@@ -28,7 +28,7 @@ class UserManage extends Component {
   }
   getAllUserFromReact = async () => {
     let response = await getAllUser("ALL");
-    if (response && response.errcode == 0) {
+    if (response && response.errCode == 0) {
       this.setState({
         arrUsers: response.users,
       });
@@ -54,7 +54,7 @@ class UserManage extends Component {
   createNewUser = async (data) => {
     try {
       let response = await createNewUseService(data);
-      if (response && response.errcode !== 0) {
+      if (response && response.errCode !== 0) {
         alert(response.errMessage);
       } else {
         await this.getAllUserFromReact();
@@ -73,7 +73,7 @@ class UserManage extends Component {
   handleDeleteUser = async (user) => {
     try {
       let res = await deleteUserService(user.id);
-      if (res && res.errcode !== 0) {
+      if (res && res.errCode !== 0) {
         alert(res.errMessage);
         toast.error("Xóa thất bại");
       } else {
@@ -96,7 +96,7 @@ class UserManage extends Component {
   doEditUser = async (user) => {
     try {
       let res = await editUserService(user);
-      if (res && res.errcode == 0) {
+      if (res && res.errCode == 0) {
         await this.getAllUserFromReact();
         toast.success("Sửa Thành công");
         this.setState({

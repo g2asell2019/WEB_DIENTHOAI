@@ -8,7 +8,7 @@ let handleGetAllProducts = async (req, res) => {
   let orderBy = req.query.orderBy;
   if (!id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing require parameters",
       products: [],
     });
@@ -21,7 +21,7 @@ let handleGetAllProducts = async (req, res) => {
     orderBy
   );
   return res.status(200).json({
-    errcode: 0,
+    errCode: 0,
     errMessage: "OK",
     products,
   });
@@ -32,14 +32,14 @@ let handleDetailProduct = async (req, res) => {
 
   if (!id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing require parameters",
       products: [],
     });
   }
   let products = await productServices.getProductDetail(id);
   return res.status(200).json({
-    errcode: 0,
+    errCode: 0,
     errMessage: "OK",
     products,
   });
@@ -53,7 +53,7 @@ let handleCreateProduct = async (req, res) => {
 let handleDeleteProduct = async (req, res) => {
   if (!req.body.id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing required parameters !",
     });
   }
@@ -72,7 +72,7 @@ let handlegetAllCategories = async (req, res) => {
   let id = req.query.id;
   if (!id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing require parameters",
       products: [],
     });
@@ -80,7 +80,7 @@ let handlegetAllCategories = async (req, res) => {
   let categories = await productServices.getAllCategories(id);
   console.log(categories);
   return res.status(200).json({
-    errcode: 0,
+    errCode: 0,
     errMessage: "OK",
     categories,
   });
@@ -94,7 +94,7 @@ let handleCreateCategory = async (req, res) => {
 let handleDeleteCategory = async (req, res) => {
   if (!req.body.id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing required parameters !",
     });
   }

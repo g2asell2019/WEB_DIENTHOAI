@@ -46,7 +46,7 @@ export const ProductDetail = ({ addToCart }) => {
   const themvaogiohang = async (data) => {
     try {
       const response = await CreateCart(data);
-      if (response && response.errcode !== 0) {
+      if (response && response.errCode !== 0) {
         toast.error("Thêm giỏ hàng thất bại !");
         alert(response.errMessage);
       } else {
@@ -74,7 +74,7 @@ export const ProductDetail = ({ addToCart }) => {
 
   const getAllUserFromReact = async () => {
     let response = await getDeltaiProduct(id);
-    if (response && response.errcode === 0) {
+    if (response && response.errCode === 0) {
       setdetailProducts(response.products);
     }
   };

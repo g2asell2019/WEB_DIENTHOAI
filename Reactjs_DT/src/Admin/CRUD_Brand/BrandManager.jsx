@@ -34,7 +34,7 @@ class BrandManager extends Component {
   }
   getAllBrandReact = async () => {
     let response = await getAllBrand("ALL");
-    if (response && response.errcode == 0) {
+    if (response && response.errCode == 0) {
       this.setState({
         arrBrand: response.Brand,
       });
@@ -61,7 +61,7 @@ class BrandManager extends Component {
   createNewCategories = async (data) => {
     try {
       let response = await CreateBrand(data);
-      if (response && response.errcode !== 0) {
+      if (response && response.errCode !== 0) {
         alert(response.errMessage);
       } else {
         await this.getAllBrandReact();
@@ -80,7 +80,7 @@ class BrandManager extends Component {
   handleDeleteUser = async (user) => {
     try {
       let res = await deleteBrand(user.id);
-      if (res && res.errcode !== 0) {
+      if (res && res.errCode !== 0) {
         alert(res.errMessage);
         toast.error("Xóa thất bại");
       } else {
@@ -103,7 +103,7 @@ class BrandManager extends Component {
   doEditUser = async (user) => {
     try {
       let res = await updateBrandData(user);
-      if (res && res.errcode === 0) {
+      if (res && res.errCode === 0) {
         await this.getAllBrandReact();
         toast.success("Sửa Thành công");
         this.setState({

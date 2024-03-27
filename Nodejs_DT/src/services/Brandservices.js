@@ -24,7 +24,7 @@ let createBrand = (data) => {
 
       if (check == true) {
         resolve({
-          errcode: 1,
+          errCode: 1,
           errMessage: "Tên loại sản phẩm này đã tồn tại",
         });
       } else {
@@ -39,7 +39,7 @@ let createBrand = (data) => {
           data = {};
         }
         resolve({
-          errcode: 0,
+          errCode: 0,
           data: data,
           message: "OK",
         });
@@ -58,7 +58,7 @@ let deleteBrand = (brandId) => {
       });
       if (!category) {
         resolve({
-          errcode: 2,
+          errCode: 2,
           errMessage: "Loại sản phẩm không tồn tại",
         });
       }
@@ -66,7 +66,7 @@ let deleteBrand = (brandId) => {
         where: { id: brandId },
       });
       resolve({
-        errcode: 0,
+        errCode: 0,
         errMessage: "Loại sản phẩm đã bị xóa !",
       });
     } catch (e) {
@@ -80,7 +80,7 @@ let updateBrand = (data) => {
     try {
       if (!data.id) {
         resolve({
-          errcode: 2,
+          errCode: 2,
           errMessage: "Missing required parameter",
         });
       }
@@ -96,12 +96,12 @@ let updateBrand = (data) => {
 
         await brand.save();
         resolve({
-          errcode: 0,
+          errCode: 0,
           errMessage: "Update brand succeeds !",
         });
       } else {
         resolve({
-          errcode: 1,
+          errCode: 1,
           errMessage: "Brand not found !",
         });
       }

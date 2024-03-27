@@ -96,7 +96,7 @@ export const Order = () => {
   const laydanhsachgiohang = async () => {
     try {
       let response = await getAllCart(user.id);
-      if (response && response.errcode === 0) {
+      if (response && response.errCode === 0) {
         setListCart(response.Cart);
       }
     } catch (error) {
@@ -107,7 +107,7 @@ export const Order = () => {
   const taomoidonhang = async (data) => {
     try {
       const response = await CreateOrders(data);
-      if (response && response.errcode !== 0) {
+      if (response && response.errCode !== 0) {
         toast.error("Đặt hàng thất bại !");
         alert(response.errMessage);
       } else {

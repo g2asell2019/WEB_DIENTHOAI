@@ -41,7 +41,7 @@ const OrderDetail = () => {
   const laymahdcuataikhoan = async () => {
     try {
       let response = await getAllOders(user.id);
-      if (response && response.errcode === 0) {
+      if (response && response.errCode === 0) {
         setOrderData((prevOrderData) => ({
           ...prevOrderData,
           hoadon: response.orders,
@@ -55,7 +55,7 @@ const OrderDetail = () => {
   const laychitiethoadon = async () => {
     try {
       let response = await getAllOrderdetail(id_order);
-      if (response && response.errcode === 0) {
+      if (response && response.errCode === 0) {
         setOrderData((prevOrderData) => ({
           ...prevOrderData,
           chitiethoadon: response.Oderdetail,
@@ -69,7 +69,7 @@ const OrderDetail = () => {
   const layhoadon = async () => {
     try {
       let response = await Layhoadon(id_order);
-      if (response && response.errcode === 0) {
+      if (response && response.errCode === 0) {
         sethoadon(response.orders1);
       }
     } catch (error) {

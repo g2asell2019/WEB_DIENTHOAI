@@ -35,25 +35,26 @@ let handleLogin = (username, password) => {
           where: { username: username },
           raw: true,
         });
-        if (user) { //Compare password
-            let checkPassword = await bcryptjs.compareSync(
+        if (user) {
+          //Compare password
+          let checkPassword = await bcryptjs.compareSync(
             password,
             user.password
           );
           if (checkPassword) {
-            (userData.errcode = 0), (userData.errMessage = "oke");
+            (userData.errCode = 0), (userData.errMessage = "oke");
             delete user.password; // Delete password from API
             userData.user = user;
           } else {
-            userData.errcode = 3;
+            userData.errCode = 3;
             userData.errMessage = "Mật khẩu sai";
           }
         } else {
-          userData.errcode = 2;
+          userData.errCode = 2;
           userData.errMessage = "Người dùng không tồn tại";
         }
       } else {
-        userData.errcode = 1;
+        userData.errCode = 1;
         userData.errMessage =
           "Username không tồn tại, vui lòng đăng kí hoặc kiểm tra lại";
       }
@@ -87,7 +88,8 @@ let getAllUsers = (userId) => {
       let users = "";
       if (userId == "ALL") {
         users = db.User.findAll({
-          attributes: { // Hide password
+          attributes: {
+            // Hide password
             exclude: ["password"],
           },
           order: [["createdAt", "DESC"]],
@@ -114,7 +116,7 @@ let createUser = (data) => {
       let check = await checkUsername(data.username);
       if (check == true) {
         resolve({
-          errcode: 1,
+          errCode: 1,
           errMessage:
             "Tên người dùng đã tồn tại, vui lòng nhập tên người dùng khác",
         });
@@ -137,7 +139,7 @@ let createUser = (data) => {
           data = {};
         }
         resolve({
-          errcode: 0,
+          errCode: 0,
           data: data,
           message: "OK",
         });
@@ -155,7 +157,7 @@ let deleteUser = (userId) => {
     });
     if (!user) {
       resolve({
-        errcode: 2,
+        errCode: 2,
         errMessage: "User isn't exist !",
       });
     }
@@ -163,7 +165,7 @@ let deleteUser = (userId) => {
       where: { id: userId },
     });
     resolve({
-      errcode: 0,
+      errCode: 0,
       errMessage: "User is deleted !",
     });
   });
@@ -174,7 +176,7 @@ let updateUser = (data) => {
     try {
       if (!data.id) {
         resolve({
-          errcode: 2,
+          errCode: 2,
           errMessage: "Missing required parameter",
         });
       }
@@ -193,12 +195,12 @@ let updateUser = (data) => {
         }
         await user.save(); //Nếu bị lỗi TypeError: user.save is not a function thì vào config.json đổi raw: true --> false là đc
         resolve({
-          errcode: 0,
+          errCode: 0,
           errMessage: "Update User succeeds !",
         });
       } else {
         resolve({
-          errcode: 1,
+          errCode: 1,
           errMessage: "User's not found !",
         });
       }
@@ -213,7 +215,7 @@ let getAllCodeService = (typeInput) => {
     try {
       if (!typeInput) {
         resolve({
-          errcode: 1,
+          errCode: 1,
           errMessage: "Vui lòng điền đủ Thông tin",
         });
       } else {
@@ -221,7 +223,7 @@ let getAllCodeService = (typeInput) => {
         let allCode = await db.AllCode.findAll({
           where: { type: typeInput },
         });
-        res.errcode = 0;
+        res.errCode = 0;
         res.data = allCode;
         resolve(res);
       }

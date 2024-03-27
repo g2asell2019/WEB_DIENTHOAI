@@ -33,7 +33,7 @@ class CategoriesManager extends Component {
   }
   getAllCategoriesReact = async () => {
     let response = await getAllCategories("ALL");
-    if (response && response.errcode == 0) {
+    if (response && response.errCode == 0) {
       this.setState({
         arrCategories: response.categories,
       });
@@ -60,7 +60,7 @@ class CategoriesManager extends Component {
   createNewCategories = async (data) => {
     try {
       let response = await createCategory(data);
-      if (response && response.errcode !== 0) {
+      if (response && response.errCode !== 0) {
         alert(response.errMessage);
       } else {
         await this.getAllCategoriesReact();
@@ -79,7 +79,7 @@ class CategoriesManager extends Component {
   handleDeleteUser = async (user) => {
     try {
       let res = await deleteCategory(user.id);
-      if (res && res.errcode !== 0) {
+      if (res && res.errCode !== 0) {
         alert(res.errMessage);
         toast.error("Xóa thất bại");
       } else {
@@ -102,7 +102,7 @@ class CategoriesManager extends Component {
   doEditUser = async (user) => {
     try {
       let res = await updateCategory(user);
-      if (res && res.errcode === 0) {
+      if (res && res.errCode === 0) {
         await this.getAllCategoriesReact();
         toast.success("Sửa Thành công");
         this.setState({

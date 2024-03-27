@@ -75,7 +75,7 @@ export const Search = ({ cartItem }) => {
   const laydanhsachgiohang = async () => {
     try {
       let response = await getAllCart(user.id);
-      if (response && response.errcode === 0) {
+      if (response && response.errCode === 0) {
         setListCart(response.Cart);
         // Update cartCount immediately
       }
@@ -120,7 +120,7 @@ export const Search = ({ cartItem }) => {
       selectedPriceRange,
       orderBy
     );
-    if (response && response.errcode === 0) {
+    if (response && response.errCode === 0) {
       setArrProducts(response.products);
     }
   };

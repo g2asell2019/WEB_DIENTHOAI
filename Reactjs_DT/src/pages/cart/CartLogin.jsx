@@ -26,7 +26,7 @@ export const CartLogin = () => {
       const laydanhsachgiohang = async () => {
         try {
           let response = await getAllCart(user.id);
-          if (response && response.errcode === 0) {
+          if (response && response.errCode === 0) {
             setListCart(response.Cart);
           }
         } catch (error) {
@@ -98,7 +98,7 @@ export const CartLogin = () => {
   const laydanhsachgiohang = async () => {
     try {
       let response = await getAllCart(user.id);
-      if (response && response.errcode === 0) {
+      if (response && response.errCode === 0) {
         setListCart(response.Cart);
       }
     } catch (error) {
@@ -109,7 +109,7 @@ export const CartLogin = () => {
   const tanggiamsoluong = async (data) => {
     try {
       let res = await updateCartData(data);
-      if (res && res.errcode !== 0) {
+      if (res && res.errCode !== 0) {
         alert(res.errMessage);
       } else {
         await laydanhsachgiohang();
@@ -123,7 +123,7 @@ export const CartLogin = () => {
   const handleDeleteUser = async (data) => {
     try {
       let res = await deleteCart(data.id);
-      if (res && res.errcode !== 0) {
+      if (res && res.errCode !== 0) {
         alert(res.errMessage);
       } else {
         toast.success("Xóa sản phẩm Thành công");
