@@ -4,11 +4,10 @@ import { Buffer } from "buffer";
 import "./ProductDetail.css";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { handleAddCart } from "../../utils/handleAddCart";
+import { themvaogiohang } from "../../utils/themvaogiohang";
 import { formatCurrency } from "../../utils/formatCurrency.js";
 export const ProductDetail = ({ addToCart }) => {
-  //Chuyển đổi tiền tệ
-  
-
   const { id } = useParams();
   const [user, setUser] = useState({ taikhoan: "" });
 
@@ -20,30 +19,7 @@ export const ProductDetail = ({ addToCart }) => {
     );
   }
 
-  const handleAddCart = (data) => {
-    themvaogiohang({
-      name: data.name,
-      price: data.price,
-      quantity: 1,
-      image: imageBase64,
-      iduser: user.id,
-      idproduct: data.id,
-    });
-  };
-
-  const themvaogiohang = async (data) => {
-    try {
-      const response = await CreateCart(data);
-      if (response && response.errcode !== 0) {
-        toast.error("Thêm giỏ hàng thất bại !");
-        alert(response.errMessage);
-      } else {
-        toast.success("Thêm giỏ hàng thành công !");
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  
 
   useEffect(() => {
     // Sử dụng một hàm async để lấy dữ liệu từ Local Storage

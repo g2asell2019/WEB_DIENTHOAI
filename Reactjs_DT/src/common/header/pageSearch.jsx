@@ -87,31 +87,7 @@ export const pageSearch = ({ addToCart, location }) => {
     item.name.toLowerCase().includes(query.toLowerCase())
   );
 
-  const handleAddCart = (data) => {
-    const imageBuffer = Buffer.from(data.image, "base64").toString("binary");
-    themvaogiohang({
-      name: data.name,
-      price: data.price,
-      quantity: 1,
-      image: imageBuffer,
-      iduser: user.id,
-      idproduct: data.id,
-    });
-  };
-
-  const themvaogiohang = async (data) => {
-    try {
-      const response = await CreateCart(data);
-      if (response && response.errcode !== 0) {
-        toast.error("Thêm giỏ hàng thất bại !");
-        alert(response.errMessage);
-      } else {
-        toast.success("Thêm giỏ hàng thành công !");
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  
 
   const [cartItem, setCardItem] = useState([]);
 
