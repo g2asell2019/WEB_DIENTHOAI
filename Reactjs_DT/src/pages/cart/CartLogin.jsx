@@ -3,7 +3,7 @@ import "./Cart.css";
 import { Link, useHistory } from "react-router-dom";
 import { Buffer } from "buffer";
 import { toast } from 'react-toastify';
-
+import {formatCurrency} from "../../utils/formatCurrency.js"
 import { getAllCart, updateCartData, deleteCart } from "../../userService";
 
 export const CartLogin = () => {
@@ -55,20 +55,7 @@ export const CartLogin = () => {
     history.goBack();
   };
 
-  function formatCurrency(number) {
-    // Sử dụng Intl.NumberFormat để định dạng số
-    const formatter = new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-      minimumFractionDigits: 0, // Loại bỏ phần thập phân
-    });
-
-    // Lấy chuỗi đã định dạng số
-    const formattedNumber = formatter.format(number);
-
-    // Loại bỏ khoảng trắng giữa số và đơn vị tiền tệ (₫)
-    return formattedNumber.replace(/\s/g, "");
-  }
+  
 
   const handleCheckout = () => {
     history.push({ pathname: "./cart/Checkout", state: { totalPrice: totalPrice } });
@@ -86,8 +73,6 @@ export const CartLogin = () => {
 
  })
   };
-
-
   const decreaseQty = (product) => {
     if(product.quantity<=1){
       deleteProduct(product);
@@ -101,16 +86,9 @@ export const CartLogin = () => {
     }
 
    };
-
-
-
-
-
   const deleteProduct = (idsanpham) => (
     handleDeleteUser(idsanpham)
   );
-  
-
   const laydanhsachgiohang = async () => {
     try {
       let response = await getAllCart(user.id);
@@ -157,17 +135,9 @@ export const CartLogin = () => {
       console.log(e);
     }
   };
-
-
-
-
-
-
   {
     user && <CartLogin />;
   }
-
-
   return (
     <>
       <section className="cart-items">
@@ -235,7 +205,7 @@ export const CartLogin = () => {
             <h2>Tóm tắt giỏ hàng</h2>
             <div className="d_flex">
               <h4>Tổng thanh toán: </h4>
-              <h3>{formatCurrency(totalPrice)}</h3>
+              <h3>{formatCurrency(totalPrice1)}</h3>
             </div>
             <button onClick={handleCheckout}>Tiến hành đặt hàng</button>
           </div>

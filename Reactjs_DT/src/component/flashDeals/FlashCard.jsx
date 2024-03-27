@@ -3,7 +3,7 @@ import { getAllProducts,CreateCart} from "../../userService";
 import { Buffer } from "buffer";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
-
+import { formatCurrency } from "../../utils/formatCurrency.js";
 
 import { toast } from 'react-toastify';
 
@@ -43,20 +43,7 @@ export const FlashCard = ({ productItems, addToCart }) => {
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
   };
-  function formatCurrency(number) {
-    // Sử dụng Intl.NumberFormat để định dạng số
-    const formatter = new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-      minimumFractionDigits: 0, // Loại bỏ phần thập phân
-    });
-
-    // Lấy chuỗi đã định dạng số
-    const formattedNumber = formatter.format(number);
-
-    // Loại bỏ khoảng trắng giữa số và đơn vị tiền tệ (₫)
-    return formattedNumber.replace(/\s/g, "");
-  }
+ 
 
 
   const [arrProducts, setArrProducts] = useState([]);
@@ -194,7 +181,7 @@ export const FlashCard = ({ productItems, addToCart }) => {
                         <h4>{formatCurrency(item.price)}</h4>
                       </div>
                       <div className="price-discount">
-                        <strike>123$</strike>
+                    
                       </div>
                     </div>
                     <div className="d_flex">

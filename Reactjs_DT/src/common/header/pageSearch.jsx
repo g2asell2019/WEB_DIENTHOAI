@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Header } from "./Header";
-
+import { formatCurrency } from "../../utils/formatCurrency.js";
 export const pageSearch = ({ addToCart, location }) => {
   const [arrProducts, setArrProducts] = useState([]);
   const [arrbrand, setArrbrand] = useState("");
@@ -64,17 +64,7 @@ export const pageSearch = ({ addToCart, location }) => {
     setCurrentPage(newPage);
   };
 
-  function formatCurrency(number) {
-    const formatter = new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-      minimumFractionDigits: 0,
-    });
-
-    const formattedNumber = formatter.format(number);
-
-    return formattedNumber.replace(/\s/g, "");
-  }
+  
 
   const handleBrandClick = (clickedId) => {
     setidbrand(clickedId);
@@ -212,9 +202,7 @@ export const pageSearch = ({ addToCart, location }) => {
                     <div className="price">
                       <h4>{formatCurrency(item.price)}</h4>
                     </div>
-                    <div className="price-discount">
-                      <strike>123$</strike>
-                    </div>
+                    <div className="price-discount"></div>
                   </div>
                   <div className="d_flex">
                     <Link to={`/productdetail/${item.id}`}>

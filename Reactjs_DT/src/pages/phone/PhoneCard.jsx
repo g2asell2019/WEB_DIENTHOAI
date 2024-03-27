@@ -4,7 +4,7 @@ import { Buffer } from "buffer";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import { formatCurrency } from "../../utils/formatCurrency.js";
 export const PhoneCard = ({ addToCart }) => {
   const { id } = useParams();
   const [user, setUser] = useState({ taikhoan: "" });
@@ -55,17 +55,7 @@ export const PhoneCard = ({ addToCart }) => {
     setCurrentPage(newPage);
   };
 
-  function formatCurrency(number) {
-    const formatter = new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-      minimumFractionDigits: 0,
-    });
 
-    const formattedNumber = formatter.format(number);
-
-    return formattedNumber.replace(/\s/g, "");
-  }
 
   const handleBrandClick = (clickedId) => {
     setidbrand(clickedId);
@@ -213,7 +203,7 @@ export const PhoneCard = ({ addToCart }) => {
                       <h4>{formatCurrency(item.price)}</h4>
                     </div>
                     <div className="price-discount">
-                      <strike>123$</strike>
+                     
                     </div>
                   </div>
                   <div className="d_flex">
