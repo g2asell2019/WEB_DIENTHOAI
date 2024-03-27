@@ -1,100 +1,128 @@
-import userSevices from "../services/userServices";
+import UserFacade from "../DP/userFacade";
 
-let handleLogin=async(req,res)=>{
-    let taikhoan =req.body.taikhoan;
-    let password=req.body.password;
-    //check taikhoan exist
-    if(!taikhoan || !password){
-        return res.status(500).json({
-            errcode: 1,
-            message:'vui lòng điền đầy đủ thông tin'
-        });
-    }
-   
-    //compare password
-    
-    // return userInfor
-    //access_token:jWT JSON web token
-    let userData = await userSevices.handleUserLogin(taikhoan,password);
-    console.log(userData)
+const handleLogin = async (req, res) => {
+    try {
+        const { taikhoan, password } = req.body;
+        if (!taikhoan || !password) {
+            return res.status(400).json({
+                errcode: 1,
+                message: 'Vui lòng điền đầy đủ thông tin',
+            });
+        }
+        const userData = await UserFacade.handleUserLogin(taikhoan, password);
         return res.status(200).json({
             errcode: userData.errcode,
-            message:userData.errMessage,
-            user: userData.user ? userData.user:{}// check trên api in ra
-          
-          });
-         
-}
-let handleGetAllUser =async(req,res)=>{
-    let id=req.query.id;//all, id
-    if(!id){
-        return res.status(200).json({
-            errcode:1,
-            errMessage:'Missing require parameters',
-            users:[]
-        })
-        
+            message: userData.errMessage,
+            user: userData.user ? userData.user : {},
+        });
+    } catch (error) {
+        console.error('Error in handleLogin:', error);
+        return res.status(500).json({
+            errcode: 1,
+            errMessage: 'Internal server error',
+        });
     }
-       let users=await userSevices.getAllUsers(id);
-       console.log(users);
- return res.status(200).json({
-    errcode:0,
-    errMessage:'OK',
-    users
+};
 
- })
-}
- let handleCreateNewUser= async(req,res)=>{
-    let message=await userSevices.CreateNewUser(req.body);
-    console.log(message);
-    return res.status(200).json(message);
-
- }
-
-
-
-
- let handleDeleteUser = async(req,res)=>{
-    if(!req.body.id){
-        return res.status(200).json({
-            errcode:1,
-            errMessage:"Missing required parameters !"
-
-        })
-    }
-    let message=await userSevices.deleteUser(req.body.id);
-    console.log(message);
-    return res.status(200).json(message);
- }
- let handleEditUser = async(req,res)=>{
-    let data= req.body;
-   let message= await userSevices.updateUserData(data);
-   return res.status(200).json(message)
-    
- }
-
- let getAllCode =async(req,res)=>{
+const handleGetAllUser = async (req, res) => {
     try {
-       
-        let data=await userSevices.getAllCodeService(req.query.type);
-        return res.status(200).json(data);
-       
-    } catch (e) {
-        console.log('get allcode error',e)
+        const id = req.query.id || 'all';
+        if (id === 'all') {
+            return res.status(400).json({
+                errcode: 1,
+                errMessage: 'Missing require parameters',
+                users: [],
+            });
+        }
+        const users = await UserFacade.getAllUsers(id);
         return res.status(200).json({
-            errcode:-1,
-            errMessage:"Error from sever"
-        })
-        
+            errcode: 0,
+            errMessage: 'OK',
+            users,
+        });
+    } catch (error) {
+        console.error('Error in handleGetAllUser:', error);
+        return res.status(500).json({
+            errcode: 1,
+            errMessage: 'Internal server error',
+        });
     }
- }
+};
 
-module.exports={
-    handleLogin:handleLogin,
-    handleGetAllUser:handleGetAllUser,
-    handleCreateNewUser:handleCreateNewUser,
-    handleEditUser:handleEditUser,
-    handleDeleteUser:handleDeleteUser,
-    getAllCode:getAllCode
-   
-}
+const handleCreateNewUser = async (req, res) => {
+    try {
+        const message = await UserFacade.CreateNewUser(req.body);
+        console.log(message);
+        return res.status(200).json(message);
+    } catch (error) {
+        console.error('Error in handleCreateNewUser:', error);
+        return res.status(500).json({
+            errcode: 1,
+            errMessage: 'Internal server error',
+        });
+    }
+};
+
+const handleDeleteUser = async (req, res) => {
+    try {
+        const { id } = req.body;
+        if (!id) {
+            return res.status(400).json({
+                errcode: 1,
+                errMessage: 'Missing required parameters!',
+            });
+        }
+        const message = await UserFacade.deleteUser(id);
+        console.log(message);
+        return res.status(200).json(message);
+    } catch (error) {
+        console.error('Error in handleDeleteUser:', error);
+        return res.status(500).json({
+            errcode: 1,
+            errMessage: 'Internal server error',
+        });
+    }
+};
+
+const handleEditUser = async (req, res) => {
+    try {
+        const data = req.body;
+        const message = await UserFacade.updateUserData(data);
+        return res.status(200).json(message);
+    } catch (error) {
+        console.error('Error in handleEditUser:', error);
+        return res.status(500).json({
+            errcode: 1,
+            errMessage: 'Internal server error',
+        });
+    }
+};
+
+const getAllCode = async (req, res) => {
+    try {
+        const { type } = req.query;
+        if (!type) {
+            return res.status(400).json({
+                errcode: 1,
+                errMessage: 'Missing required parameters!',
+            });
+        }
+        const data = await UserFacade.getAllCodeService(type);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error('Error in getAllCode:', error);
+        return res.status(500).json({
+            errcode: -1,
+            errMessage: 'Error from server',
+        });
+    }
+};
+
+module.exports = {
+    handleLogin,
+    handleGetAllUser,
+    handleCreateNewUser,
+    handleEditUser,
+    handleDeleteUser,
+    getAllCode,
+};
