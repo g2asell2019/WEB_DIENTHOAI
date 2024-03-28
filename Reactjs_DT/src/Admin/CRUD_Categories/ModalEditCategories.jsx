@@ -6,8 +6,6 @@ import "./ModalEditProducts.scss";
 import _ from "lodash";
 import { Buffer } from "buffer";
 import CommonUtils from "../../utils/CommonUtils";
-import { validateInput } from "../Utility/CRUDUltility";
-import ImageUtility from "../Utility/ImageUtility";
 
 
 class ModalEditCategories extends Component {
@@ -59,9 +57,24 @@ class ModalEditCategories extends Component {
     // console.log(event.target.value,id)
   };
 
+  checkValideInputEdit = () => {
+    let isValid = true;
+    let arrInput = ["name"];
+
+    for (let i = 0; i < arrInput.length; i++) {
+      console.log("check inside loop", this.state[arrInput[i]], arrInput[i]);
+      if (!this.state[arrInput[i]]) {
+        isValid = false;
+        alert("Missing parameter: " + arrInput[i]);
+        break;
+      }
+    }
+
+    return isValid;
+  };
 
   handleSaveUser = () => {
-    let isValid = validateInput(["name"]);
+    let isValid = this.checkValideInputEdit();
 
     if (isValid == true) {
       this.props.editUser(this.state);
@@ -117,7 +130,28 @@ class ModalEditCategories extends Component {
                       value={this.state.name}
                     />
                   </div>
-                  <ImageUtility></ImageUtility>
+                  <div className="form-group col-md-3">
+                    <label>Hình ảnh</label>
+                    <div className="lamdep">
+                      <input
+                        type="file"
+                        id="previewImg"
+                        hidden
+                        onChange={(event) => this.handleOnChangeImage(event)}
+                      ></input>
+
+                      <label className="label-upload" htmlFor="previewImg">
+                        tải ảnh <i className="fas fa-upload"></i>
+                      </label>
+                      <div
+                        className="preview-image"
+                        onClick={this.handleImageClick}
+                        style={{
+                          backgroundImage: `url(${this.state.previewImgURL})`,
+                        }}
+                      ></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

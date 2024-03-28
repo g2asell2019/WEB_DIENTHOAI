@@ -93,12 +93,6 @@ const CreateOrders = (data) => {
   return axios.post("/api/create-new-orders", data);
 };
 
-const PayWithVNPAY = (data) => {
-    return axios.post('/vnpay/create_order', data, {
-        withCredentials: false
-    })
-}
-
 const deleteOrders = (productId) => {
   return axios.delete("/api/delete-orders", {
     data: {
@@ -198,41 +192,40 @@ const locdonhang = (id, createdAt, order_status) => {
 };
 
 export {
-    handleLoginApi,
-    getAllUser,
-    createNewUseService,
-    deleteUserService,
-    editUserService,
-    getAllProducts,
-    getDeltaiProduct,
-    CreateProducts,
-    deleteProducts,
-    updateProductData,
-    CreateCategories,
-    deleteCategories,
-    getAllCategories,
-    updateCategoriesData,
-    getAllOders,
-    Layhoadon,
-    deleteOrders,
-    CreateOrders,
-    updateorderData,
-    getAllSale,
-    CreateSale,
-    deleteSale,
-    updateSaleData,
-    CreateBrand,
-    deleteBrand,
-    getAllBrand,
-    updateBrandData,
-    CreateCart,
-    deleteCart,
-    getAllCart,
-    updateCartData,
-    CreateOrderdetail,
-    deleteOrderdetail,
-    getAllOrderdetail,
-    updateOrderdetailData,
-    locdonhang,
-    PayWithVNPAY
+  handleLoginApi,
+  getAllUser,
+  createNewUseService,
+  deleteUserService,
+  editUserService,
+  getAllProducts,
+  getDetailProduct,
+  createProduct,
+  deleteProduct,
+  updateProduct,
+  createCategory,
+  deleteCategory,
+  getAllCategories,
+  updateCategory,
+  getAllOders,
+  Layhoadon,
+  deleteOrders,
+  CreateOrders,
+  updateorderData,
+  getAllSale,
+  CreateSale,
+  deleteSale,
+  updateSaleData,
+  CreateBrand,
+  deleteBrand,
+  getAllBrand,
+  updateBrandData,
+  CreateCart,
+  deleteCart,
+  getAllCart,
+  updateCartData,
+  CreateOrderdetail,
+  deleteOrderdetail,
+  getAllOrderdetail,
+  updateOrderdetailData,
+  locdonhang,
 };
