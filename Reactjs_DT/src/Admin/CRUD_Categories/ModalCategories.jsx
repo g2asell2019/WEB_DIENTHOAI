@@ -5,7 +5,8 @@ import { toast } from "react-toastify";
 import "./ModalProducts.scss";
 import _ from "lodash";
 import CommonUtils from "../../utils/CommonUtils";
-
+import {validateInput} from "../Utility/CRUDUltility";
+import ImageUtility from "../Utility/ImageUtility"
 class ModalCategories extends Component {
   constructor(props) {
     super(props);
@@ -48,24 +49,9 @@ class ModalCategories extends Component {
 
     // console.log(event.target.value,id)
   };
-  checkValideInput = () => {
-    let isValid = true;
-    let arrInput = ["name", "avatar"];
-
-    for (let i = 0; i < arrInput.length; i++) {
-      console.log("check inside loop", this.state[arrInput[i]], arrInput[i]);
-      if (!this.state[arrInput[i]]) {
-        isValid = false;
-        alert("Missing parameter: " + arrInput[i]);
-        break;
-      }
-    }
-
-    return isValid;
-  };
 
   handleAddCategories = () => {
-    let isValid = this.checkValideInput();
+    let isValid = validateInput(["name", "avatar"])
 
     if (isValid == true) {
       //call api create modal
@@ -125,28 +111,7 @@ class ModalCategories extends Component {
                       value={this.state.name}
                     />
                   </div>
-                  <div className="form-group col-md-3">
-                    <label>Hình ảnh</label>
-                    <div className="lamdep">
-                      <input
-                        type="file"
-                        id="previewImg"
-                        hidden
-                        onChange={(event) => this.handleOnChangeImage(event)}
-                      ></input>
-
-                      <label className="label-upload" htmlFor="previewImg">
-                        tải ảnh <i className="fas fa-upload"></i>
-                      </label>
-                      <div
-                        className="preview-image"
-                        onClick={this.handleImageClick}
-                        style={{
-                          backgroundImage: `url(${this.state.previewImgURL})`,
-                        }}
-                      ></div>
-                    </div>
-                  </div>
+                  <ImageUtility></ImageUtility>
                 </div>
               </div>
             </div>

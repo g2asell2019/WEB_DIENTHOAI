@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Header } from "./Header";
-
+import CommonUtils from "../../utils/CommonUtils";
 export const pageSearch = ({ addToCart, location }) => {
   const [arrProducts, setArrProducts] = useState([]);
   const [arrbrand, setArrbrand] = useState("");
