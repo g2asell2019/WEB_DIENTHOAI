@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "./Checkout.css";
-import { CreateOrders, getAllCart, PayWithVNPAY } from "../../userService";
-import { useLocation, useHistory  } from "react-router-dom";
-import PaymentGate from "../../component/payment/PaymentGate";
-import { VNPay } from "../../component/payment/VNPay";
-import { ViettelPay } from "../../component/payment/ViettelPay";
-import { COD } from "../../component/payment/COD";
-
+import { CreateOrders, getAllCart } from "../../userService";
+import { useLocation } from "react-router-dom";
 export const Order = () => {
   const location = useLocation();
-  const history = useHistory();
   const [totalPrice, setTotalPrice] = useState(location.state.totalPrice);
 
   const [user, setUser] = useState({ taikhoan: "" });
@@ -83,7 +77,7 @@ export const Order = () => {
 
       taomoidonhang({
         receiver: state.receiver,
-        order_status: state.payment == "cod" ? "Đang chờ để duyệt" : "Đang chờ thanh toán",
+        order_status: "Đang chờ để duyệt",
         receiving_point: state.receiving_point,
         total_value: totalPrice,
         phoneNumber: state.phoneNumber,
@@ -112,21 +106,7 @@ export const Order = () => {
 
   const taomoidonhang = async (data) => {
     try {
-      let response;
-      response = await CreateOrders(data);
-      let paymentGate = new PaymentGate();
-      if (data?.payment === "cod") {
-        paymentGate.setStrategy(new COD());
-      }
-      else if (data?.payment === "atm") {
-        paymentGate.setStrategy(new VNPay());
-
-      }
-      else if (data?.payment === "viettel_pay") {
-        paymentGate.setStrategy(new ViettelPay());
-      }
-      paymentGate.pay(response);
-
+      const response = await CreateOrders(data);
       if (response && response.errcode !== 0) {
         toast.error("Đặt hàng thất bại !");
         alert(response.errMessage);
@@ -170,7 +150,6 @@ export const Order = () => {
 
   return (
     <>
-    <form method="post" action={"http://localhost:8080/vnpay/create_order"}>
       <div className="order">
         <div className="container-o">
           <h1>Điền thông tin đơn đặt hàng</h1>
@@ -178,7 +157,6 @@ export const Order = () => {
             <input
               type="text"
               id="name"
-              name="receiver"
               required
               onChange={(event) => {
                 handleOnChangeInput(event, "receiver");
@@ -192,7 +170,6 @@ export const Order = () => {
             <input
               type="text"
               id="name"
-              name="phoneNumber"
               required
               onChange={(event) => {
                 handleOnChangeInput(event, "phoneNumber");
@@ -206,7 +183,6 @@ export const Order = () => {
             <input
               type="text"
               id="text"
-              name="receiving_point"
               required
               onChange={(event) => {
                 handleOnChangeInput(event, "receiving_point");
@@ -221,7 +197,6 @@ export const Order = () => {
             <input
               type="text"
               id="text"
-              name="note"
               required
               onChange={(event) => {
                 handleOnChangeInput(event, "note");
@@ -232,7 +207,6 @@ export const Order = () => {
             <label>Ghi chú</label>
           </div>
           <div className="input-data">
-            <input name="total_value" type="hidden" value={totalPrice} />
             Tổng số tiền: {formatCurrency(totalPrice)} vnd
             <select
               className="ml-5"
@@ -243,19 +217,16 @@ export const Order = () => {
               value={state.payment}
             >
               <option value="">chọn phương thức thanh toán</option>
-              <option value="cod">
+              <option value="Thanh toán bằng tiền mặt">
                 Thanh toán bằng tiền mặt
               </option>
-              <option value="atm">
-                Thanh toán bằng VNPay
+              <option value="Thanh toán bằng ngân hàng">
+                Thanh toán bằng ngân hàng
               </option>
-              <option value="viettel_pay" disabled>Thanh toán bằng ViettelPay</option>
             </select>
           </div>
-          <input type="text" style={{display: "none"}} name="order_id" id="order_id" value="" ></input>
-          <input id="checkOutSubmit" type="submit" style={{display: "none"}} ></input>
           <button
-            type="button"
+            type="submit"
             onClick={() => {
               handleAddOrders();
             }}
@@ -264,7 +235,6 @@ export const Order = () => {
           </button>
         </div>
       </div>
-      </form>
     </>
   );
 };

@@ -51,7 +51,6 @@ const OrderManager = () => {
     try {
       await updateorderData({
         id: data.id,
-        order_status: "Đã xác nhận"
         // other update data
       });
       await getAllOrdersFromReact();
