@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import "./Checkout.css";
 import { CreateOrders, getAllCart } from "../../userService";
 import { useLocation } from "react-router-dom";
+import { formatCurrency } from "../../utils/formatCurrency";
 export const Order = () => {
   const location = useLocation();
   const [totalPrice, setTotalPrice] = useState(location.state.totalPrice);

@@ -4,7 +4,7 @@ import { Buffer } from "buffer";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
 import { formatCurrency } from "../../utils/formatCurrency.js";
-
+import { handleAddCart } from "../../utils/handleAddCart";
 import { toast } from 'react-toastify';
 
 const NextArrow = (props) => {

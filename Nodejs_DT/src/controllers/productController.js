@@ -44,32 +44,12 @@ let handleDeltaiProduct = async(req, res) => {
 
     })
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 let handleCreateProducts = async(req, res) => {
     let message = await productServices.CreateProducts(req.body);
     console.log(message);
     return res.status(200).json(message);
 
 }
-
-
-
-
 let handleDeleteProducts = async(req, res) => {
     if (!req.body.id) {
         return res.status(200).json({

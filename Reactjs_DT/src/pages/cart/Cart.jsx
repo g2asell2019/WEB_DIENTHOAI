@@ -3,6 +3,7 @@ import "./Cart.css";
 import { Link, useHistory } from "react-router-dom";
 import { Buffer } from "buffer";
 import { useEffect } from "react";
+import { formatCurrency } from "../../utils/formatCurrency";
 
 export const Cart = ({
   cartItem,

@@ -7,9 +7,6 @@ let getAllProducts = (productId, idne,idbrand, priceRange, orderBy) => {
     return new Promise(async(resolve, reject) => {
         try {
             let products = '';
-
-            
-
             // Khởi tạo các điều kiện truy vấn
             let queryConditions = {};
 
@@ -64,21 +61,12 @@ let getAllProducts = (productId, idne,idbrand, priceRange, orderBy) => {
                 raw: true,
                 nest: true,
             });
-
-         
-         
-
-             
-
             resolve(products);
         } catch (e) {
             reject(e);
         }
     });
 };
-
-
-
 
 let DeltaiProduct = (productId) => {
     return new Promise(async(resolve, reject) => {
@@ -148,7 +136,7 @@ let CreateProducts = (data) => {
             if (check == true) {
                 resolve({
                     errcode: 1,
-                    errMessage: "Tên người dùng đã tồn tại vui lòng nhập tên người dùng  khác"
+                    errMessage: "Tên sản phẩm đã tồn tại vui lòng nhập tên sản phẩm  khác"
                 })
             } else {
                 await db.Products.create({

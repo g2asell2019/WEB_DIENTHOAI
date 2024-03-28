@@ -18,7 +18,7 @@ import Stack from "@mui/material/Stack";
 import "./ModalProducts.scss";
 import ModalCategories from "./ModalCategories";
 import { Buffer } from "buffer";
-
+import { formatCurrency } from "../../utils/formatCurrency";
 class ProductManager extends Component {
   constructor(props) {
     super(props);
@@ -215,21 +215,7 @@ class ProductManager extends Component {
     });
   }
 
-   formatCurrency(number) {
-    // Sử dụng Intl.NumberFormat để định dạng số
-    const formatter = new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-      minimumFractionDigits: 0, // Loại bỏ phần thập phân
-    });
-
-    // Lấy chuỗi đã định dạng số
-    const formattedNumber = formatter.format(number);
-
-    // Loại bỏ khoảng trắng giữa số và đơn vị tiền tệ (₫)
-    return formattedNumber.replace(/\s/g, "");
-  }
-
+  
   /**Life cycle
    * Run component:
    * 1.run contrucstor-> init state
@@ -379,7 +365,7 @@ class ProductManager extends Component {
                               <tr key={index}>
                                 <td>{index+1}</td>
                                 <td>{item.name}</td>
-                                <td>{this.formatCurrency(item.price)}</td>
+                                <td>{formatCurrency(item.price)}</td>
                                 <td>{item.quantity}</td>
                                 <td>{item.idBrandData.name}</td>
                                 <td>{item.idCateData.name}</td>

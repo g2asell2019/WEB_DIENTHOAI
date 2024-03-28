@@ -3,6 +3,7 @@ import "./OrderHistory.scss";
 import { useParams } from 'react-router-dom';
 import { getAllOders, getAllOrderdetail,Layhoadon } from "../../userService";
 import { Buffer } from "buffer";
+import { formatCurrency } from "../../utils/formatCurrency";
  const OrderDetail = () => {
   const { id_order } = useParams();
 
@@ -94,20 +95,7 @@ import { Buffer } from "buffer";
 
     return `${day}/${month}/${year}`;
   };
- const  formatCurrency=(number)=> {
-    // Sử dụng Intl.NumberFormat để định dạng số
-    const formatter = new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-      minimumFractionDigits: 0, // Loại bỏ phần thập phân
-    });
-
-    // Lấy chuỗi đã định dạng số
-    const formattedNumber = formatter.format(number);
-
-    // Loại bỏ khoảng trắng giữa số và đơn vị tiền tệ (₫)
-    return formattedNumber.replace(/\s/g, "");
-  }
+ 
 
 
 

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { formatCurrency } from "../../utils/formatCurrency.js";
+import { handleAddCart } from "../../utils/handleAddCart";
 export const PhoneCard = ({ addToCart }) => {
   const { id } = useParams();
   const [user, setUser] = useState({ taikhoan: "" });

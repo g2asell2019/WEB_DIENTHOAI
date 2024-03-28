@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
+import { formatCurrency } from "../../utils/formatCurrency";
 export const ShopCart = ({ shopItems, addToCart }) => {
   const [count, setCount] = useState(0);
   const increment = () => {

@@ -1,30 +1,31 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Cart.css";
 import { Link, useHistory } from "react-router-dom";
 import { Buffer } from "buffer";
-import { toast } from 'react-toastify';
-import {formatCurrency} from "../../utils/formatCurrency.js"
+import { toast } from "react-toastify";
+import { formatCurrency } from "../../utils/formatCurrency.js";
 import { getAllCart, updateCartData, deleteCart } from "../../userService";
 import { TotalPriceVisitor } from "./TotalPriceVisitor";
+
 export const CartLogin = () => {
-function acceptVisitor(cartItems, visitor) {
-  for (const cartItem of cartItems) {
-    visitor.visitCartItem(cartItem);
+  function acceptVisitor(cartItems, visitor) {
+    for (const cartItem of cartItems) {
+      visitor.visitCartItem(cartItem);
+    }
   }
-}
   const [user, setUser] = useState({ taikhoan: "" });
   const [arrCart, setListCart] = useState([]);
   useEffect(() => {
     const getUserDataFromLocalStorage = async () => {
       const userData = localStorage.getItem("user");
-  
+
       if (userData) {
         const parsedUser = JSON.parse(userData);
         setUser(parsedUser);
       }
     };
     getUserDataFromLocalStorage();
-  
+
     // Check if user.id exists before making the API call
     if (user.id) {
       const laydanhsachgiohang = async () => {
@@ -37,54 +38,48 @@ function acceptVisitor(cartItems, visitor) {
           console.error("Error fetching cart data:", error);
         }
       };
-      
+
       laydanhsachgiohang();
     }
   }, [user.id]);
-  console.log("xem id user",user.id);
+  console.log("xem id user", user.id);
 
   const history = useHistory();
-
 
   const handleContinueShopping = () => {
     // Sử dụng history.goBack() để quay lại trang trước đó
     history.goBack();
   };
-const totalPriceVisitor = new TotalPriceVisitor();
-acceptVisitor(arrCart, totalPriceVisitor);
-const totalPrice1 = totalPriceVisitor.totalPrice;
-
-  
+  const totalPriceVisitor = new TotalPriceVisitor();
+  acceptVisitor(arrCart, totalPriceVisitor);
+  const totalPrice1 = totalPriceVisitor.totalPrice;
 
   const handleCheckout = () => {
-
-    history.push({ pathname: "./cart/Checkout", state: { totalPrice: totalPrice } });
+    history.push({
+      pathname: "./cart/Checkout",
+      state: { totalPrice: totalPrice },
+    });
   };
 
   const addToCart = (product) => {
-   let tangsoluong=product.quantity+1;
- tanggiamsoluong({
-  id:product.id,
-  quantity:tangsoluong,
-
- })
+    let tangsoluong = product.quantity + 1;
+    tanggiamsoluong({
+      id: product.id,
+      quantity: tangsoluong,
+    });
   };
   const decreaseQty = (product) => {
-    if(product.quantity<=1){
+    if (product.quantity <= 1) {
       deleteProduct(product);
-    }else{
-      let giamsoluong=product.quantity-1;
+    } else {
+      let giamsoluong = product.quantity - 1;
       tanggiamsoluong({
-       id:product.id,
-       quantity:giamsoluong,
-      
-      })
+        id: product.id,
+        quantity: giamsoluong,
+      });
     }
-
-   };
-  const deleteProduct = (idsanpham) => (
-    handleDeleteUser(idsanpham)
-  );
+  };
+  const deleteProduct = (idsanpham) => handleDeleteUser(idsanpham);
   const laydanhsachgiohang = async () => {
     try {
       let response = await getAllCart(user.id);
@@ -101,10 +96,7 @@ const totalPrice1 = totalPriceVisitor.totalPrice;
       let res = await updateCartData(data);
       if (res && res.errcode !== 0) {
         alert(res.errMessage);
-     
       } else {
-     
-
         await laydanhsachgiohang();
       }
       console.log(res);
@@ -113,16 +105,12 @@ const totalPrice1 = totalPriceVisitor.totalPrice;
     }
   };
 
-
-
   const handleDeleteUser = async (data) => {
     try {
       let res = await deleteCart(data.id);
       if (res && res.errcode !== 0) {
         alert(res.errMessage);
-     
       } else {
-     
         toast.success("Xóa sản phẩm Thành công");
         await laydanhsachgiohang();
       }
@@ -152,9 +140,8 @@ const totalPrice1 = totalPriceVisitor.totalPrice;
             {arrCart.map((item) => {
               const productQty = item.price * item.quantity;
               let imageBase64 = "";
-             
+
               if (item.image) {
-              
                 imageBase64 = Buffer.from(item.image, "base64").toString(
                   "binary"
                 );

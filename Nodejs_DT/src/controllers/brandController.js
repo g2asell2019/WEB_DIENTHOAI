@@ -1,5 +1,5 @@
 import Brandservices from "../services/Brandservices";
-
+import Singleton from "./singleton";
 let handlegetAllBrand = async (req, res) => {
   let id = req.query.id; //all, id
   if (!id) {
@@ -18,8 +18,8 @@ let handlegetAllBrand = async (req, res) => {
 };
 
 let handleCreateBrand = async (req, res) => {
-  let message = await Brandservices.CreateBrands(req.body);
-  console.log(message);
+  let message = await Brandservices.CreateBrands(req.body)
+    console.log(message)
   return res.status(200).json(message);
 };
 
