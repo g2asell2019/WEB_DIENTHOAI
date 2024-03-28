@@ -9,6 +9,7 @@ import {
   getAllCategories,
   getAllBrand,
 } from "../../userService";
+// Singleton pattern
 import { emitter } from "../../utils/emitter";
 import { toast } from "react-toastify";
 import ModalEditProducts from "./ModalEditProducts";

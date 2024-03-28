@@ -11,7 +11,7 @@ const checkProductName = (name) => {
       let product = await db.Products.findOne({
         where: { name: name },
       });
-      resolve(!!product);
+      resolve(!!product); //resolve true if product is exist and else
     } catch (e) {
       reject(e);
     }
