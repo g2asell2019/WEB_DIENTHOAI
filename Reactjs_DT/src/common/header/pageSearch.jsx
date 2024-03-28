@@ -12,7 +12,7 @@ export const pageSearch = ({ addToCart, location }) => {
   const [idbrand, setidbrand] = useState("");
   const [orderBy, setordeby] = useState("");
   const [selectedPriceRange, setgia] = useState("");
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
   useEffect(() => {
     const getUserDataFromLocalStorage = async () => {
       const userData = localStorage.getItem("user");
@@ -38,14 +38,14 @@ export const pageSearch = ({ addToCart, location }) => {
       selectedPriceRange,
       orderBy
     );
-    if (response && response.errcode === 0) {
+    if (response && response.errCode === 0) {
       setArrProducts(response.products);
     }
   };
 
   const getAllBrandFromReact = async () => {
     let response = await getAllBrand("ALL");
-    if (response && response.errcode === 0) {
+    if (response && response.errCode === 0) {
       setArrbrand(response.Brand);
     }
   };
@@ -84,15 +84,12 @@ export const pageSearch = ({ addToCart, location }) => {
     setordeby(order);
   };
   const handleOnChangeInput = (event) => {
-    // Thực hiện các hành động khi input thay đổi
-    // Ví dụ: cập nhật giá trị selectedPriceRange
     setgia(event.target.value);
   };
 
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("query");
 
-  // Thực hiện tìm kiếm dựa trên query
   const filteredData = arrProducts.filter((item) =>
     item.name.toLowerCase().includes(query.toLowerCase())
   );
@@ -112,7 +109,7 @@ export const pageSearch = ({ addToCart, location }) => {
   const themvaogiohang = async (data) => {
     try {
       const response = await CreateCart(data);
-      if (response && response.errcode !== 0) {
+      if (response && response.errCode !== 0) {
         toast.error("Thêm giỏ hàng thất bại !");
         alert(response.errMessage);
       } else {

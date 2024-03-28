@@ -56,7 +56,7 @@ class ModalEditProducts extends Component {
 
   getAllCategoriesReact = async () => {
     let response = await getAllCategories("ALL");
-    if (response && response.errcode == 0) {
+    if (response && response.errCode == 0) {
       this.setState({
         arrCate: response.categories,
       });
@@ -64,7 +64,7 @@ class ModalEditProducts extends Component {
   };
   getAllBrandReact = async () => {
     let response = await getAllBrand("ALL");
-    if (response && response.errcode == 0) {
+    if (response && response.errCode == 0) {
       this.setState({
         arrBrand: response.Brand,
       });

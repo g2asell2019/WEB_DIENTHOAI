@@ -15,7 +15,7 @@ export const Phone = ({ addToCart }) => {
 
   const getAllCategoriesReact = async () => {
     let response = await getAllCategories(id);
-    if (response && response.errcode === 0) {
+    if (response && response.errCode === 0) {
       setCategories(response.categories);
     }
   };

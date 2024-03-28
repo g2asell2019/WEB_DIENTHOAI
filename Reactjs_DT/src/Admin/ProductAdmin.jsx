@@ -7,12 +7,10 @@ export const ProductAdmin = () => {
     <>
       <div className="admin">
         <Header />
-
         <div className="main--content d_flex">
           <div>
             <DashBoard />
           </div>
-
           <div className="user_manage">
             <ProductManager />
           </div>

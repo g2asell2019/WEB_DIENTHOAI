@@ -11,7 +11,7 @@ class ModalEditUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      taikhoan: "",
+      username: "",
       password: "",
       fullName: "",
       address: "",
@@ -34,7 +34,7 @@ class ModalEditUser extends Component {
       }
       this.setState({
         id: user.id,
-        taikhoan: user.taikhoan,
+        username: user.username,
         fullName: user.fullName,
         address: user.address,
         phoneNumber: user.phoneNumber,
@@ -70,7 +70,7 @@ class ModalEditUser extends Component {
   checkValideInputEdit = () => {
     let isValid = true;
     let arrInput = [
-      "taikhoan",
+      "username",
       "fullName",
       "address",
       "phoneNumber",
@@ -142,9 +142,9 @@ class ModalEditUser extends Component {
                       className="form-control"
                       placeholder="UserName"
                       onChange={(event) => {
-                        this.handleOnChangeInput(event, "taikhoan");
+                        this.handleOnChangeInput(event, "username");
                       }}
-                      value={this.state.taikhoan}
+                      value={this.state.username}
                       disabled
                     />
                   </div>

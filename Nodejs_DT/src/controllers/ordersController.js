@@ -1,62 +1,47 @@
+
 import OrderServices from "../services/OrderServices"
 import moment from "moment";
 require('dotenv').config();
 
-let handleGetAllOrders = async(req, res) => {
-    let id = req.query.id; //all, id
-    if (!id) {
-        return res.status(200).json({
-            errcode: 1,
-            errMessage: 'Missing require parameters',
-            products: []
-        })
 
-    }
-    let orders = await OrderServices.getAllOders(id);
-
+let handleGetAllOrders = async (req, res) => {
+  let id = req.query.id; //all, id
+  if (!id) {
     return res.status(200).json({
-        errcode: 0,
-        errMessage: 'OK',
-        orders
+      errCode: 1,
+      errMessage: "Missing require parameters",
+      products: [],
+    });
+  }
+  let orders = await OrderServices.getAllOders(id);
 
-    })
-}
+  return res.status(200).json({
+    errCode: 0,
+    errMessage: "OK",
+    orders,
+  });
+};
 
-
-
-let handleLocdonhang = async(req, res) => {
-    let id = req.query.id; //all, id
-    let createdAt=req.query.createdAt;
-    let order_status=req.query.order_status;
-    if (!id) {
-        return res.status(200).json({
-            errcode: 1,
-            errMessage: 'Missing require parameters',
-            products: []
-        })
-
-    }
-    let orders = await OrderServices.locdonhang(id,createdAt,order_status);
-
+let handleLocdonhang = async (req, res) => {
+  let id = req.query.id; //all, id
+  let createdAt = req.query.createdAt;
+  let order_status = req.query.order_status;
+  if (!id) {
     return res.status(200).json({
-        errcode: 0,
-        errMessage: 'OK',
-        orders
 
-    })
-}
+      errCode: 1,
+      errMessage: "Missing require parameters",
+      products: [],
+    });
+  }
+  let orders = await OrderServices.locdonhang(id, createdAt, order_status);
 
-
-
-
-
-
-
-
-
-
-
-
+  return res.status(200).json({
+    errCode: 0,
+    errMessage: "OK",
+    orders,
+  });
+};
 
 
 let handleCreateOrders = async(req, res) => {
@@ -174,12 +159,6 @@ function sortObject(obj) {
     return sorted;
 }
 
-
-
-
-
-
-
 module.exports = {
     handleGetAllOrders: handleGetAllOrders,
     handleCreateOrders: handleCreateOrders,
@@ -188,9 +167,4 @@ module.exports = {
     handleLocdonhang:handleLocdonhang,
     handleVnPayReturn:handleVnPayReturn,
     handleCreatePayment:handleCreatePayment
-
-
-
-
-
 }

@@ -28,7 +28,7 @@ class UserManage extends Component {
   }
   getAllUserFromReact = async () => {
     let response = await getAllUser("ALL");
-    if (response && response.errcode == 0) {
+    if (response && response.errCode == 0) {
       this.setState({
         arrUsers: response.users,
       });
@@ -54,7 +54,7 @@ class UserManage extends Component {
   createNewUser = async (data) => {
     try {
       let response = await createNewUseService(data);
-      if (response && response.errcode !== 0) {
+      if (response && response.errCode !== 0) {
         alert(response.errMessage);
       } else {
         await this.getAllUserFromReact();
@@ -73,7 +73,7 @@ class UserManage extends Component {
   handleDeleteUser = async (user) => {
     try {
       let res = await deleteUserService(user.id);
-      if (res && res.errcode !== 0) {
+      if (res && res.errCode !== 0) {
         alert(res.errMessage);
         toast.error("Xóa thất bại");
       } else {
@@ -86,7 +86,7 @@ class UserManage extends Component {
     }
   };
 
-  handleEditUser = (user) => {
+  handleUpdateUser = (user) => {
     this.setState({
       isOpenModalEditUser: true,
       userEdit: user,
@@ -96,7 +96,7 @@ class UserManage extends Component {
   doEditUser = async (user) => {
     try {
       let res = await editUserService(user);
-      if (res && res.errcode == 0) {
+      if (res && res.errCode == 0) {
         await this.getAllUserFromReact();
         toast.success("Sửa Thành công");
         this.setState({
@@ -167,7 +167,7 @@ class UserManage extends Component {
                           arrUsers.map((item, index) => {
                             return (
                               <tr key={index}>
-                                <td>{item.taikhoan}</td>
+                                <td>{item.username}</td>
                                 <td>{item.fullName}</td>
                                 <td>{item.address}</td>
                                 <td>{item.phoneNumber}</td>
@@ -177,7 +177,7 @@ class UserManage extends Component {
                                   <button
                                     className="btn-edit"
                                     onClick={() => {
-                                      this.handleEditUser(item);
+                                      this.handleUpdateUser(item);
                                     }}
                                   >
                                     <i className="fa-regular fa-pen-to-square"></i>

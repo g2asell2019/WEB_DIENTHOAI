@@ -1,48 +1,44 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Cart.css";
 import { Link, useHistory } from "react-router-dom";
 import { Buffer } from "buffer";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 import { getAllCart, updateCartData, deleteCart } from "../../userService";
 
 export const CartLogin = () => {
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
   const [arrCart, setListCart] = useState([]);
-
-
 
   useEffect(() => {
     const getUserDataFromLocalStorage = async () => {
       const userData = localStorage.getItem("user");
-  
+
       if (userData) {
         const parsedUser = JSON.parse(userData);
         setUser(parsedUser);
       }
     };
     getUserDataFromLocalStorage();
-  
+
     // Check if user.id exists before making the API call
     if (user.id) {
       const laydanhsachgiohang = async () => {
         try {
           let response = await getAllCart(user.id);
-          if (response && response.errcode === 0) {
+          if (response && response.errCode === 0) {
             setListCart(response.Cart);
           }
         } catch (error) {
           console.error("Error fetching cart data:", error);
         }
       };
-      
+
       laydanhsachgiohang();
     }
   }, [user.id]);
 
-
-
-  console.log("xem id user",user.id);
+  console.log("xem id user", user.id);
 
   const history = useHistory();
 
@@ -71,50 +67,38 @@ export const CartLogin = () => {
   }
 
   const handleCheckout = () => {
-    history.push({ pathname: "./cart/Checkout", state: { totalPrice: totalPrice } });
+    history.push({
+      pathname: "./cart/Checkout",
+      state: { totalPrice: totalPrice },
+    });
   };
-
-
-
-
 
   const addToCart = (product) => {
-   let tangsoluong=product.quantity+1;
- tanggiamsoluong({
-  id:product.id,
-  quantity:tangsoluong,
-
- })
+    let tangsoluong = product.quantity + 1;
+    tanggiamsoluong({
+      id: product.id,
+      quantity: tangsoluong,
+    });
   };
 
-
   const decreaseQty = (product) => {
-    if(product.quantity<=1){
+    if (product.quantity <= 1) {
       deleteProduct(product);
-    }else{
-      let giamsoluong=product.quantity-1;
+    } else {
+      let giamsoluong = product.quantity - 1;
       tanggiamsoluong({
-       id:product.id,
-       quantity:giamsoluong,
-      
-      })
+        id: product.id,
+        quantity: giamsoluong,
+      });
     }
+  };
 
-   };
-
-
-
-
-
-  const deleteProduct = (idsanpham) => (
-    handleDeleteUser(idsanpham)
-  );
-  
+  const deleteProduct = (idsanpham) => handleDeleteUser(idsanpham);
 
   const laydanhsachgiohang = async () => {
     try {
       let response = await getAllCart(user.id);
-      if (response && response.errcode === 0) {
+      if (response && response.errCode === 0) {
         setListCart(response.Cart);
       }
     } catch (error) {
@@ -125,12 +109,9 @@ export const CartLogin = () => {
   const tanggiamsoluong = async (data) => {
     try {
       let res = await updateCartData(data);
-      if (res && res.errcode !== 0) {
+      if (res && res.errCode !== 0) {
         alert(res.errMessage);
-     
       } else {
-     
-
         await laydanhsachgiohang();
       }
       console.log(res);
@@ -139,16 +120,12 @@ export const CartLogin = () => {
     }
   };
 
-
-
   const handleDeleteUser = async (data) => {
     try {
       let res = await deleteCart(data.id);
-      if (res && res.errcode !== 0) {
+      if (res && res.errCode !== 0) {
         alert(res.errMessage);
-     
       } else {
-     
         toast.success("Xóa sản phẩm Thành công");
         await laydanhsachgiohang();
       }
@@ -158,15 +135,9 @@ export const CartLogin = () => {
     }
   };
 
-
-
-
-
-
   {
     user && <CartLogin />;
   }
-
 
   return (
     <>
@@ -186,9 +157,8 @@ export const CartLogin = () => {
             {arrCart.map((item) => {
               const productQty = item.price * item.quantity;
               let imageBase64 = "";
-             
+
               if (item.image) {
-              
                 imageBase64 = Buffer.from(item.image, "base64").toString(
                   "binary"
                 );

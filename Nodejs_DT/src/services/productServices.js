@@ -1,466 +1,339 @@
-import categories from "../models/categories";
 import db from "../models/index";
-const { Sequelize, Op } = require('sequelize');
+import { Op } from "sequelize";
 
+// Asynchronous Programming (Promise Pattern)
+// Separation of Concerns (SoC)
+// Error Handling Patterns
 
-let getAllProducts = (productId, idne,idbrand, priceRange, orderBy) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            let products = '';
-
-            
-
-            // Khởi tạo các điều kiện truy vấn
-            let queryConditions = {};
-
-            // Lọc theo ID sản phẩm
-            if (productId && productId !== 'ALL') {
-                queryConditions.id = productId;
-            }
-
-            // Lọc theo ID hãng
-            if (idne && idne !== '') {
-                queryConditions.idCate = idne;
-            }
-            if (idbrand && idbrand !== '') {
-                queryConditions.idBrand = idbrand;
-            }
-
-            // Lọc theo mức giá
-            if (priceRange && priceRange !== '') {
-                const [minPrice, maxPrice] = priceRange.split('-').map(price => parseFloat(price));
-                queryConditions.price = {
-                    [Op.between]: [minPrice, maxPrice],
-                };
-            }
-
-            // Thêm điều kiện sắp xếp
-            let orderCondition = [];
-            if (orderBy === 'price-asc') {
-                orderCondition.push(["price", "ASC"]);
-            } else if (orderBy === 'price-desc') {
-                orderCondition.push(["price", "DESC"]);
-            } else {
-                // Sắp xếp mặc định theo createdAt DESC nếu không có điều kiện sắp xếp
-                orderCondition.push(["createdAt", "DESC"]);
-            }
-
-            // Truy vấn database
-            products = await db.Products.findAll({
-                where: queryConditions,
-                order: orderCondition,
-                include: [
-                    {
-                        model: db.Categories,
-                        as: 'idCateData',
-                        attributes: ['name'],
-                    },
-                    {
-                        model: db.Brands,
-                        as: 'idBrandData',
-                        attributes: ['name'],
-                    },
-                ],
-                raw: true,
-                nest: true,
-            });
-
-         
-         
-
-             
-
-            resolve(products);
-        } catch (e) {
-            reject(e);
-        }
-    });
+const checkProductName = (name) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let product = await db.Products.findOne({
+        where: { name: name },
+      });
+      resolve(!!product);
+    } catch (e) {
+      reject(e);
+    }
+  });
 };
 
-
-
-
-let DeltaiProduct = (productId) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            let products = '';
-
-         if (productId && productId !== 'ALL') {
-                products = await db.Products.findOne({
-                    where: { id: productId },
-                    include: [
-                        {
-                            model: db.Categories,
-                            as: 'idCateData',
-                            attributes: ['name'],
-                        },
-                        {
-                            model: db.Brands,
-                            as: 'idBrandData',
-                            attributes: ['name'],
-                        },
-                    ],
-                    raw: true,
-                    nest: true,
-
-                });
-            }
-
-
-
-            resolve(products);
-        } catch (e) {
-            reject(e);
-        }
-    });
+const checkCategoryName = (name) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let category = await db.Categories.findOne({
+        where: { name: name },
+      });
+      if (category) {
+        resolve(true);
+      }
+      resolve(false);
+    } catch (e) {
+      reject(e);
+    }
+  });
 };
 
+// Product service
+class ProductService {
+  constructor() {}
 
+  getAllProducts = (productId, cateId, idbrand, priceRange, orderBy) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let queryConditions = {};
 
-
-
-let checkproductname = (name) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            let products = await db.Products.findOne({
-
-                where: { name: name },
-
-            });
-            if (products) {
-                resolve(true);
-            } else {
-                resolve(false);
-            }
-
-        } catch (e) {
-            reject(e);
-
+        if (productId !== "ALL") {
+          queryConditions.id = productId;
         }
-    })
-}
 
-let CreateProducts = (data) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            // check taikhoan is exist??
-            let check = await checkproductname(data.name);
-            if (check == true) {
-                resolve({
-                    errcode: 1,
-                    errMessage: "Tên người dùng đã tồn tại vui lòng nhập tên người dùng  khác"
-                })
-            } else {
-                await db.Products.create({
-                    name: data.name,
-                    price: data.price,
-                    quantity: data.quantity,
-                    image: data.avatar,
-                    idCate: data.idCate,
-                    idBrand:data.idBrand,
-                });
-                if (data && data.image) {
-                    data.image = Buffer.from(data.image, 'base64').toString('binary');
-
-                }
-                if (!data) {
-                    data = {};
-                }
-                resolve({
-                    errcode: 0,
-                    data: data
-                })
-
-                resolve({
-                    errcode: 0,
-                    message: 'OK'
-                })
-            }
-
-
-
-        } catch (e) {
-            reject(e);
-
+        if (cateId) {
+          queryConditions.idCate = cateId;
         }
-    })
-}
-let deleteProducts = (productId) => {
-    return new Promise(async(resolve, reject) => {
-        let products = await db.Products.findOne({
-            where: { id: productId }
-        })
-        if (!products) {
-            resolve({
-                errcode: 2,
-                errMessage: "product isn't exist !"
-            })
+        if (idbrand) {
+          queryConditions.idBrand = idbrand;
         }
-        await db.Products.destroy({
-            where: { id: productId }
+
+        if (priceRange && priceRange !== "") {
+          const [minPrice, maxPrice] = priceRange.split("-").map(parseFloat);
+          queryConditions.price = {
+            [Op.between]: [minPrice, maxPrice],
+          };
+        }
+
+        let orderCondition = [];
+        if (orderBy === "price-asc") {
+          orderCondition.push(["price", "ASC"]);
+        } else if (orderBy === "price-desc") {
+          orderCondition.push(["price", "DESC"]);
+        } else {
+          orderCondition.push(["createdAt", "DESC"]);
+        }
+
+        const products = await db.Products.findAll({
+          where: queryConditions,
+          order: orderCondition,
+          include: [
+            {
+              model: db.Categories,
+              as: "idCateData",
+              attributes: ["name"],
+            },
+            {
+              model: db.Brands,
+              as: "idBrandData",
+              attributes: ["name"],
+            },
+          ],
+          raw: true,
+          nest: true,
         });
+        resolve(products);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
+
+  getProductDetail = (productId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let product = null;
+
+        if (productId && productId !== "ALL") {
+          product = await db.Products.findOne({
+            where: { id: productId },
+            include: [
+              {
+                model: db.Categories,
+                as: "idCateData",
+                attributes: ["name"],
+              },
+              {
+                model: db.Brands,
+                as: "idBrandData",
+                attributes: ["name"],
+              },
+            ],
+            raw: true,
+            nest: true,
+          });
+        }
+        resolve(product);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
+
+  createProduct = (data) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let isProductNameExist = await checkProductName(data.name);
+        if (isProductNameExist) {
+          resolve({
+            errCode: 1,
+            errMessage: "Product name already exists",
+          });
+        } else {
+          if (!data) {
+            data = {};
+          }
+          await db.Products.create({
+            name: data.name,
+            price: data.price,
+            quantity: data.quantity,
+            image: data.avatar,
+            idCate: data.idCate,
+            idBrand: data.idBrand,
+          });
+          if (data && data.image) {
+            data.image = Buffer.from(data.image, "base64").toString("binary");
+          }
+          resolve({
+            errCode: 0,
+            data: data,
+            message: "Product created successfully",
+          });
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
+
+  deleteProduct = (productId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let product = await db.Products.findOne({ where: { id: productId } });
+        if (!product) {
+          resolve({
+            errCode: 1,
+            errMessage: "Product doesn't exist",
+          });
+        } else {
+          await db.Products.destroy({ where: { id: productId } });
+          resolve({ errCode: 0, message: "Product deleted successfully" });
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
+
+  updateProduct = (data) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let product = await db.Products.findOne({
+          where: { id: data.id },
+          raw: false,
+        });
+
+        if (!product) {
+          resolve({
+            errCode: 1,
+            errMessage: "Product not found",
+          });
+        } else {
+          product.set(data);
+          await product.save();
+          resolve({ errCode: 0, message: "Product updated successfully" });
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
+}
+
+// Category service
+class CategoryService {
+  constructor() {}
+
+  createCategory = (data) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let checkCName = await checkCategoryName(data.name);
+        if (checkCName) {
+          resolve({
+            errCode: 1,
+            errMessage: "Tên loại sản phẩm này đã tồn tại",
+          });
+        } else {
+          if (!data) {
+            data = {};
+          }
+
+          await db.Categories.create({
+            name: data.name,
+            image: data.avatar,
+          });
+          if (data && data.image) {
+            data.image = Buffer.from(data.image, "base64").toString("binary");
+          }
+          resolve({
+            errCode: 0,
+            data: data,
+            message: "OK",
+          });
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
+
+  deleteCategory = (categoryId) => {
+    return new Promise(async (resolve, reject) => {
+      let category = await db.Categories.findOne({
+        where: { id: categoryId },
+      });
+      if (!category) {
         resolve({
-            errcode: 0,
-            errMessage: "product is deleted !"
-
+          errCode: 2,
+          errMessage: "loại sản phẩm  không tồn tại",
         });
-    })
-}
-let updateProductData = (data) => {
-    return new Promise(async(resolve, reject) => {
-        try {
+      }
+      await db.Categories.destroy({
+        where: { id: categoryId },
+      });
+      resolve({
+        errCode: 0,
+        errMessage: "loại sản phẩm đã bị xóa !",
+      });
+    });
+  };
 
-            if (!data.id || !data.name) {
-                resolve({
-                    errcode: 2,
-                    errMessage: "Missing required parameter"
-                })
-            }
-            let products = await db.Products.findOne({
-                where: { id: data.id },
-                raw: false
-            })
-            if (products) {
-                products.name = data.name;
-                products.price = data.price;
-                products.quantity = data.quantity;
-                products.idCate = data.idCate;
-                products.idBrand=data.idBrand;
-                if (data.avatar) {
-                    products.image = data.avatar;
-
-                }
-
-                products.image = data.avatar;
-                await products.save();
-                resolve({
-                    errcode: 0,
-                    errMessage: "update product succeeds !"
-                });
-            } else {
-                resolve({
-                    errcode: 1,
-                    errMessage: "product not found !"
-                });
-            }
-        } catch (e) {
-            reject(e)
-
+  updateCategory = (data) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (!data.id) {
+          resolve({
+            errCode: 1,
+            errMessage: "Missing required parameter",
+          });
         }
-    })
-}
-
-
-
-
-
-let checkcategoriesname = (name) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            let category = await db.Categories.findOne({
-
-                where: { name: name },
-
-            });
-            if (category) {
-                resolve(true);
-            } else {
-                resolve(false);
-            }
-
-        } catch (e) {
-            reject(e);
-
-        }
-    })
-}
-
-let checkbrandname = (name) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            let brands = await db.Brands.findOne({
-
-                where: { name: name },
-
-            });
-            if (brands) {
-                resolve(true);
-            } else {
-                resolve(false);
-            }
-
-        } catch (e) {
-            reject(e);
-
-        }
-    })
-}
-
-
-
-
-
-let CreateCategories = (data) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            // check taikhoan is exist??
-            let check = await checkcategoriesname(data.name);
-            let check1 = await checkbrandname(data.name);
-            if (check == true) {
-                resolve({
-                    errcode: 1,
-                    errMessage: "Tên loại sản phẩm này đã tồn tại"
-                })
-            } else if(check1==true){
-                resolve({
-                    errcode: 1,
-                    errMessage: "Tên hãng sản phẩm này đã tồn tại"
-                })
-            }
-            else {
-                await db.Categories.create({
-                    name: data.name,
-                    image: data.avatar
-
-                });
-                if (data && data.image) {
-                    data.image = Buffer.from(data.image, 'base64').toString('binary');
-
-                }
-                if (!data) {
-                    data = {};
-                }
-                resolve({
-                    errcode: 0,
-                    data: data
-                })
-
-                resolve({
-                    errcode: 0,
-                    message: 'OK'
-                })
-            }
-
-
-
-        } catch (e) {
-            reject(e);
-
-        }
-    })
-}
-let deleteCategories = (CategoriesId) => {
-    return new Promise(async(resolve, reject) => {
         let category = await db.Categories.findOne({
-            where: { id: CategoriesId }
-        })
+          where: { id: data.id },
+          raw: false,
+        });
         if (!category) {
-            resolve({
-                errcode: 2,
-                errMessage: "loại sản phẩm  không tồn tại"
-            })
+          resolve({
+            errCode: 2,
+            errMessage: "categories not found !",
+          });
         }
-        await db.Categories.destroy({
-            where: { id: CategoriesId }
-        });
+
+        category.name = data.name;
+        if (data.avatar) {
+          category.image = data.avatar;
+        }
+        await category.save();
         resolve({
-            errcode: 0,
-            errMessage: "loại sản phẩm đã bị xóa !"
-
+          errCode: 0,
+          errMessage: "update categories succeeds !",
         });
-    })
-}
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
 
+  getAllCategories = (categoryId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let categories = "";
 
-
-
-let updateCategoriesData = (data) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-
-            if (!data.id) {
-                resolve({
-                    errcode: 2,
-                    errMessage: "Missing required parameter"
-                })
-            }
-            let categories = await db.Categories.findOne({
-                where: { id: data.id },
-                raw: false
-            })
-            if (categories) {
-                categories.name = data.name;
-                if (data.avatar) {
-                    categories.image = data.avatar;
-
-                }
-
-                categories.image = data.avatar;
-
-
-
-                await categories.save();
-                resolve({
-                    errcode: 0,
-                    errMessage: "update categories succeeds !"
-                });
-            } else {
-                resolve({
-                    errcode: 1,
-                    errMessage: "categories not found !"
-                });
-            }
-        } catch (e) {
-            reject(e)
-
+        if (categoryId && categoryId !== "ALL") {
+          categories = await db.Categories.findOne({
+            where: { id: categoryId },
+          });
         }
-    })
+
+        categories = db.Categories.findAll({
+          order: [["createdAt", "ASC"]],
+        });
+
+        resolve(categories);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
 }
 
-
-let getAllCategories = (categoriesId) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            let categories = '';
-            if (categoriesId == 'ALL') {
-                categories = db.Categories.findAll({
-                    order: [
-                        ["createdAt", "ASC"]
-                    ],
-                })
-
-            }
-            if (categoriesId && categoriesId !== 'ALL') {
-                categories = await db.Categories.findOne({
-                    where: { id: categoriesId }, //  productId laf cais tham so truyen vao
-                });
-
-            }
-            resolve(categories)
-        } catch (e) {
-            reject(e);
-        }
-    })
-
+// Factory Method Pattern
+class ServiceFactory {
+  static createService(serviceType) {
+    switch (serviceType) {
+      case "product":
+        return new ProductService();
+      case "category":
+        return new CategoryService();
+      default:
+        throw new Error("Invalid service type");
+    }
+  }
 }
 
-
-
-
-
-
-
-
-
-module.exports = {
-    getAllProducts: getAllProducts,
-    DeltaiProduct:DeltaiProduct,
-    CreateProducts: CreateProducts,
-    deleteProducts: deleteProducts,
-    updateProductData: updateProductData,
-    CreateCategories: CreateCategories,
-    deleteCategories: deleteCategories,
-    getAllCategories: getAllCategories,
-    updateCategoriesData: updateCategoriesData,
-
-}
+export default ServiceFactory;

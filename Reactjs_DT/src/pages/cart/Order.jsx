@@ -13,7 +13,7 @@ export const Order = () => {
   const history = useHistory();
   const [totalPrice, setTotalPrice] = useState(location.state.totalPrice);
 
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
   const [arrCart, setListCart] = useState([]);
 
   const [state, setState] = useState({
@@ -23,7 +23,6 @@ export const Order = () => {
     total_value: totalPrice,
     note: "",
     phoneNumber: "",
-
     payment: "",
     order_idUser: user.id,
   });
@@ -102,7 +101,7 @@ export const Order = () => {
   const laydanhsachgiohang = async () => {
     try {
       let response = await getAllCart(user.id);
-      if (response && response.errcode === 0) {
+      if (response && response.errCode === 0) {
         setListCart(response.Cart);
       }
     } catch (error) {
@@ -120,7 +119,6 @@ export const Order = () => {
       }
       else if (data?.payment === "atm") {
         paymentGate.setStrategy(new VNPay());
-
       }
       else if (data?.payment === "viettel_pay") {
         paymentGate.setStrategy(new ViettelPay());
@@ -167,7 +165,6 @@ export const Order = () => {
   {
     user && <Order />;
   }
-
   return (
     <>
     <form method="post" action={"http://localhost:8080/vnpay/create_order"}>

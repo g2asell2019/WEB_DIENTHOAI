@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 export const PhoneCard = ({ addToCart }) => {
   const { id } = useParams();
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
 
   const [arrProducts, setArrProducts] = useState([]);
   const [arrbrand, setArrbrand] = useState("");
@@ -29,14 +29,14 @@ export const PhoneCard = ({ addToCart }) => {
       selectedPriceRange,
       orderBy
     );
-    if (response && response.errcode === 0) {
+    if (response && response.errCode === 0) {
       setArrProducts(response.products);
     }
   };
 
   const getAllBrandFromReact = async () => {
     let response = await getAllBrand("ALL");
-    if (response && response.errcode === 0) {
+    if (response && response.errCode === 0) {
       setArrbrand(response.Brand);
     }
   };
@@ -96,7 +96,7 @@ export const PhoneCard = ({ addToCart }) => {
   const themvaogiohang = async (data) => {
     try {
       const response = await CreateCart(data);
-      if (response && response.errcode !== 0) {
+      if (response && response.errCode !== 0) {
         toast.error("Thêm giỏ hàng thất bại !");
         alert(response.errMessage);
       } else {

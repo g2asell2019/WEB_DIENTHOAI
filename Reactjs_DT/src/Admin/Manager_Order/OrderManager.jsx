@@ -24,7 +24,7 @@ const OrderManager = () => {
     try {
       const response = await locdonhang("ALL", formattedDate, statusFilter);
 
-      if (response && response.errcode === 0) {
+      if (response && response.errCode === 0) {
         setArrOrders(response.orders);
       }
     } catch (error) {
@@ -35,7 +35,7 @@ const OrderManager = () => {
   const handleDeleteOrders = async (user) => {
     try {
       const res = await deleteOrders(user.id);
-      if (res && res.errcode !== 0) {
+      if (res && res.errCode !== 0) {
         alert(res.errMessage);
         toast.error("Xóa thất bại");
       } else {
@@ -68,7 +68,7 @@ const OrderManager = () => {
 
   const formatDate = (isoDate) => {
     const dateObject = new Date(isoDate);
- 
+
     const day = dateObject.getDate();
     const month = dateObject.getMonth() + 1;
     const year = dateObject.getFullYear();
@@ -76,7 +76,7 @@ const OrderManager = () => {
     return `${day}/${month}/${year}`;
   };
 
-  console.log("xem ngay cai",selectedDate);
+  console.log("xem ngay cai", selectedDate);
 
   return (
     <div className="hello">
@@ -109,7 +109,7 @@ const OrderManager = () => {
                 <div className="table-container">
                   <table>
                     <thead>
-                    <tr>
+                      <tr>
                         <th>Người Nhận</th>
                         <th>Ngày đặt</th>
                         <th>Địa chỉ nhận hàng</th>
@@ -124,18 +124,17 @@ const OrderManager = () => {
                     <tbody>
                       {arrOrders.map((item, index) => (
                         <tr key={index}>
-                         <td>{item.receiver}</td>
-                            <td>{formatDate(item.createdAt)}</td>
-                            <td>{item.receiving_point}</td>
-                            <td>{item.phoneNumber}</td>
-                            <td>{item.payment}</td>
-                            <td>{new Intl.NumberFormat().format(item.total_value)} đ</td>
+                          <td>{item.receiver}</td>
+                          <td>{formatDate(item.createdAt)}</td>
+                          <td>{item.receiving_point}</td>
+                          <td>{item.phoneNumber}</td>
+                          <td>{item.payment}</td>
+                          <td>
+                            {new Intl.NumberFormat().format(item.total_value)} đ
+                          </td>
 
-
-
-
-                            <td>{item.order_status}</td>
-                            <td>{item.note}</td>
+                          <td>{item.order_status}</td>
+                          <td>{item.note}</td>
                           <td>
                             <button
                               className="btn-edit"

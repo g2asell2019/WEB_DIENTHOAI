@@ -4,7 +4,7 @@ import { Link, useHistory, Redirect } from "react-router-dom";
 
 export const NavbarAdmin = (props) => {
   const history = useHistory();
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
 
   useEffect(() => {
     // Sử dụng một hàm async để lấy dữ liệu từ Local Storage

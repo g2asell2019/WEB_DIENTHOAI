@@ -4,7 +4,7 @@ let handlegetAllOderdetail = async (req, res) => {
   let id = req.query.id; //all, id
   if (!id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing require parameters",
       products: [],
     });
@@ -12,7 +12,7 @@ let handlegetAllOderdetail = async (req, res) => {
   let Oderdetail = await Oderdetailservices.getAllOrderDetails(id);
   console.log(Oderdetail);
   return res.status(200).json({
-    errcode: 0,
+    errCode: 0,
     errMessage: "OK",
     Oderdetail,
   });
@@ -26,7 +26,7 @@ let handleCreateOderdetail = async (req, res) => {
 let handleDeleteOderdetail = async (req, res) => {
   if (!req.body.id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing required parameters !",
     });
   }
@@ -45,14 +45,14 @@ let handleLayhoadon = async (req, res) => {
   let id = req.query.id; //all, id
   if (!id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing require parameters",
     });
   }
   let orders1 = await Oderdetailservices.layhoadon(id);
 
   return res.status(200).json({
-    errcode: 0,
+    errCode: 0,
     errMessage: "OK",
     orders1,
   });

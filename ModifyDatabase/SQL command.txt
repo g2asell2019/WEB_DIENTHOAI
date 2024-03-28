@@ -1,0 +1,1 @@
+ALTER TABLE users CHANGE COLUMN taikhoan username VARCHAR(255);

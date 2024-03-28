@@ -15,12 +15,12 @@ let CreateOrderDetails = (data) => {
         data = {};
       }
       resolve({
-        errcode: 0,
+        errCode: 0,
         data: data,
       });
 
       resolve({
-        errcode: 0,
+        errCode: 0,
         message: "OK",
       });
     } catch (e) {
@@ -28,17 +28,17 @@ let CreateOrderDetails = (data) => {
     }
   });
 };
+
 let deleteOrderDetails = (OrderDetailsId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // Find all OrderDetails with the given order_id
       let orderDetailsList = await db.OrderDetails.findAll({
         where: { order_id: OrderDetailsId },
       });
 
       if (orderDetailsList.length === 0) {
         resolve({
-          errcode: 2,
+          errCode: 2,
           errMessage: "No order details found with the given order_id",
         });
       }
@@ -49,12 +49,12 @@ let deleteOrderDetails = (OrderDetailsId) => {
       });
 
       resolve({
-        errcode: 0,
+        errCode: 0,
         errMessage: "Order details have been deleted!",
       });
     } catch (error) {
       reject({
-        errcode: 1,
+        errCode: 1,
         errMessage: "Error deleting order details",
       });
     }
@@ -66,7 +66,7 @@ let updateOrderDetailsData = (data) => {
     try {
       if (!data.id) {
         resolve({
-          errcode: 2,
+          errCode: 2,
           errMessage: "Missing required parameter",
         });
       }
@@ -78,12 +78,12 @@ let updateOrderDetailsData = (data) => {
         OrderDetails.quantity = data.quantity;
         await OrderDetails.save();
         resolve({
-          errcode: 0,
+          errCode: 0,
           errMessage: "update OrderDetails succeeds !",
         });
       } else {
         resolve({
-          errcode: 1,
+          errCode: 1,
           errMessage: "OrderDetails not found !",
         });
       }

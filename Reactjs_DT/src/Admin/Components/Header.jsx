@@ -4,7 +4,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 
 export const Header = () => {
   const history = useHistory();
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
 
   useEffect(() => {
     // Sử dụng một hàm async để lấy dữ liệu từ Local Storage

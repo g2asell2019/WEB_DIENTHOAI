@@ -25,7 +25,7 @@ class SalesManager extends Component {
   }
   getAllCategoriesReact = async () => {
     let response = await getAllSale("ALL");
-    if (response && response.errcode == 0) {
+    if (response && response.errCode == 0) {
       this.setState({
         arrCategories: response.categories,
       });
@@ -51,8 +51,8 @@ class SalesManager extends Component {
 
   createNewCategories = async (data) => {
     try {
-      let response = await CreateCategories(data);
-      if (response && response.errcode !== 0) {
+      let response = await createCategory(data);
+      if (response && response.errCode !== 0) {
         alert(response.errMessage);
       } else {
         await this.getAllCategoriesReact();
@@ -70,8 +70,8 @@ class SalesManager extends Component {
 
   handleDeleteUser = async (user) => {
     try {
-      let res = await deleteCategories(user.id);
-      if (res && res.errcode !== 0) {
+      let res = await deleteCategory(user.id);
+      if (res && res.errCode !== 0) {
         alert(res.errMessage);
         toast.error("Xóa thất bại");
       } else {
@@ -84,7 +84,7 @@ class SalesManager extends Component {
     }
   };
 
-  handleEditUser = (user) => {
+  handleUpdateUser = (user) => {
     this.setState({
       isOpenModalEditProduct: true,
       productEdit: user,
@@ -93,8 +93,8 @@ class SalesManager extends Component {
 
   doEditUser = async (user) => {
     try {
-      let res = await updateCategoriesData(user);
-      if (res && res.errcode === 0) {
+      let res = await updateCategory(user);
+      if (res && res.errCode === 0) {
         await this.getAllCategoriesReact();
         toast.success("Sửa Thành công");
         this.setState({
@@ -181,7 +181,7 @@ class SalesManager extends Component {
                                   <button
                                     className="btn-edit"
                                     onClick={() => {
-                                      this.handleEditUser(item);
+                                      this.handleUpdateUser(item);
                                     }}
                                   >
                                     <i className="fa-regular fa-pen-to-square"></i>

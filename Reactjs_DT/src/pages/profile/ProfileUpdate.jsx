@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { editUserService,getAllUser } from "../../userService";
+import { editUserService, getAllUser } from "../../userService";
 import { toast } from "react-toastify";
 import CommonUtils from "../../utils/CommonUtils"; // Assuming this import is needed
 
 export const ProfileUpdate = () => {
-  const [user, setUser] = useState({ id: "", fullName: "", address: "", phoneNumber: "" });
+  const [user, setUser] = useState({
+    id: "",
+    fullName: "",
+    address: "",
+    phoneNumber: "",
+  });
   const [arrUsers, setArrUsers] = useState("");
 
   const [state, setState] = useState({
@@ -14,24 +19,17 @@ export const ProfileUpdate = () => {
   });
 
   useEffect(() => {
-
-   
-    if(user&&user!==""){
-   
-    
+    if (user && user !== "") {
       setState({
         id: user.id,
         fullName: arrUsers.fullName || "",
         address: arrUsers.address || "",
         phoneNumber: arrUsers.phoneNumber || "",
       });
-     
     }
-   
 
     getAllUserFromReact();
     getUserDataFromLocalStorage();
-    
   }, [user.id]);
   const getUserDataFromLocalStorage = async () => {
     const userData = localStorage.getItem("user");
@@ -49,18 +47,17 @@ export const ProfileUpdate = () => {
       phoneNumber: state.phoneNumber,
     });
   };
- 
 
   const getAllUserFromReact = async () => {
     let response = await getAllUser(user.id);
-    if (response && response.errcode === 0) {
+    if (response && response.errCode === 0) {
       setArrUsers(response.users);
     }
   };
   const doEditUser = async (user) => {
     try {
       let res = await editUserService(user);
-      if (res && res.errcode === 0) {
+      if (res && res.errCode === 0) {
         toast.success("Cập nhật thành công");
       } else {
         toast.error("Sửa Thất bại");

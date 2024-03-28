@@ -4,13 +4,12 @@ import { Link, useHistory, Redirect } from "react-router-dom";
 export const Navbar = () => {
   const [MobileMenu, setMobileMenu] = useState(false);
   const history = useHistory();
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
 
   useEffect(() => {
     // Sử dụng một hàm async để lấy dữ liệu từ Local Storage
     const getUserDataFromLocalStorage = async () => {
       const userData = localStorage.getItem("user");
-    
 
       if (userData) {
         const parsedUser = JSON.parse(userData);
@@ -52,16 +51,13 @@ export const Navbar = () => {
               onClick={() => setMobileMenu(false)}
             >
               <li>
-                  
-                {
-                  user.taikhoan === "" ? (
-                    <Link to="/login-signup/Login">Đăng nhập</Link>
-                  ) : (
-                    <Link to="/">Xin Chào, <strong>{user.taikhoan}</strong></Link>
-                  )
-
-                }
-                
+                {user.username === "" ? (
+                  <Link to="/login-signup/Login">Đăng nhập</Link>
+                ) : (
+                  <Link to="/">
+                    Xin Chào, <strong>{user.username}</strong>
+                  </Link>
+                )}
               </li>
             </ul>
 

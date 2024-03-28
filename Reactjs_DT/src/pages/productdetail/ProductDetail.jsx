@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { getDeltaiProduct, CreateCart } from "../../userService";
+import { getDetailProduct, CreateCart } from "../../userService";
 import { Buffer } from "buffer";
 import "./ProductDetail.css";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 export const ProductDetail = ({ addToCart }) => {
-  //Chuyển đổi tiền tệ
   function formatCurrency(number) {
-    // Sử dụng Intl.NumberFormat để định dạng số
     const formatter = new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
@@ -22,7 +20,7 @@ export const ProductDetail = ({ addToCart }) => {
   }
 
   const { id } = useParams();
-  const [user, setUser] = useState({ taikhoan: "" });
+  const [user, setUser] = useState({ username: "" });
 
   const [detailProducts, setdetailProducts] = useState({});
   let imageBase64 = "";
@@ -46,7 +44,7 @@ export const ProductDetail = ({ addToCart }) => {
   const themvaogiohang = async (data) => {
     try {
       const response = await CreateCart(data);
-      if (response && response.errcode !== 0) {
+      if (response && response.errCode !== 0) {
         toast.error("Thêm giỏ hàng thất bại !");
         alert(response.errMessage);
       } else {
@@ -73,9 +71,9 @@ export const ProductDetail = ({ addToCart }) => {
   }, []);
 
   const getAllUserFromReact = async () => {
-    let response = await getDeltaiProduct(id);
-    if (response && response.errcode === 0) {
-      setdetailProducts(response.products);
+    let response = await getDetailProduct(id);
+    if (response && response.errCode === 0) {
+      setdetailProducts(response.product);
     }
   };
 

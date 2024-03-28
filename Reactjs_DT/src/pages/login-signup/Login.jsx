@@ -22,10 +22,10 @@ export const Login = (props) => {
 
     try {
       let data = await handleLoginApi(username, password);
-      if (data && data.errcode !== 0) {
+      if (data && data.errCode !== 0) {
         setErrMessage(data.message);
       }
-      if (data && data.errcode === 0) {
+      if (data && data.errCode === 0) {
         localStorage.setItem("user", JSON.stringify(data.user));
 
         if (data.user.roleId == "R1") {

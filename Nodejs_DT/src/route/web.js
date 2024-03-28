@@ -1,7 +1,6 @@
 import express from "express";
 import homeController from "../controllers/homeController";
 import userController from "../controllers/userController";
-import specialtyController from "../controllers/specialtyController";
 import productController from "../controllers/productController";
 import orderController from "../controllers/ordersController";
 import brandController from "../controllers/brandController";
@@ -9,45 +8,43 @@ import SaleController from "../controllers/saleController";
 import CartController from "../controllers/cartController";
 import OrderdetailController from "../controllers/orderdetailController";
 
-let router = express.Router();
+const router = express.Router();
 
-let initWebRouters = (app) => {
-  router.get("/", homeController.getHomePage); // gọi file controller và
+const initWebRouters = (app) => {
+  router.get("/", homeController.getHomePage);
   router.get("/about", homeController.getAboutPage);
   router.get("/crud", homeController.getCRUD);
-
-  router.post("/post-crud", homeController.postCRUD); // link acction
-
+  router.post("/post-crud", homeController.postCRUD);
   router.get("/get-crud", homeController.displayGetCRUD);
   router.get("/edit-crud", homeController.getEditCRUD);
   router.post("/put-crud", homeController.putCRUD);
   router.get("/delete-crud", homeController.deleteCRUD);
 
-  //api cua User
+  //User routes
   router.post("/api/login", userController.handleLogin);
-  router.get("/api/get-all-users", userController.handleGetAllUser);
-  router.post("/api/create-new-user", userController.handleCreateNewUser);
-  router.put("/api/edit-user", userController.handleEditUser);
+  router.get("/api/get-all-users", userController.handleGetAllUsers);
+  router.post("/api/create-new-user", userController.handleCreateUser);
+  router.put("/api/edit-user", userController.handleUpdateUser);
   router.delete("/api/delete-user", userController.handleDeleteUser);
-  router.get("/api/allcode", userController.getAllCode);
+  router.get("/api/allcode", userController.handleGetAllCodes);
 
-  //api cua san pham
+  //Product route
   router.get("/api/get-all-products", productController.handleGetAllProducts);
-  router.get("/api/get-deltai-product", productController.handleDeltaiProduct);
+  router.get("/api/get-detail-product", productController.handleDetailProduct);
   router.post(
     "/api/create-new-products",
-    productController.handleCreateProducts
+    productController.handleCreateProduct
   );
-  router.put("/api/edit-products", productController.handleEditProducts);
-  router.delete("/api/delete-products", productController.handleDeleteProducts);
+  router.put("/api/edit-products", productController.handleEditProduct);
+  router.delete("/api/delete-products", productController.handleDeleteProduct);
 
-  //api cua  cart
+  //Cart route
   router.post("/api/create-new-cart", CartController.handleCreateCart);
   router.delete("/api/delete-cart", CartController.handleDeleteCart);
   router.put("/api/edit-cart", CartController.handleEditCart);
   router.get("/api/get-all-cart", CartController.handlegetAllCart);
 
-  //api cua oderdetail
+  //Orderdetail route
   router.post(
     "/api/create-new-Orderdetail",
     OrderdetailController.handleCreateOderdetail
@@ -66,36 +63,35 @@ let initWebRouters = (app) => {
   );
   router.get("/api/get-lay-hoa-don", OrderdetailController.handleLayhoadon);
 
-  //api cua brand
+  //Brand route
   router.post("/api/create-new-brand", brandController.handleCreateBrand);
   router.delete("/api/delete-brand", brandController.handleDeleteBrand);
   router.put("/api/edit-brand", brandController.handleEditBrand);
-  router.get("/api/get-all-brand", brandController.handlegetAllBrand);
+  router.get("/api/get-all-brand", brandController.handleGetAllBrand);
 
-  // api cuar sale
+  //Sale route
   router.post("/api/create-new-sale", SaleController.handleCreateSale);
   router.delete("/api/delete-sale", SaleController.handleDeleteSale);
   router.put("/api/edit-sale", SaleController.handleEditSale);
   router.get("/api/get-all-sale", SaleController.handlegetAllSale);
 
-  //api cua categories
+  //Category route
   router.post(
     "/api/create-new-categories",
-    productController.handleCreateCategories
+    productController.handleCreateCategory
   );
   router.delete(
     "/api/delete-categories",
-    productController.handleDeleteCategories
+    productController.handleDeleteCategory
   );
-  router.put("/api/edit-categories", productController.handleEditCategories);
+  router.put("/api/edit-categories", productController.handleEditCategory);
   router.get(
     "/api/get-all-categories",
     productController.handlegetAllCategories
   );
 
-  //api cua orders
+  //Order route
   router.get("/api/get-all-orders", orderController.handleGetAllOrders);
-
   router.post("/api/create-new-orders", orderController.handleCreateOrders);
   router.delete("/api/delete-orders", orderController.handleDeleteOrders);
   router.put("/api/edit-orders", orderController.handleEditOder);
@@ -119,7 +115,6 @@ let initWebRouters = (app) => {
   });
 
   
-
   return app.use("/", router);
 };
 module.exports = initWebRouters;

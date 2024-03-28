@@ -1,168 +1,140 @@
 import db from "../models/index";
 
+let checkBrandName = (name) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let brand = await db.Brands.findOne({
+        where: { name: name },
+      });
+      if (brand) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 
+let createBrand = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let check = await checkBrandName(data.name);
 
-let checkBrandsname = (name) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            let Brands = await db.Brands.findOne({
-
-                where: { name: name },
-
-            });
-            if (Brands) {
-                resolve(true);
-            } else {
-                resolve(false);
-            }
-
-        } catch (e) {
-            reject(e);
-
-        }
-    })
-}
-let CreateBrands = (data) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            // check taikhoan is exist??
-            let check = await checkBrandsname(data.name);
-            if (check == true) {
-                resolve({
-                    errcode: 1,
-                    errMessage: "Tên loại sản phẩm này đã tồn tại"
-                })
-            } else {
-                await db.Brands.create({
-                    name: data.name,
-                    image: data.avatar
-
-                });
-                if (data && data.image) {
-                    data.image = Buffer.from(data.image, 'base64').toString('binary');
-
-                }
-                if (!data) {
-                    data = {};
-                }
-                resolve({
-                    errcode: 0,
-                    data: data
-                })
-
-                resolve({
-                    errcode: 0,
-                    message: 'OK'
-                })
-            }
-
-
-
-        } catch (e) {
-            reject(e);
-
-        }
-    })
-}
-let deleteBrands = (BrandsId) => {
-    return new Promise(async(resolve, reject) => {
-        let category = await db.Brands.findOne({
-            where: { id: BrandsId }
-        })
-        if (!category) {
-            resolve({
-                errcode: 2,
-                errMessage: "loại sản phẩm  không tồn tại"
-            })
-        }
-        await db.Brands.destroy({
-            where: { id: BrandsId }
-        });
+      if (check == true) {
         resolve({
-            errcode: 0,
-            errMessage: "loại sản phẩm đã bị xóa !"
-
+          errCode: 1,
+          errMessage: "Tên loại sản phẩm này đã tồn tại",
         });
-    })
-}
-
-
-
-
-let updateBrandsData = (data) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-
-            if (!data.id) {
-                resolve({
-                    errcode: 2,
-                    errMessage: "Missing required parameter"
-                })
-            }
-            let Brands = await db.Brands.findOne({
-                where: { id: data.id },
-                raw: false
-            })
-            if (Brands) {
-                Brands.name = data.name;
-                if (data.avatar) {
-                    Brands.image = data.avatar;
-
-                }
-
-                Brands.image = data.avatar;
-
-
-
-                await Brands.save();
-                resolve({
-                    errcode: 0,
-                    errMessage: "update Brands succeeds !"
-                });
-            } else {
-                resolve({
-                    errcode: 1,
-                    errMessage: "Brands not found !"
-                });
-            }
-        } catch (e) {
-            reject(e)
-
+      } else {
+        await db.Brands.create({
+          name: data.name,
+          image: data.avatar,
+        });
+        if (data && data.image) {
+          data.image = Buffer.from(data.image, "base64").toString("binary");
         }
-    })
-}
-
-
-let getAllBrands = (BrandsId) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            let Brands = '';
-            if (BrandsId == 'ALL') {
-                Brands = db.Brands.findAll({
-                    order: [
-                        ["createdAt", "DESC"]
-                    ],
-                })
-
-            }
-            if (BrandsId && BrandsId !== 'ALL') {
-                Brands = await db.Brands.findOne({
-                    where: { id: BrandsId }, //  productId laf cais tham so truyen vao
-                });
-
-            }
-            resolve(Brands)
-        } catch (e) {
-            reject(e);
+        if (!data) {
+          data = {};
         }
-    })
+        resolve({
+          errCode: 0,
+          data: data,
+          message: "OK",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 
-}
+let deleteBrand = (brandId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let category = await db.Brands.findOne({
+        where: { id: brandId },
+      });
+      if (!category) {
+        resolve({
+          errCode: 2,
+          errMessage: "Loại sản phẩm không tồn tại",
+        });
+      }
+      await db.Brands.destroy({
+        where: { id: brandId },
+      });
+      resolve({
+        errCode: 0,
+        errMessage: "Loại sản phẩm đã bị xóa !",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let updateBrand = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.id) {
+        resolve({
+          errCode: 2,
+          errMessage: "Missing required parameter",
+        });
+      }
+      let brand = await db.Brands.findOne({
+        where: { id: data.id },
+        raw: false,
+      });
+      if (brand) {
+        brand.name = data.name;
+        if (data.avatar) {
+          brand.image = data.avatar;
+        }
+
+        await brand.save();
+        resolve({
+          errCode: 0,
+          errMessage: "Update brand succeeds !",
+        });
+      } else {
+        resolve({
+          errCode: 1,
+          errMessage: "Brand not found !",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllBrands = (brandId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let brands = "";
+      if (brandId == "ALL") {
+        brands = db.Brands.findAll({
+          order: [["createdAt", "DESC"]],
+        });
+      }
+      if (brandId && brandId !== "ALL") {
+        brands = await db.Brands.findOne({
+          where: { id: brandId },
+        });
+      }
+      resolve(brands);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 
 module.exports = {
-    getAllBrands: getAllBrands,
-    CreateBrands: CreateBrands,
-    deleteBrands: deleteBrands,
-    updateBrandsData: updateBrandsData,
-
-}
+  getAllBrands: getAllBrands,
+  createBrand: createBrand,
+  deleteBrand: deleteBrand,
+  updateBrand: updateBrand,
+};

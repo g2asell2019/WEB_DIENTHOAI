@@ -20,11 +20,11 @@ let checkCart = (data) => {
 let CreateCart = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // check taikhoan is exist??
+      // check username is exist??
       let check = await checkCart(data);
       if (check == true) {
         resolve({
-          errcode: 1,
+          errCode: 1,
           errMessage: " Sản phẩm này đã tồn tại trong giỏ hàng",
         });
       } else {
@@ -43,12 +43,12 @@ let CreateCart = (data) => {
           data = {};
         }
         resolve({
-          errcode: 0,
+          errCode: 0,
           data: data,
         });
 
         resolve({
-          errcode: 0,
+          errCode: 0,
           message: "OK",
         });
       }
@@ -64,7 +64,7 @@ let deleteCart = (CartId) => {
     });
     if (!category) {
       resolve({
-        errcode: 2,
+        errCode: 2,
         errMessage: " sản phẩm  không tồn tại",
       });
     }
@@ -72,7 +72,7 @@ let deleteCart = (CartId) => {
       where: { id: CartId },
     });
     resolve({
-      errcode: 0,
+      errCode: 0,
       errMessage: " sản phẩm đã bị xóa !",
     });
   });
@@ -83,7 +83,7 @@ let updateCartData = (data) => {
     try {
       if (!data.id) {
         resolve({
-          errcode: 2,
+          errCode: 2,
           errMessage: "Missing required parameter",
         });
       }
@@ -96,12 +96,12 @@ let updateCartData = (data) => {
         Cart.price = data.price;
         await Cart.save();
         resolve({
-          errcode: 0,
+          errCode: 0,
           errMessage: "update Cart succeeds !",
         });
       } else {
         resolve({
-          errcode: 1,
+          errCode: 1,
           errMessage: "Cart not found !",
         });
       }

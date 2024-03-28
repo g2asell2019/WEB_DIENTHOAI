@@ -4,14 +4,14 @@ let handlegetAllCart = async (req, res) => {
   let id = req.query.id; //all, id
   if (!id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing require parameters",
       products: [],
     });
   }
   let Cart = await Cartservices.getAllCart(id);
   return res.status(200).json({
-    errcode: 0,
+    errCode: 0,
     errMessage: "OK",
     Cart,
   });
@@ -25,7 +25,7 @@ let handleCreateCart = async (req, res) => {
 let handleDeleteCart = async (req, res) => {
   if (!req.body.id) {
     return res.status(200).json({
-      errcode: 1,
+      errCode: 1,
       errMessage: "Missing required parameters !",
     });
   }
