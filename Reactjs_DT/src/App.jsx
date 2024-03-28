@@ -30,6 +30,7 @@ import { pageSearch } from "./common/header/pageSearch";
 import OrderHistory from "./pages/profile/OrderHistory";
 import OrderDetail from "./pages/profile/OrderDetail";
 import { CartLogin } from "./pages/cart/CartLogin";
+import { VNPayStatus } from "./pages/cart/VNPayStatus";
 function App() {
   //step 1: fetch data from DB
   const { productItems } = Data;
@@ -212,6 +213,12 @@ function App() {
                 addTo
                 Cart={addToCart}
               />
+              <Footer />
+            </Route>
+
+            <Route path="/vnpay/vnpay_return">
+              <Header cartItem={cartItem} />
+              <VNPayStatus />
               <Footer />
             </Route>
 

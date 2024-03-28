@@ -6,7 +6,8 @@ import "./ModalProducts.scss";
 import _ from "lodash";
 import CommonUtils from "../../utils/CommonUtils";
 import { getAllCategories, getAllBrand } from "../../userService";
-
+import { validateInput } from "../Utility/CRUDUltility";
+import ImageUtility from "../Utility/ImageUtility";
 class ModalProducts extends Component {
   constructor(props) {
     super(props);
@@ -93,24 +94,9 @@ class ModalProducts extends Component {
     }
   };
 
-  checkValideInput = () => {
-    let isValid = true;
-    let arrInput = ["name", "price", "quantity", "idCate", "idBrand", "avatar"];
-
-    for (let i = 0; i < arrInput.length; i++) {
-      console.log("check inside loop", this.state[arrInput[i]], arrInput[i]);
-      if (!this.state[arrInput[i]]) {
-        isValid = false;
-        alert("Missing parameter: " + arrInput[i]);
-        break;
-      }
-    }
-
-    return isValid;
-  };
 
   handleAddNewUser = () => {
-    let isValid = this.checkValideInput();
+    let isValid = validateInput(["name", "price", "quantity", "idCate", "idBrand", "avatar"]);
 
     if (isValid == true) {
       //call api create modal
@@ -120,19 +106,6 @@ class ModalProducts extends Component {
     }
   };
 
-  handleOnChangeImage = async (event) => {
-    let data = event.target.files;
-    let file = data[0];
-    if (file) {
-      let base64 = await CommonUtils.getBase64(file);
-
-      let objectUrl = URL.createObjectURL(file);
-      this.setState({
-        previewImgURL: objectUrl,
-        avatar: base64,
-      });
-    }
-  };
 
   render() {
     const formattedPrice = new Intl.NumberFormat("en-US").format(
@@ -237,28 +210,7 @@ class ModalProducts extends Component {
                     </select>
                   </div>
 
-                  <div className="form-group col-md-3">
-                    <label>Hình ảnh</label>
-                    <div className="lamdep">
-                      <input
-                        type="file"
-                        id="previewImg"
-                        hidden
-                        onChange={(event) => this.handleOnChangeImage(event)}
-                      ></input>
-
-                      <label className="label-upload" htmlFor="previewImg">
-                        tải ảnh <i className="fas fa-upload"></i>
-                      </label>
-                      <div
-                        className="preview-image"
-                        onClick={this.handleImageClick}
-                        style={{
-                          backgroundImage: `url(${this.state.previewImgURL})`,
-                        }}
-                      ></div>
-                    </div>
-                  </div>
+                  <ImageUtility></ImageUtility>
                 </div>
               </div>
             </div>

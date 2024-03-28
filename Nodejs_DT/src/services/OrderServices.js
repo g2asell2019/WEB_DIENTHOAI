@@ -189,7 +189,9 @@ let updateOrderData = (data) => {
                 raw: false
             })
             if (Order) {
-                Order.order_status="Đã xác nhận";
+                if (data.order_status) {
+                    Order.order_status=data.order_status;
+                }
                 await Order.save();
                 resolve({
                     errcode: 0,
