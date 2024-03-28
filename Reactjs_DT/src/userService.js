@@ -90,12 +90,6 @@ const CreateOrders = (data) => {
     return axios.post('/api/create-new-orders', data)
 }
 
-const PayWithVNPAY = (data) => {
-    return axios.post('/vnpay/create_order', data, {
-        withCredentials: false
-    })
-}
-
 const deleteOrders = (productId) => {
 
     return axios.delete('/api/delete-orders', {
@@ -257,8 +251,8 @@ export {
     deleteOrderdetail,
     getAllOrderdetail,
     updateOrderdetailData,
-    locdonhang,
-    PayWithVNPAY
+    locdonhang
+    
 
 
 

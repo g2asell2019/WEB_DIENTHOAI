@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import "./ModalUser.scss";
 import _ from "lodash";
 import CommonUtils from "../../utils/CommonUtils";
-import { validateInput } from "../Utility/CRUDUltility";
 
 class ModalUser extends Component {
   constructor(props) {
@@ -61,9 +60,32 @@ class ModalUser extends Component {
 
     // console.log(event.target.value,id)
   };
+  checkValideInput = () => {
+    let isValid = true;
+    let arrInput = [
+      "taikhoan",
+      "password",
+      "fullName",
+      "address",
+      "phoneNumber",
+      "email",
+      "roleId",
+    ];
+
+    for (let i = 0; i < arrInput.length; i++) {
+      console.log("check inside loop", this.state[arrInput[i]], arrInput[i]);
+      if (!this.state[arrInput[i]]) {
+        isValid = false;
+        alert("Missing parameter: " + arrInput[i]);
+        break;
+      }
+    }
+
+    return isValid;
+  };
 
   handleAddNewUser = () => {
-    let isValid = validateInput(["taikhoan", "password", "fullName", "address", "phoneNumber", "email", "roleId"])
+    let isValid = this.checkValideInput();
 
     if (isValid == true) {
       //call api create modal
